@@ -117,6 +117,22 @@ static void draw_arrow (QPainter &painter, QPointF start, QPointF end)
   painter.drawPolygon (arrow_triangle.data (), isize (arrow_triangle));
 }
 
+static void draw_arc_arrow (QPainter &painter, QPointF start, QPointF end, int shift)
+{
+    QPointF diff = end - start;
+    QPointF norm = {-diff.y (), diff.x ()};
+
+    const double length = sqrt (diff.x () * diff.x () + diff.y () * diff.y ());
+    if (fuzzy_eq (length, 0.))
+      return;
+
+    QPointF median = start + 0.5 * diff;
+    QPointF angle_point = median + norm * shift * 0.05;
+
+    draw_arrow (painter, start, angle_point);
+    draw_arrow (painter, angle_point, end);
+}
+
 void graph_painter::draw_edges (QPainter &painter)
 {
     painter.save ();
@@ -131,17 +147,61 @@ void graph_painter::draw_edges (QPainter &painter)
 
     painter.setPen (pen);
     painter.setBrush (brush);
-    for (graph::uid i = 0; i < m_graph->edge_count (); i++)
+//    for (graph::uid i = 0; i < m_graph->edge_count (); i++)
+//    {
+//        const graph::graph_base<>::self_edge &edge = m_graph->edge (i);
+
+//        const graph::graph_base<>::self_node node_1 = m_graph->node (edge.start);
+//        const graph::graph_base<>::self_node node_2 = m_graph->node (edge.end);
+
+//        QPointF start = m_axis_painter->get_screen_pos (node_1.x, node_1.y);
+//        QPointF end = m_axis_painter->get_screen_pos (node_2.x, node_2.y);
+
+//        draw_arrow (painter, start, end);
+//    }
+
+    for (graph::uid i = 0; i < m_graph->node_count (); i++)
     {
-        const graph::graph_base<>::self_edge &edge = m_graph->edge (i);
+        const graph::graph_base<>::self_node &node = m_graph->node (i);
 
-        const graph::graph_base<>::self_node node_1 = m_graph->node (edge.start);
-        const graph::graph_base<>::self_node node_2 = m_graph->node (edge.end);
+        const std::vector<graph::uid> &uids = m_graph->edges_started_from (i);
 
-        QPointF start = m_axis_painter->get_screen_pos (node_1.x, node_1.y);
-        QPointF end = m_axis_painter->get_screen_pos (node_2.x, node_2.y);
+        std::vector<std::pair<graph::uid, graph::uid>> uids_map;
 
-        draw_arrow (painter, start, end);
+        for (graph::uid j: uids)
+        {
+          const graph::graph_base<>::self_edge e = m_graph->edge (j);
+          uids_map.push_back ({j, e.end});
+        }
+
+        std::sort (uids_map.begin (), uids_map.end (),
+                   [] (std::pair<int, int> a, std::pair<int, int> b) {
+                     return a.second < b.second;
+                   });
+
+        for (size_t i = 0; i < uids_map.size ();)
+        {
+            size_t j = i;
+            while (j + 1 < uids_map.size () && uids_map[i].second == uids_map[j + 1].second)
+            {
+              j++;
+            }
+
+            for (int k = i; k <= j; k++)
+            {
+              const graph::graph_base<>::self_edge edge = m_graph->edge (uids_map[k].first);
+
+              const graph::graph_base<>::self_node node_1 = m_graph->node (edge.start);
+              const graph::graph_base<>::self_node node_2 = m_graph->node (edge.end);
+
+              QPointF start = m_axis_painter->get_screen_pos (node_1.x, node_1.y);
+              QPointF end = m_axis_painter->get_screen_pos (node_2.x, node_2.y);
+
+              draw_arc_arrow (painter, start, end, k - i + 1);
+            }
+
+            i = j + 1;
+        }
     }
     painter.restore ();
 }
