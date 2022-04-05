@@ -79,6 +79,15 @@ namespace graph
       std::uniform_real_distribution<double> edge_random (0, 1);
 
       std::vector<Edge> edges;
+      for (unsigned int i = 0; i < node_count - 1; i++)
+      {
+          Edge edge;
+          edge.start = i;
+          edge.end = i + 1;
+
+          edges.push_back (edge);
+      }
+
       for (unsigned int i = 0; i < node_count; i++)
       {
           for (unsigned int j = i; j < node_count; j++)
@@ -126,7 +135,7 @@ namespace graph
     {
         std::vector<Node_Base> nodes = {{-1, 0.5, "A"}, {0., 0.5, ""}, {0.5, 1., ""}, {0.5, 0., ""}, {1, 0.5, ""}, {2, 0.5, "B"}};
 
-        std::vector<Edge_Base> edges = {{0, 1}, {1, 2}, {1, 3}, {2, 4}, {3, 4}, {4, 5}};
+        std::vector<Edge_Base> edges = {{0, 1}, {0, 1}, {1, 2}, {1, 3}, {2, 4}, {3, 4}, {4, 5}};
 
         std::vector<Directional_Vehicle<Vehicle_Base>> dir_vehs = {{{1.}, {{0, 5}}}};
 

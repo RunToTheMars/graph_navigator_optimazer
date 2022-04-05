@@ -32,7 +32,7 @@ public:
     virtual const self_node &node (const uid node_uid) const = 0;
     virtual const self_edge &edge (const uid edge_uid) const = 0;
 
-    virtual const std::vector<graph::uid> &edges_started_on (const uid node_uid) const = 0;
+    virtual const std::vector<graph::uid> &edges_started_from (const uid node_uid) const = 0;
     virtual const std::vector<graph::uid> &edges_ended_on (const uid node_uid) const = 0;
 
     virtual void add_node (const self_node &node) = 0;
@@ -91,7 +91,7 @@ public:
     virtual const Node &node (const uid node_uid) const override { return m_nodes[node_uid]; }
     virtual const Edge &edge (const uid edge_uid) const override { return m_edges[edge_uid]; }
 
-    virtual const std::vector<graph::uid> &edges_started_on (const uid node_uid) const { return m_start_map[node_uid]; }
+    virtual const std::vector<graph::uid> &edges_started_from (const uid node_uid) const { return m_start_map[node_uid]; }
     virtual const std::vector<graph::uid> &edges_ended_on   (const uid node_uid) const { return m_end_map[node_uid]; }
 
     virtual void add_node (const Node &node) override

@@ -11,25 +11,24 @@ template <typename Vehicle = Vehicle_Base>
 struct Directional_Vehicle
 {
     Vehicle vehicle;
-    std::vector<uid> path;
+    std::vector<graph::uid> path;
 };
 
 template <typename Vehicle = Vehicle_Base>
 class graph_initial_state_base
 {
 public:
-    using veh = Vehicle;
     using dir_veh = Directional_Vehicle<Vehicle>;
 
     virtual ~graph_initial_state_base () = default;
 
-    virtual uid vehicle_count () const = 0;
+    virtual graph::uid vehicle_count () const = 0;
 
-    virtual veh &vehicle (const uid vehicle_uid) = 0;
-    virtual const veh &vehicle (const uid vehicle_uid) const = 0;
+    virtual Vehicle &vehicle (const uid vehicle_uid) = 0;
+    virtual const Vehicle &vehicle (const uid vehicle_uid) const = 0;
 
-    virtual std::vector<uid> &path (const uid vehicle_uid) = 0;
-    virtual const std::vector<uid> &path (const uid vehicle_uid) const = 0;
+    virtual std::vector<graph::uid> &path (const uid vehicle_uid) = 0;
+    virtual const std::vector<graph::uid> &path (const uid vehicle_uid) const = 0;
 
     virtual void add_vehicle (const dir_veh &directional_vehicle) = 0;
     virtual void remove_vehicle (const uid vehicle_uid) = 0;
