@@ -82,8 +82,8 @@ class graph_impl : public graph_base<Node, Edge>
 public:
     virtual ~graph_impl () = default;
 
-    virtual graph::uid node_count () const override { return m_nodes.size (); }
-    virtual graph::uid edge_count () const override { return m_edges.size (); }
+    virtual graph::uid node_count () const override { return static_cast<graph::uid> (m_nodes.size ()); }
+    virtual graph::uid edge_count () const override { return static_cast<graph::uid> (m_edges.size ()); }
 
     virtual Node &node (const uid node_uid) override { return m_nodes[node_uid]; }
     virtual Edge &edge (const uid edge_uid) override { return m_edges[edge_uid]; }

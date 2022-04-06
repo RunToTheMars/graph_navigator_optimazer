@@ -23,9 +23,11 @@ abstract_axis_painter::abstract_axis_painter(render_area_widget *area): abstract
   m_axis_painter_y = std::make_unique<axis_painter_y> (this);
 }
 
+abstract_axis_painter::~abstract_axis_painter () = default;
+
 void abstract_axis_painter::set_model (abstract_axis_model *model)
 {
-  m_model.reset (model);
+    m_model = model;
 }
 
 QRectF abstract_axis_painter::get_initial_rect () const

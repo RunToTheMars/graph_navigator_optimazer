@@ -8,6 +8,8 @@ graph_axis_model::graph_axis_model (graph::graph_base<> *graph): m_graph (graph)
 {
 }
 
+graph_axis_model::~graph_axis_model () = default;
+
 QVariant graph_axis_model::data (axis_settings setting) const
 {
   const double margin_x = 0.2 * (m_graph->max_x () - m_graph->min_x ());

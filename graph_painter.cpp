@@ -117,7 +117,7 @@ static void draw_arrow (QPainter &painter, QPointF start, QPointF end)
   painter.drawPolygon (arrow_triangle.data (), isize (arrow_triangle));
 }
 
-static void draw_arc_arrow (QPainter &painter, QPointF start, QPointF end, int shift)
+static void draw_arc_arrow (QPainter &painter, QPointF start, QPointF end, size_t shift)
 {
     QPointF diff = end - start;
     QPointF norm = {-diff.y (), diff.x ()};
@@ -162,8 +162,6 @@ void graph_painter::draw_edges (QPainter &painter)
 
     for (graph::uid i = 0; i < m_graph->node_count (); i++)
     {
-        const graph::graph_base<>::self_node &node = m_graph->node (i);
-
         const std::vector<graph::uid> &uids = m_graph->edges_started_from (i);
 
         std::vector<std::pair<graph::uid, graph::uid>> uids_map;
@@ -187,7 +185,7 @@ void graph_painter::draw_edges (QPainter &painter)
               j++;
             }
 
-            for (int k = i; k <= j; k++)
+            for (size_t k = i; k <= j; k++)
             {
               const graph::graph_base<>::self_edge edge = m_graph->edge (uids_map[k].first);
 

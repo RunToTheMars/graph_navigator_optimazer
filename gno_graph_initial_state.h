@@ -60,7 +60,7 @@ public:
 
     virtual uid vehicle_count () const override
     {
-      return m_directional_vehicles.size ();
+        return static_cast<uid> (m_directional_vehicles.size ());
     }
 
     virtual Vehicle &vehicle (const uid vehicle_uid) override

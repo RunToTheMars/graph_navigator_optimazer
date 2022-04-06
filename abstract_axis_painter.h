@@ -15,12 +15,12 @@ class axis_painter_y;
 class abstract_axis_painter: public abstract_painter
 {
 public:
-    static constexpr int default_margin_vertical = 5;
-    static constexpr int default_margin_horizontal = 5;
+   static constexpr int default_margin_vertical = 5;
+   static constexpr int default_margin_horizontal = 5;
 
-    static constexpr int default_segments = 10;
+   static constexpr int default_segments = 10;
 
-   std::unique_ptr<abstract_axis_model> m_model;
+   abstract_axis_model *m_model = nullptr;
    QRectF m_draw_rect;
 
    //additional painters
@@ -29,11 +29,12 @@ public:
 
 public:
     abstract_axis_painter (render_area_widget *area);
+    ~abstract_axis_painter ();
 
     void draw (QPainter &painter) override;
     void set_model (abstract_axis_model *model);
 
-    const abstract_axis_model *get_model () const { return m_model.get (); }
+    const abstract_axis_model *get_model () const { return m_model; }
 
     QRectF get_initial_rect () const;
     QRectF get_draw_rect () const { return m_draw_rect; }
