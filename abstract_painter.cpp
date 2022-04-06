@@ -1,6 +1,5 @@
 #include "abstract_painter.h"
 
-#include "abstract_painter_holder.h"
 #include "render_area_widget.h"
 
 abstract_painter::abstract_painter (render_area_widget *area): m_render_area_widget (area)

@@ -3,6 +3,7 @@
 
 #include <functional>
 #include <vector>
+#include <math.h>
 
 #include "gno_graph_fwd.h"
 #include <string>

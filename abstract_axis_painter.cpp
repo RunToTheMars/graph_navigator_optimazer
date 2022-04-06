@@ -1,7 +1,6 @@
 #include "abstract_axis_painter.h"
 
 #include "abstract_axis_model.h"
-#include "abstract_painter_holder.h"
 #include "utils.h"
 
 #include "render_area_widget.h"

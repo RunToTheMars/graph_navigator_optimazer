@@ -21,7 +21,7 @@ void render_area_widget::paintEvent (QPaintEvent */*event*/)
   QPainter painter (this);
 
   painter.setRenderHint(QPainter::Antialiasing);
-  painter.setRenderHint(QPainter::HighQualityAntialiasing);
+//  painter.setRenderHint(QPainter::HighQualityAntialiasing);
 
   draw (painter);
 }
