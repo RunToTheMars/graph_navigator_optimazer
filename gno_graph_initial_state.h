@@ -11,6 +11,15 @@ template <typename Vehicle = Vehicle_Base>
 struct Directional_Vehicle
 {
     Vehicle vehicle;
+
+    //start time
+    double t = 0.;
+
+    //node uids
+    graph::uid src;
+    graph::uid dst;
+
+    //edge uids
     std::vector<graph::uid> path;
 };
 

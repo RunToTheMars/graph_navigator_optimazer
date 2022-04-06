@@ -137,7 +137,12 @@ namespace graph
 
         std::vector<Edge_Base> edges = {{0, 1}, {0, 1}, {1, 2}, {1, 3}, {2, 4}, {3, 4}, {4, 5}};
 
-        std::vector<Directional_Vehicle<Vehicle_Base>> dir_vehs = {{{1.}, {{0, 5}}}};
+        Directional_Vehicle<Vehicle> v1;
+        v1.src = 0;
+        v1.dst = 5;
+
+
+        std::vector<Directional_Vehicle<Vehicle_Base>> dir_vehs = {v1};
 
         set_graph (graph_initial, nodes, edges, dir_vehs);
     }
