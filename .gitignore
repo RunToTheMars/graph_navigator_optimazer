@@ -32,8 +32,6 @@
 *.app
 
 #Qt
-*.pro.user*
-*.pro*
 *.md
 Makefile*
 .qtc_clangd/
@@ -41,3 +39,7 @@ debug/
 Users*
 *.stash
 *.user
+
+#Qt
+object_script*
+GNO*
