@@ -156,7 +156,7 @@ int gno_modeling_simple::do_step (const graph_initial &initial_state)
             return -1;
 
           graph::uid next_edge = edges[0];
-          for (graph::uid i = 1; i < edges.size (); i++)
+          for (graph::uid i = 1; i < isize (edges); i++)
           {
             graph::uid edge_id = edges[i];
             if (m_veh_on_edge[edge_id] < m_veh_on_edge[next_edge])

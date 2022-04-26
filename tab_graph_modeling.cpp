@@ -108,6 +108,8 @@ graph_modeling_tab::graph_modeling_tab (graph::graph_initial *graph_initial, QWi
   QObject::connect (this, &graph_modeling_tab::done, this, [this] { stop (); });
 }
 
+graph_modeling_tab::~graph_modeling_tab () = default;
+
 void graph_modeling_tab::update_max_times ()
 {
   if (m_simple_model_widget->get_line_states().empty ())

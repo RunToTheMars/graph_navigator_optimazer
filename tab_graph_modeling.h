@@ -24,6 +24,7 @@ class graph_modeling_tab: public QWidget
 
 public:
     graph_modeling_tab (graph::graph_initial *graph_initial, QWidget *parent);
+    ~graph_modeling_tab ();
 
     Q_SIGNAL void set_val (int i);
     Q_SIGNAL void done ();

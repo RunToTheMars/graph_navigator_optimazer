@@ -69,7 +69,7 @@ void veh_on_graph_painter::draw_veh (QPainter &painter)
       default_color_builder color_builder;
       color_builder.set_val_range (0., static_cast<double> (states.size ()));
 
-      for (graph::uid veh_id = 0; veh_id < states.size (); veh_id ++)
+      for (graph::uid veh_id = 0; veh_id < isize (states); veh_id ++)
       {
         auto edge_part = get_edge_and_part (states[veh_id]);
         const graph::Edge edge = m_graph->edge (edge_part.first);

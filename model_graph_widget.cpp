@@ -42,6 +42,8 @@ model_graph_widget::model_graph_widget(graph::graph_initial *graph_initial, grap
       });
 }
 
+model_graph_widget::~model_graph_widget () = default;
+
 void model_graph_widget::set_time (double t)
 {
   area_render->get_painter ()->set_time (t);

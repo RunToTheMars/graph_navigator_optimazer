@@ -19,6 +19,7 @@ class model_graph_widget: public QWidget
 
 public:
   model_graph_widget (graph::graph_initial *graph_initial, graph::gno_discrete_modeling_base *discrete_modeling, QWidget *parent = nullptr);
+  ~model_graph_widget ();
 
   const std::vector<graph::vehicle_continuous_line_states> &get_line_states () const { return m_line_states; }
   void set_time (double t);
