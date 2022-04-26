@@ -62,6 +62,9 @@ public:
         return node_uid != invalid_uid && node_uid < node_count ();
     }
 
+    //todo hide this!
+    virtual void rebuild_maps () = 0;
+
 private:
     virtual void remove_node_impl (const uid node_uid) = 0;
 
@@ -90,25 +93,16 @@ public:
     virtual void add_node (const Node &node) override
     {
         m_nodes.push_back (node);
-
-        // todo: do 1 time on create
-        rebuild_maps ();
     }
 
     virtual void add_edge (const Edge &edge) override
     {
         m_edges.push_back (edge);
-
-        //todo: do 1 time on create
-        rebuild_maps ();
     }
 
     virtual void remove_edge (const uid edge_uid) override
     {
         m_edges.erase (m_edges.begin () + edge_uid);
-
-        //todo: do 1 time on create
-        rebuild_maps ();
     }
 
     virtual double length (const uid edge_uid) const override
@@ -175,9 +169,7 @@ public:
         clear_bounds ();
     }
 
-
-private:
-    virtual void rebuild_maps ()
+    virtual void rebuild_maps () override
     {
         m_start_map.clear ();
         m_end_map.clear ();
@@ -193,12 +185,10 @@ private:
             m_end_map[e.end].push_back (i);
         }
     }
+private:
     virtual void remove_node_impl (const uid node_uid) override
     {
         m_nodes.erase (m_nodes.begin () + node_uid);
-
-        //todo: do 1 time on create
-        rebuild_maps ();
     }
     virtual void clear_bounds ()
     {

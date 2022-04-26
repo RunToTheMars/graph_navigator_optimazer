@@ -16,6 +16,7 @@ static constexpr time undef_time = -1.;
 
 static constexpr double V_MAX = 60.;
 static constexpr double D = 500.;
+static constexpr double A_MAX = V_MAX * V_MAX / (2 * D);
 
 struct Node
 {
@@ -39,7 +40,6 @@ struct Vehicle
 
 struct vehicle_discrete_state
 {
-    double velocity = 0.;
     graph::uid edge_uid = graph::invalid_uid;
     double part = 0.;
     size_t node_num = 0;

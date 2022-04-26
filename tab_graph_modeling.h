@@ -49,6 +49,9 @@ private:
     std::unique_ptr<graph::gno_discrete_modeling_base> m_simple_model;
     model_graph_widget *m_simple_model_widget = nullptr;
 
+    std::unique_ptr<graph::gno_discrete_modeling_base> m_simple_acc_model;
+    model_graph_widget *m_simple_acc_model_widget = nullptr;
+
     std::atomic_bool m_stop;
     std::thread m_run_thread;
 };

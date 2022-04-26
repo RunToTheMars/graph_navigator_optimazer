@@ -32,6 +32,7 @@ namespace graph
       for (auto dir_veh: dir_vehs)
         initial_state->add_vehicle (dir_veh);
 
+      graph->rebuild_maps ();
       graph->calculate_bounds ();
     }
 
@@ -155,7 +156,7 @@ namespace graph
                 {
                   if (ind < 0 || ind >= n * m)
                     continue;
-                  Edge e = {i * m + j, ind};
+                  Edge e = {i * m + j, ind, 3 * graph::D};
                   edges.push_back (e);
                 }
             }
@@ -223,7 +224,7 @@ namespace graph
     {
         std::vector<Node> nodes = {{-1, 0.5, "A"}, {0., 0.5, ""}, {0.5, 1., ""}, {0.5, 0., ""}, {1, 0.5, ""}, {2, 0.5, "B"}};
 
-        std::vector<Edge> edges = {{0, 1}, {0, 1}, {1, 2}, {1, 3}, {2, 4}, {3, 4}, {4, 5}};
+        std::vector<Edge> edges = {{0, 1, graph::D}, {0, 1, graph::D}, {1, 2, graph::D}, {1, 3, graph::D}, {2, 4, graph::D}, {3, 4, graph::D}, {4, 5, graph::D}};
 
         Directional_Vehicle v1;
         v1.src = 0;

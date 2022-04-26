@@ -44,19 +44,23 @@ void veh_on_graph_painter::draw_veh (QPainter &painter)
   if (!m_line_states)
     return;
 
+  double time = m_cur_time;
+  if (time > m_line_states->back ().t2)
+      time = m_line_states->back ().t2;
+
   for (size_t i = 0; i < m_line_states->size (); i++)
   {
       const auto &line_state = m_line_states->at (i);
-      if (m_cur_time < line_state.t1 || line_state.t2 < m_cur_time)
+      if (time < line_state.t1 || line_state.t2 < time)
         continue;
 
-      auto get_edge_and_part = [this, &line_state] (const graph::vehicle_continuous_state &state) -> std::pair<graph::uid, double>
+      auto get_edge_and_part = [this, time, &line_state] (const graph::vehicle_continuous_state &state) -> std::pair<graph::uid, double>
       {
           if (state.edge_uid_start == state.edge_uid_end)
-            return  {state.edge_uid_end, (state.part_end - state.part_start) * (m_cur_time - line_state.t1) / (line_state.t2 - line_state.t1) + state.part_start};
+            return  {state.edge_uid_end, (state.part_end - state.part_start) * (time - line_state.t1) / (line_state.t2 - line_state.t1) + state.part_start};
           else
           {
-              double p = (state.part_end - state.part_start + 1) * (m_cur_time - line_state.t1) / (line_state.t2 - line_state.t1);
+              double p = (state.part_end - state.part_start + 1) * (time - line_state.t1) / (line_state.t2 - line_state.t1);
               if (p < 1 - state.part_start)
                 return  {state.edge_uid_start, state.part_start + p};
               else

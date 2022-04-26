@@ -48,7 +48,6 @@ int gno_modeling_simple::run (const graph_initial &initial_state)
       m_veh_on_edge[next_edge] ++;
 
       state.part = 0.;
-      state.velocity = graph::V_MAX;
       state.node_num = 0;
       state.edge_uid = next_edge;
   }
@@ -110,9 +109,8 @@ int gno_modeling_simple::do_step (const graph_initial &initial_state)
             continue;
 
         double S = graph->length (m_states[veh_id].edge_uid);
-        double V = m_states[veh_id].velocity;
 
-        double critical_time = S * (1. - m_states[veh_id].part) / V;
+        double critical_time = S * (1. - m_states[veh_id].part) / graph::V_MAX;
 
         if (min_veh_id == graph::invalid_uid || critical_time < min_critical_time)
         {
@@ -132,10 +130,9 @@ int gno_modeling_simple::do_step (const graph_initial &initial_state)
         if (m_finished[veh_id] == 1)
           continue;
 
-        double V = m_states[veh_id].velocity;
         double S = graph->length (m_states[veh_id].edge_uid);
 
-        double dS = V * min_critical_time;
+        double dS = graph::V_MAX * min_critical_time;
 
         m_states[veh_id].part += dS / S;
 
@@ -166,7 +163,6 @@ int gno_modeling_simple::do_step (const graph_initial &initial_state)
           m_veh_on_edge[m_states[veh_id].edge_uid] --;
           m_veh_on_edge[next_edge] ++;
 
-          m_states[veh_id].velocity = graph::V_MAX;
           m_states[veh_id].edge_uid = next_edge;
           m_states[veh_id].part = 0.;
           m_states[veh_id].node_num ++;
