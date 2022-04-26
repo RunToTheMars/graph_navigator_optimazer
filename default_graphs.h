@@ -168,14 +168,15 @@ namespace graph
 
         std::mt19937 gen (0);
         std::uniform_real_distribution<double> node_random (0, n * m);
-        std::uniform_real_distribution<double> path_count_random (3, 10);
+        std::uniform_real_distribution<double> path_count_random (10, n * m);
         std::uniform_real_distribution<double> dir_4_random (0, 3);
         std::uniform_real_distribution<double> dir_3_random (0, 2);
         std::uniform_real_distribution<double> dir_2_random (0, 1);
 
-        std::set<graph::uid> nodes_set;
         for (int veh_i = 0; veh_i < veh_count; veh_i ++)
         {
+            std::set<graph::uid> nodes_set;
+
             Directional_Vehicle veh;
 
             int count = static_cast<int> (path_count_random (gen));
@@ -189,25 +190,25 @@ namespace graph
               int i = veh.path.back () / m;
               int j = veh.path.back () % m;
 
-              if (i > 0 && i < n - 1 && j > 0 && j < m - 1)
-              {
-                int dir = static_cast<int> (dir_4_random (gen));
-                int ind;
+              int dir = static_cast<int> (dir_4_random (gen));
+              int ind = -1;
 
-                if (dir == 0)
-                  ind = (i + 1) * m + j;
-                else if (dir == 1)
-                  ind = (i - 1) * m + j;
-                else if (dir == 2)
-                  ind = i * m + j + 1;
-                else if (dir == 3)
-                  ind = i * m + j - 1;
+              if (dir == 0 && i < n - 1)
+                ind = (i + 1) * m + j;
+              else if (dir == 1 && i > 0)
+                ind = (i - 1) * m + j;
+              else if (dir == 2 && j < m - 1)
+                ind = i * m + j + 1;
+              else if (dir == 3 && j > 0)
+                ind = i * m + j - 1;
 
-                if (!nodes_set.insert (ind).second)
+              if (ind == -1)
+                continue;
+
+              if (!nodes_set.insert (ind).second)
                   continue;
 
-                veh.path.push_back (ind);
-              }
+              veh.path.push_back (ind);
             }
             veh.dst = veh.path.back ();
 
