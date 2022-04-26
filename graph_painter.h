@@ -29,10 +29,15 @@ protected:
 
   //graph
   graph::graph_base *m_graph = nullptr;
+  graph::graph_initial_state_base *m_graph_initial_state = nullptr;
 
   //settings
   bool m_show_names = false;
   bool m_show_numbers = false;
+
+  bool m_show_path = false;
+  int m_veh_num = 0;
+
   bool m_is_editable = false;
   double m_point_size_mult = 1.;
   double m_edge_width_mult = 1.;
@@ -46,7 +51,7 @@ protected:
   QPointF m_move_drag_pos;
 
 public:
-  graph_painter (graph::graph_base *graph, render_area_widget *area);
+  graph_painter (graph::graph_initial *graph_initial, render_area_widget *area);
   ~graph_painter ();
 
   virtual void mouse_pos_changed (QMouseEvent *event) override;
@@ -59,9 +64,13 @@ public:
   void draw_nodes (QPainter &painter);
   void draw_edges (QPainter &painter);
   void draw_names (QPainter &painter);
+  void draw_path (QPainter &painter, graph::uid veh_id);
 
   void set_show_names (bool show) { m_show_names = show; }
   void set_show_numbers (bool show) { m_show_numbers = show; }
+
+  void set_show_path (bool show) { m_show_path = show; }
+  void show_veh_path (int veh_num) { m_veh_num = veh_num; }
 
   void set_is_editable (bool is_editable) { m_is_editable = is_editable; }
 

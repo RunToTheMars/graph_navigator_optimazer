@@ -7,7 +7,7 @@
 model_graph_area_render::model_graph_area_render (graph::graph_initial *graph_initial, QWidget *parent)
     : render_area_widget (parent)
 {
-    m_veh_painter = std::make_unique<veh_on_graph_painter> (graph_initial->get_graph (), this);
+    m_veh_painter = std::make_unique<veh_on_graph_painter> (graph_initial, this);
     m_veh_painter->set_is_editable (false);
     m_veh_painter->set_point_size_mult (0.5);
     m_veh_painter->set_edge_width_mult (0.5);

@@ -6,7 +6,7 @@
 #include <QColor>
 #include <QPainter>
 
-veh_on_graph_painter::veh_on_graph_painter (graph::graph_base *graph, render_area_widget *area): graph_painter (graph, area)
+veh_on_graph_painter::veh_on_graph_painter (graph::graph_initial *graph_initial, render_area_widget *area): graph_painter (graph_initial, area)
 {
 
 }
@@ -36,7 +36,7 @@ static void draw_on_arc_arrow (QPainter &painter, QPointF start, QPointF end, si
       on_arc_arrow_point = (end - angle_point) * 2 * (part - 0.5) + angle_point;
 
     painter.setBrush (color);
-    painter.drawEllipse (on_arc_arrow_point, graph_painter::point_size, graph_painter::point_size);
+    painter.drawEllipse (on_arc_arrow_point, 1.5 * graph_painter::point_size, 1.5 * graph_painter::point_size);
 }
 
 void veh_on_graph_painter::draw_veh (QPainter &painter)

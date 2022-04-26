@@ -7,7 +7,7 @@
 editable_graph_area_render::editable_graph_area_render (graph::graph_initial *graph_initial, QWidget *parent)
     : render_area_widget (parent)
 {
-  m_graph_painter = std::make_unique<graph_painter> (graph_initial->get_graph (), this);
+  m_graph_painter = std::make_unique<graph_painter> (graph_initial, this);
   m_graph_painter->set_is_editable (true);
   setMouseTracking (true);
 }

@@ -11,7 +11,7 @@ class veh_on_graph_painter : public graph_painter
     std::vector<graph::vehicle_continuous_line_states> *m_line_states = nullptr;
 
 public:
-    veh_on_graph_painter (graph::graph_base *graph, render_area_widget *area);
+    veh_on_graph_painter (graph::graph_initial *graph_initial, render_area_widget *area);
 
     virtual void draw (QPainter &painter) override;
     void draw_veh (QPainter &painter);

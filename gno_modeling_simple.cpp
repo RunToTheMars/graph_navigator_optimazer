@@ -29,16 +29,20 @@ int gno_modeling_simple::run (const graph_initial &initial_state)
       if (path.front () != initial_states->vehicle (veh_id).src)
         return -2;
 
+      if (path.back () != initial_states->vehicle (veh_id).dst)
+        return -3;
+
       auto edges = graph->edges (path[0], path[1]);
 
       if (edges.size () == 0)
-        return -3;
+        return -4;
 
-      graph::uid next_edge = 0;
-      for (graph::uid i = 1; i < edges.size (); i++)
+      graph::uid next_edge = edges[0];
+      for (size_t i = 1; i < edges.size (); i++)
       {
-        if (m_veh_on_edge[i] < m_veh_on_edge[next_edge])
-          next_edge = i;
+        graph::uid edge_uid = edges[i];
+        if (m_veh_on_edge[edge_uid] < m_veh_on_edge[next_edge])
+          next_edge = edge_uid;
       }
 
       m_veh_on_edge[next_edge] ++;
@@ -65,23 +69,29 @@ bool gno_modeling_simple::is_finished (const graph_initial &initial_state)
   const graph_base *graph = initial_state.get_graph ();
 
   graph::uid veh_count = initial_states->vehicle_count ();
+  bool res = true;
 
   for (graph::uid veh_id = 0; veh_id < veh_count; veh_id++)
   {
+    bool is_finish = true;
     if (m_finished[veh_id] == 1)
       continue;
 
     if (!fuzzy_eq (m_states[veh_id].part, 1.))
-      return false;
+      is_finish = false;
 
     auto edges = graph->edges_ended_on (initial_states->vehicle (veh_id).dst);
 
     if (std::find (edges.begin (), edges.end (), m_states[veh_id].edge_uid) == edges.end ())
-      return false;
+      is_finish = false;
 
-    m_finished[veh_id] = 1;
+    if (is_finish)
+      m_finished[veh_id] = 1;
+
+    if (!is_finish)
+      res = false;
   }
-  return true;
+  return res;
 }
 
 int gno_modeling_simple::do_step (const graph_initial &initial_state)
@@ -96,10 +106,13 @@ int gno_modeling_simple::do_step (const graph_initial &initial_state)
 
     for (graph::uid veh_id = 0; veh_id < veh_count; veh_id++)
     {
+        if (m_finished[veh_id] == 1)
+            continue;
+
         double S = graph->length (m_states[veh_id].edge_uid);
         double V = m_states[veh_id].velocity;
 
-        double critical_time = S / V;
+        double critical_time = S * (1. - m_states[veh_id].part) / V;
 
         if (min_veh_id == graph::invalid_uid || critical_time < min_critical_time)
         {
@@ -116,6 +129,9 @@ int gno_modeling_simple::do_step (const graph_initial &initial_state)
 
     for (graph::uid veh_id = 0; veh_id < veh_count; veh_id++)
     {
+        if (m_finished[veh_id] == 1)
+          continue;
+
         double V = m_states[veh_id].velocity;
         double S = graph->length (m_states[veh_id].edge_uid);
 
@@ -125,7 +141,7 @@ int gno_modeling_simple::do_step (const graph_initial &initial_state)
 
         if (fuzzy_eq (m_states[veh_id].part, 1.))
         {
-          auto path = initial_states->vehicle (veh_id).path;
+          const auto &path = initial_states->vehicle (veh_id).path;
 
           //choose path
           size_t node_num = m_states[veh_id].node_num;
@@ -146,6 +162,9 @@ int gno_modeling_simple::do_step (const graph_initial &initial_state)
             if (m_veh_on_edge[edge_id] < m_veh_on_edge[next_edge])
               next_edge = edge_id;
           }
+
+          m_veh_on_edge[m_states[veh_id].edge_uid] --;
+          m_veh_on_edge[next_edge] ++;
 
           m_states[veh_id].velocity = graph::V_MAX;
           m_states[veh_id].edge_uid = next_edge;

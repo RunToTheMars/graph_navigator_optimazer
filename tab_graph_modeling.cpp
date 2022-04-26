@@ -62,35 +62,35 @@ graph_modeling_tab::graph_modeling_tab (graph::graph_initial *graph_initial, QWi
           models_layout->addWidget (model_simple_groupbox, 0, 0);
       }
 
-      {
-          QGroupBox *model_simple_groupbox = new QGroupBox ("Simple 2", this);
-          QVBoxLayout *model_simple_layout = new QVBoxLayout (model_simple_groupbox);
-          model_simple_groupbox->setLayout (model_simple_layout);
+//      {
+//          QGroupBox *model_simple_groupbox = new QGroupBox ("Simple 2", this);
+//          QVBoxLayout *model_simple_layout = new QVBoxLayout (model_simple_groupbox);
+//          model_simple_groupbox->setLayout (model_simple_layout);
 
-//          m_simple_model = std::make_unique<graph::gno_modeling_simple> ();
-//          model_simple_layout->addWidget (m_simple_model_widget = new model_graph_widget (graph_initial, m_simple_model.get (),model_simple_groupbox));
-          models_layout->addWidget (model_simple_groupbox, 0, 1);
-      }
+////          m_simple_model = std::make_unique<graph::gno_modeling_simple> ();
+////          model_simple_layout->addWidget (m_simple_model_widget = new model_graph_widget (graph_initial, m_simple_model.get (),model_simple_groupbox));
+//          models_layout->addWidget (model_simple_groupbox, 0, 1);
+//      }
 
-      {
-          QGroupBox *model_simple_groupbox = new QGroupBox ("Simple 3", this);
-          QVBoxLayout *model_simple_layout = new QVBoxLayout (model_simple_groupbox);
-          model_simple_groupbox->setLayout (model_simple_layout);
+//      {
+//          QGroupBox *model_simple_groupbox = new QGroupBox ("Simple 3", this);
+//          QVBoxLayout *model_simple_layout = new QVBoxLayout (model_simple_groupbox);
+//          model_simple_groupbox->setLayout (model_simple_layout);
 
-//          m_simple_model = std::make_unique<graph::gno_modeling_simple> ();
-//          model_simple_layout->addWidget (m_simple_model_widget = new model_graph_widget (graph_initial, m_simple_model.get (),model_simple_groupbox));
-          models_layout->addWidget (model_simple_groupbox, 1, 0);
-      }
+////          m_simple_model = std::make_unique<graph::gno_modeling_simple> ();
+////          model_simple_layout->addWidget (m_simple_model_widget = new model_graph_widget (graph_initial, m_simple_model.get (),model_simple_groupbox));
+//          models_layout->addWidget (model_simple_groupbox, 1, 0);
+//      }
 
-      {
-          QGroupBox *model_simple_groupbox = new QGroupBox ("Simple 4", this);
-          QVBoxLayout *model_simple_layout = new QVBoxLayout (model_simple_groupbox);
-          model_simple_groupbox->setLayout (model_simple_layout);
+//      {
+//          QGroupBox *model_simple_groupbox = new QGroupBox ("Simple 4", this);
+//          QVBoxLayout *model_simple_layout = new QVBoxLayout (model_simple_groupbox);
+//          model_simple_groupbox->setLayout (model_simple_layout);
 
-//          m_simple_model = std::make_unique<graph::gno_modeling_simple> ();
-//          model_simple_layout->addWidget (m_simple_model_widget = new model_graph_widget (graph_initial, m_simple_model.get (),model_simple_groupbox));
-          models_layout->addWidget (model_simple_groupbox, 1, 1);
-      }
+////          m_simple_model = std::make_unique<graph::gno_modeling_simple> ();
+////          model_simple_layout->addWidget (m_simple_model_widget = new model_graph_widget (graph_initial, m_simple_model.get (),model_simple_groupbox));
+//          models_layout->addWidget (model_simple_groupbox, 1, 1);
+//      }
   }
 
 

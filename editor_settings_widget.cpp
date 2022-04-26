@@ -40,6 +40,17 @@ gno_editor_settings_widget::gno_editor_settings_widget(QWidget *parent): QWidget
 
             show_layout->addWidget (m_show_numbers = new QCheckBox ("Show Numbers", this));
             m_show_numbers->setTristate (false);
+
+            QGroupBox *show_veh_groupbox = new QGroupBox ("Vehicle Path", this);
+            QHBoxLayout *show_veh_layout = new QHBoxLayout (show_veh_groupbox);
+            {
+                show_veh_layout->addWidget (m_show_veh_path = new QCheckBox ("Show Path", this));
+                m_show_veh_path->setTristate (false);
+                show_veh_layout->addWidget (m_veh_num = new QSpinBox (this));
+                m_veh_num->setRange (0, 1000);
+            }
+
+            show_layout->addWidget (show_veh_groupbox);
         }
 
         layout->addWidget (show_groupbox);
@@ -73,6 +84,7 @@ gno_editor_settings_widget::gno_editor_settings_widget(QWidget *parent): QWidget
 
         {
             fill_layout->addWidget (m_load_default_1_button = new QPushButton ("Default 1", this));
+            fill_layout->addWidget (m_load_manh_button = new QPushButton ("Manhattan", this));
         }
 
         layout->addWidget (fill_groupbox);
@@ -103,10 +115,13 @@ gno_editor_settings_widget::gno_editor_settings_widget(QWidget *parent): QWidget
 
     QObject::connect (m_show_names, &QCheckBox::clicked, this, [this] (bool checked) { Q_EMIT show_name_signal (checked); });
     QObject::connect (m_show_numbers, &QCheckBox::clicked, this, [this] (bool checked) { Q_EMIT show_numbers_signal (checked); });
+    QObject::connect (m_show_veh_path, &QCheckBox::clicked, this, [this] (bool checked) { Q_EMIT show_path (checked); });
+    QObject::connect (m_veh_num, qOverload<int>(&QSpinBox::valueChanged), this, [this] (int veh_num) { Q_EMIT show_veh_path (veh_num); });
     QObject::connect (m_clear_button, &QPushButton::clicked, this, [this] () { Q_EMIT clear_signal (); });
     QObject::connect (m_random_button, &QPushButton::clicked, this, [this] ()
                      {
                          Q_EMIT fill_random_signal (m_random_node_count_spinbox->value (), m_random_vehicle_count_spinbox->value ());
                      });
     QObject::connect (m_load_default_1_button, &QPushButton::clicked, this, [this] () { Q_EMIT load_default_1_signal (); });
+    QObject::connect (m_load_manh_button, &QPushButton::clicked, this, [this] () { Q_EMIT load_manh_signal (); });
 }

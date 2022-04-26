@@ -1,18 +1,21 @@
 #include "graph_painter.h"
 
+#include "gno_graph_initial.h"
+#include "gno_graph_initial_state.h"
 #include "graph_axis_model.h"
 #include "abstract_axis_painter.h"
 #include "array"
 #include "utils.h"
+#include "color_builder.h"
 
 #include <QPainter>
 #include <QPen>
 #include <QMouseEvent>
 
-graph_painter::graph_painter (graph::graph_base *graph, render_area_widget *area)
-    : abstract_painter (area), m_graph (graph)
+graph_painter::graph_painter (graph::graph_initial *graph_initial, render_area_widget *area)
+    : abstract_painter (area), m_graph (graph_initial->get_graph ()), m_graph_initial_state (graph_initial->get_initial_state ())
 {
-    m_axis_model = std::make_unique<graph_axis_model> (graph);
+    m_axis_model = std::make_unique<graph_axis_model> (graph_initial->get_graph ());
     m_axis_painter = std::make_unique<abstract_axis_painter> (area);
     m_axis_painter->set_model (m_axis_model.get ());
 }
@@ -27,6 +30,9 @@ void graph_painter::draw (QPainter &painter)
 
   if (m_show_names || m_show_numbers)
     draw_names (painter);
+
+  if (m_show_path)
+    draw_path (painter, m_veh_num);
 }
 
 void graph_painter::draw_nodes (QPainter &painter)
@@ -223,6 +229,48 @@ void graph_painter::draw_names (QPainter &painter)
 
         painter.drawText (screen_pos, name);
     }
+}
+
+void graph_painter::draw_path (QPainter &painter, graph::uid veh_id)
+{
+    if (!m_show_path || veh_id >= m_graph_initial_state->vehicle_count ())
+      return;
+
+    graph::Directional_Vehicle vehicle = m_graph_initial_state->vehicle (veh_id);
+
+    default_color_builder color_builder;
+    color_builder.set_val_range (0., static_cast<double> (m_graph_initial_state->vehicle_count ()));
+
+    QColor color = color_builder.get_color (veh_id);
+    QColor font_color;
+
+    int black = color.black ();
+    if (black > 127)
+      font_color = QColor ("white");
+    else
+      font_color = QColor ("black");
+
+    QFontMetrics fm = painter.fontMetrics ();
+    for (size_t i = 0; i < vehicle.path.size (); i++)
+    {
+        graph::uid node_uid = vehicle.path[i];
+        const graph::Node &node = m_graph->node (node_uid);
+        QPointF screen_pos = m_axis_painter->get_screen_pos (node.x, node.y);
+
+        painter.setBrush (color);
+        painter.setPen(Qt::NoPen);
+        painter.drawEllipse (screen_pos, 2 * get_handle_point_size (), 2 * get_handle_point_size ());
+
+        QString name = QString ("%1").arg (i);
+
+        screen_pos.setX (screen_pos.x () - fm.horizontalAdvance (name) / 2);
+        screen_pos.setY (screen_pos.y () + fm.height () / 2 - 1);
+
+        painter.setPen (font_color);
+        painter.drawText (screen_pos, name);
+    }
+
+    painter.restore ();
 }
 
 graph::uid graph_painter::node_uid_under_mouse (QPointF mouse_pos) const
