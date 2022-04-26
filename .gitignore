@@ -42,9 +42,3 @@ Users*
 
 #Qt
 object_script*
-GNO.*
-
-#diplom
-*.aux
-*.log
-*.pdf
