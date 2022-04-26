@@ -42,3 +42,8 @@ Users*
 
 #Qt
 object_script*
+
+#diplom
+*.aux
+*.log
+*.pdf
