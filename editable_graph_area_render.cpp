@@ -1,21 +1,18 @@
 #include "editable_graph_area_render.h"
 #include "graph_painter.h"
+#include "gno_graph_initial.h"
 #include "gno_graph.h"
 #include <QMouseEvent>
 
-editable_graph_area_render::editable_graph_area_render (graph::graph_initial<> *graph_initial, QWidget *parent)
+editable_graph_area_render::editable_graph_area_render (graph::graph_initial *graph_initial, QWidget *parent)
     : render_area_widget (parent)
 {
   m_graph_painter = std::make_unique<graph_painter> (graph_initial->get_graph (), this);
+  m_graph_painter->set_is_editable (true);
   setMouseTracking (true);
 }
 
 editable_graph_area_render::~editable_graph_area_render () = default;
-
-void editable_graph_area_render::set_show_names (bool show)
-{
-  m_graph_painter->set_show_names (show);
-}
 
 void editable_graph_area_render::mouseReleaseEvent (QMouseEvent *event)
 {

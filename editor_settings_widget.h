@@ -26,6 +26,7 @@ public:
 
 Q_SIGNALS:
     void show_name_signal (bool show);
+    void show_numbers_signal (bool show);
     void clear_signal ();
     void fill_random_signal (unsigned int node_count, unsigned int veh_count);
     void load_default_1_signal ();
@@ -42,6 +43,7 @@ private:
 
     //show options
     QCheckBox *m_show_names = nullptr;
+    QCheckBox *m_show_numbers = nullptr;
 
     //fill options
     QPushButton *m_clear_button = nullptr;

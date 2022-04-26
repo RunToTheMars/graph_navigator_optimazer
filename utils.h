@@ -3,6 +3,8 @@
 
 #include "math.h"
 
+#define OK(x) (x >= 0)
+
 namespace cmp_constants
 {
   constexpr double min_compare = 1.e-12;

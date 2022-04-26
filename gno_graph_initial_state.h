@@ -7,7 +7,6 @@
 namespace graph
 {
 
-template <typename Vehicle = Vehicle_Base>
 struct Directional_Vehicle
 {
     Vehicle vehicle;
@@ -19,27 +18,21 @@ struct Directional_Vehicle
     graph::uid src;
     graph::uid dst;
 
-    //edge uids
+    //node uids
     std::vector<graph::uid> path;
 };
 
-template <typename Vehicle = Vehicle_Base>
 class graph_initial_state_base
 {
 public:
-    using dir_veh = Directional_Vehicle<Vehicle>;
-
     virtual ~graph_initial_state_base () = default;
 
     virtual graph::uid vehicle_count () const = 0;
 
-    virtual Vehicle &vehicle (const uid vehicle_uid) = 0;
-    virtual const Vehicle &vehicle (const uid vehicle_uid) const = 0;
+    virtual Directional_Vehicle &vehicle (const uid vehicle_uid) = 0;
+    virtual const Directional_Vehicle &vehicle (const uid vehicle_uid) const = 0;
 
-    virtual std::vector<graph::uid> &path (const uid vehicle_uid) = 0;
-    virtual const std::vector<graph::uid> &path (const uid vehicle_uid) const = 0;
-
-    virtual void add_vehicle (const dir_veh &directional_vehicle) = 0;
+    virtual void add_vehicle (const Directional_Vehicle &directional_vehicle) = 0;
     virtual void remove_vehicle (const uid vehicle_uid) = 0;
 
     virtual void clear () = 0;
@@ -50,10 +43,9 @@ public:
     }
 };
 
-template <typename Vehicle = Vehicle_Base>
-class graph_initial_state_impl : public graph_initial_state_base<Vehicle>
+class graph_initial_state_impl : public graph_initial_state_base
 {
-    using parent_t = graph_initial_state_base<Vehicle>;
+    using parent_t = graph_initial_state_base;
 
 public:
     virtual ~graph_initial_state_impl () = default;
@@ -63,27 +55,17 @@ public:
         return static_cast<uid> (m_directional_vehicles.size ());
     }
 
-    virtual Vehicle &vehicle (const uid vehicle_uid) override
+    virtual Directional_Vehicle &vehicle (const uid vehicle_uid) override
     {
-        return m_directional_vehicles[vehicle_uid].vehicle;
+        return m_directional_vehicles[vehicle_uid];
     }
 
-    virtual const Vehicle &vehicle (const uid vehicle_uid) const override
+    virtual const Directional_Vehicle &vehicle (const uid vehicle_uid) const override
     {
-        return m_directional_vehicles[vehicle_uid].vehicle;
+        return m_directional_vehicles[vehicle_uid];
     }
 
-    virtual std::vector<uid> &path (const uid vehicle_uid) override
-    {
-        return m_directional_vehicles[vehicle_uid].path;
-    }
-
-    virtual const std::vector<uid> &path (const uid vehicle_uid) const override
-    {
-        return m_directional_vehicles[vehicle_uid].path;
-    }
-
-    virtual void add_vehicle (const Directional_Vehicle<Vehicle> &directional_vehicle) override
+    virtual void add_vehicle (const Directional_Vehicle &directional_vehicle) override
     {
         return m_directional_vehicles.push_back (directional_vehicle);
     }
@@ -99,7 +81,7 @@ public:
     }
 
 private:
-    std::vector<Directional_Vehicle<Vehicle>> m_directional_vehicles;
+    std::vector<Directional_Vehicle> m_directional_vehicles;
 };
 }
 

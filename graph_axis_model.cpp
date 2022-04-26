@@ -4,7 +4,7 @@
 #include <QColor>
 #include <optional>
 
-graph_axis_model::graph_axis_model (graph::graph_base<> *graph): m_graph (graph)
+graph_axis_model::graph_axis_model (graph::graph_base *graph): m_graph (graph)
 {
 }
 

@@ -2,20 +2,25 @@
 #define MAIN_WINDOW_H
 
 #include <QWidget>
+#include "gno_graph_fwd.h"
 
 class graph_editor_tab;
-
-
+class graph_modeling_tab;
 class QGroupBox;
 
 class gno_main_window: public QWidget
 {
 public:
-    gno_main_window(QWidget *parent = nullptr);
+    gno_main_window (QWidget *parent = nullptr);
+    ~gno_main_window ();
 
 private:
+    std::unique_ptr<graph::graph_base> m_graph;
+    std::unique_ptr<graph::graph_initial_state_base> m_graph_initial_state;
+    std::unique_ptr<graph::graph_initial> m_graph_initial;
+
     graph_editor_tab *m_editor_tab = nullptr;
-    graph_editor_tab *m_calculations_tab = nullptr;
+    graph_modeling_tab *m_modeling_tab = nullptr;
 };
 
 #endif // MAIN_WINDOW_H

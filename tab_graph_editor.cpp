@@ -1,19 +1,16 @@
-#include "graph_editor_tab.h"
+#include "tab_graph_editor.h"
+
 #include "editable_graph_area_render.h"
 #include "editor_settings_widget.h"
 #include "default_graphs.h"
+#include "graph_painter.h"
 
 #include <QGroupBox>
 #include <QHBoxLayout>
 #include <QSplitter>
 
-graph_editor_tab::graph_editor_tab (QWidget *parent) : QWidget (parent)
+graph_editor_tab::graph_editor_tab (graph::graph_initial *graph_initial, QWidget *parent) : QWidget (parent), m_graph_initial (graph_initial)
 {
-  m_graph = std::make_unique<graph::graph_impl<>> ();
-  m_graph_initial_state = std::make_unique<graph::graph_initial_state_impl<>> ();
-
-  m_graph_initial = std::make_unique<graph::graph_initial<>> (m_graph.get (), m_graph_initial_state.get ());
-
   QHBoxLayout *horizon_layout = new QHBoxLayout (this);
 
   // settings
@@ -34,7 +31,7 @@ graph_editor_tab::graph_editor_tab (QWidget *parent) : QWidget (parent)
     QVBoxLayout *algorithms_vertial_layout = new QVBoxLayout (graph_groupbox);
     graph_groupbox->setLayout (algorithms_vertial_layout);
 
-    algorithms_vertial_layout->addWidget (m_editable_graph_area_render = new editable_graph_area_render (m_graph_initial.get (), graph_groupbox));
+    algorithms_vertial_layout->addWidget (m_editable_graph_area_render = new editable_graph_area_render (m_graph_initial, graph_groupbox));
   }
 
   QSplitter *splitter = new QSplitter (Qt::Orientation::Horizontal, this);
@@ -43,7 +40,12 @@ graph_editor_tab::graph_editor_tab (QWidget *parent) : QWidget (parent)
   horizon_layout->addWidget (splitter);
 
   QObject::connect (m_editor_settings, &gno_editor_settings_widget::show_name_signal, this, [this] (bool show) {
-      m_editable_graph_area_render->set_show_names (show);
+      m_editable_graph_area_render->get_painter ()->set_show_names (show);
+      m_editable_graph_area_render->update ();
+  });
+
+  QObject::connect (m_editor_settings, &gno_editor_settings_widget::show_numbers_signal, this, [this] (bool show) {
+      m_editable_graph_area_render->get_painter ()->set_show_numbers (show);
       m_editable_graph_area_render->update ();
   });
 
@@ -55,8 +57,8 @@ graph_editor_tab::graph_editor_tab (QWidget *parent) : QWidget (parent)
                    });
 
   QObject::connect (m_editor_settings, &gno_editor_settings_widget::fill_random_signal, this, [this] (unsigned int node_count, unsigned int veh_count) {
-      graph::fill_random (m_graph_initial.get (), node_count, veh_count);
+      graph::fill_random (m_graph_initial, node_count, veh_count);
       m_editable_graph_area_render->update ();
   });
-  QObject::connect (m_editor_settings, &gno_editor_settings_widget::load_default_1_signal, this, [this] () { graph::set_default_graph_1(m_graph_initial.get ()); m_editable_graph_area_render->update (); });
+  QObject::connect (m_editor_settings, &gno_editor_settings_widget::load_default_1_signal, this, [this] () { graph::set_default_graph_1(m_graph_initial); m_editable_graph_area_render->update (); });
 }

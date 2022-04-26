@@ -37,6 +37,9 @@ gno_editor_settings_widget::gno_editor_settings_widget(QWidget *parent): QWidget
         {
             show_layout->addWidget (m_show_names = new QCheckBox ("Names", this));
             m_show_names->setTristate (false);
+
+            show_layout->addWidget (m_show_numbers = new QCheckBox ("Show Numbers", this));
+            m_show_numbers->setTristate (false);
         }
 
         layout->addWidget (show_groupbox);
@@ -99,6 +102,7 @@ gno_editor_settings_widget::gno_editor_settings_widget(QWidget *parent): QWidget
 //    }
 
     QObject::connect (m_show_names, &QCheckBox::clicked, this, [this] (bool checked) { Q_EMIT show_name_signal (checked); });
+    QObject::connect (m_show_numbers, &QCheckBox::clicked, this, [this] (bool checked) { Q_EMIT show_numbers_signal (checked); });
     QObject::connect (m_clear_button, &QPushButton::clicked, this, [this] () { Q_EMIT clear_signal (); });
     QObject::connect (m_random_button, &QPushButton::clicked, this, [this] ()
                      {

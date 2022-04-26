@@ -11,50 +11,30 @@
 
 namespace graph
 {
-    template <typename Node, typename Edge, typename Vehicle>
-    void set_graph (graph::graph_initial <Node, Edge, Vehicle> *graph_initial,
-                    const std::vector<Node_Base> &nodes,
-                    const std::vector<Edge_Base> &edges,
-                    const std::vector<Directional_Vehicle<Vehicle_Base>> &dir_vehs)
+    void set_graph (graph::graph_initial *graph_initial,
+                    const std::vector<Node> &nodes,
+                    const std::vector<Edge> &edges,
+                    const std::vector<Directional_Vehicle> &dir_vehs)
     {
-      graph::graph_base <Node, Edge> *graph = graph_initial->get_graph ();
+      graph::graph_base *graph = graph_initial->get_graph ();
       graph->clear ();
 
       for (auto &node : nodes)
-        {
-          Node n;
-          n.x = node.x;
-          n.y = node.y;
-          n.name = node.name;
-          graph->add_node (n);
-        }
+        graph->add_node (node);
 
       for (auto &edge : edges)
-      {
-          Edge e;
-          e.start = edge.start;
-          e.end = edge.end;
-          e.length = edge.length;
-          graph->add_edge (e);
-      }
+        graph->add_edge (edge);
 
-      graph_initial_state_base<Vehicle> *initial_state = graph_initial->get_initial_state ();
+      graph_initial_state_base *initial_state = graph_initial->get_initial_state ();
       initial_state->clear ();
 
       for (auto dir_veh: dir_vehs)
-      {
-          Directional_Vehicle<Vehicle> d_v;
-          d_v.vehicle.weight = dir_veh.vehicle.weight;
-          d_v.path = dir_veh.path;
-
-          initial_state->add_vehicle (d_v);
-      }
+        initial_state->add_vehicle (dir_veh);
 
       graph->calculate_bounds ();
     }
 
-    template <typename Node, typename Edge, typename Vehicle>
-    void fill_random (graph::graph_initial <Node, Edge, Vehicle> *graph_initial, unsigned int node_count, unsigned int vehicle_count, int seed = 0,
+    void fill_random (graph::graph_initial *graph_initial, unsigned int node_count, unsigned int vehicle_count, int seed = 0,
                       double min_x = 0, double max_x = 1, double min_y = 0, double max_y = 1, double edge_probability = 0.1,
                       double min_w = 0.1, double max_w = 10.)
     {
@@ -113,7 +93,7 @@ namespace graph
         return;
       }
 
-      std::vector<Directional_Vehicle<Vehicle_Base>> dir_vehs;
+      std::vector<Directional_Vehicle> dir_vehs;
       for (unsigned int i = 0; i < vehicle_count; i++)
       {
         graph::uid src_node_uid = static_cast<graph::uid> (node_random (gen));
@@ -121,7 +101,7 @@ namespace graph
         while (src_node_uid == (dst_node_uid = static_cast<graph::uid> (node_random (gen))));
 
         double w = w_random (gen);
-        Directional_Vehicle<Vehicle> dir_veh;
+        Directional_Vehicle dir_veh;
         dir_veh.vehicle.weight = w;
         dir_veh.path = {src_node_uid, dst_node_uid};
         dir_vehs.push_back (dir_veh);
@@ -130,19 +110,19 @@ namespace graph
      set_graph (graph_initial, nodes, edges, dir_vehs);
     }
 
-    template <typename Node, typename Edge, typename Vehicle>
-    void set_default_graph_1 (graph::graph_initial <Node, Edge, Vehicle> *graph_initial)
+    void set_default_graph_1 (graph::graph_initial *graph_initial)
     {
-        std::vector<Node_Base> nodes = {{-1, 0.5, "A"}, {0., 0.5, ""}, {0.5, 1., ""}, {0.5, 0., ""}, {1, 0.5, ""}, {2, 0.5, "B"}};
+        std::vector<Node> nodes = {{-1, 0.5, "A"}, {0., 0.5, ""}, {0.5, 1., ""}, {0.5, 0., ""}, {1, 0.5, ""}, {2, 0.5, "B"}};
 
-        std::vector<Edge_Base> edges = {{0, 1}, {0, 1}, {1, 2}, {1, 3}, {2, 4}, {3, 4}, {4, 5}};
+        std::vector<Edge> edges = {{0, 1}, {0, 1}, {1, 2}, {1, 3}, {2, 4}, {3, 4}, {4, 5}};
 
-        Directional_Vehicle<Vehicle> v1;
+        Directional_Vehicle v1;
         v1.src = 0;
         v1.dst = 5;
+        v1.path = {0, 1, 2, 4, 5};
 
 
-        std::vector<Directional_Vehicle<Vehicle_Base>> dir_vehs = {v1};
+        std::vector<Directional_Vehicle> dir_vehs = {v1};
 
         set_graph (graph_initial, nodes, edges, dir_vehs);
     }

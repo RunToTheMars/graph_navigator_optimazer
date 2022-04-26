@@ -10,39 +10,31 @@
 
 namespace graph
 {
-template <typename Node = Node_Base, typename Edge = Edge_Base>
 class graph_base
 {
-    static_assert (std::is_base_of<Node_Base, Node>::value,
-                  "Node must derive from Node_Base");
-    static_assert (std::is_base_of<Edge_Base, Edge>::value,
-                  "Edge must derive from Edge_Base");
-
 public:
-    using self_node = Node;
-    using self_edge = Edge;
-
     virtual ~graph_base () = default;
 
     virtual graph::uid node_count () const = 0;
     virtual graph::uid edge_count () const = 0;
 
-    virtual self_node &node (const uid node_uid) = 0;
-    virtual self_edge &edge (const uid edge_uid) = 0;
+    virtual Node &node (const uid node_uid) = 0;
+    virtual Edge &edge (const uid edge_uid) = 0;
 
-    virtual const self_node &node (const uid node_uid) const = 0;
-    virtual const self_edge &edge (const uid edge_uid) const = 0;
+    virtual const Node &node (const uid node_uid) const = 0;
+    virtual const Edge &edge (const uid edge_uid) const = 0;
 
     virtual const std::vector<graph::uid> &edges_started_from (const uid node_uid) const = 0;
     virtual const std::vector<graph::uid> &edges_ended_on (const uid node_uid) const = 0;
+    virtual const std::vector<graph::uid> edges (const uid start, const uid end) const = 0;
 
-    virtual void add_node (const self_node &node) = 0;
+    virtual void add_node (const Node &node) = 0;
     virtual void remove_node (const uid node_uid)
     {
         remove_node_impl (node_uid);
         for (uid edge_uid = 0; edge_uid < static_cast<int> (edge_count ()); edge_uid ++)
         {
-            const self_edge &e = edge (edge_uid);
+            const Edge &e = edge (edge_uid);
             if (e.start == node_uid || e.end == node_uid)
             {
                 remove_edge (edge_uid);
@@ -51,7 +43,7 @@ public:
         }
     }
 
-    virtual void add_edge (const self_edge &edge) = 0;
+    virtual void add_edge (const Edge &edge) = 0;
     virtual void remove_edge (const uid edge_uid) = 0;
 
     virtual double length (const uid edge_uid) const = 0;
@@ -75,10 +67,9 @@ private:
 
 };
 
-template <typename Node = Node_Base, typename Edge = Edge_Base>
-class graph_impl : public graph_base<Node, Edge>
+class graph_impl : public graph_base
 {
-    using parent_t = graph_base<Node_Base, Edge_Base>;
+    using parent_t = graph_base;
 
 public:
     virtual ~graph_impl () = default;
@@ -92,8 +83,9 @@ public:
     virtual const Node &node (const uid node_uid) const override { return m_nodes[node_uid]; }
     virtual const Edge &edge (const uid edge_uid) const override { return m_edges[edge_uid]; }
 
-    virtual const std::vector<graph::uid> &edges_started_from (const uid node_uid) const { return m_start_map[node_uid]; }
-    virtual const std::vector<graph::uid> &edges_ended_on   (const uid node_uid) const { return m_end_map[node_uid]; }
+    virtual const std::vector<graph::uid> &edges_started_from (const uid node_uid) const override { return m_start_map[node_uid]; }
+    virtual const std::vector<graph::uid> &edges_ended_on   (const uid node_uid) const override { return m_end_map[node_uid]; }
+    virtual const std::vector<graph::uid> edges (const uid start, const uid end) const override;
 
     virtual void add_node (const Node &node) override
     {
