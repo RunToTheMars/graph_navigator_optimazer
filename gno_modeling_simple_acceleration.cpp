@@ -95,14 +95,16 @@ int gno_modeling_simple_acceleration::do_step (const graph_initial &initial_stat
         }
     }
 
-    m_t += min_critical_time;
-
     for (graph::uid veh_id = 0; veh_id < veh_count; veh_id++)
     {
         if (fuzzy_eq (m_states[veh_id].part, 1.) && m_states[veh_id].edge_num  == isize (initial_states->vehicle (veh_id).path) - 1)
             continue;
 
-        const graph::Directional_Vehicle &veh = initial_states->vehicle(veh_id);
+        const graph::Directional_Vehicle &veh = initial_states->vehicle (veh_id);
+
+        if (m_t < veh.t)
+          continue;
+
         const size_t edge_num = m_states[veh_id].edge_num;
 
         const double S = graph->length (veh.path[edge_num]);
@@ -135,6 +137,9 @@ int gno_modeling_simple_acceleration::do_step (const graph_initial &initial_stat
             m_accelerations[veh_id] = 0.;
     }
 
+    if (min_critical_time)
+
+    m_t += min_critical_time;
     find_critical_time (m_t, m_states);
     return 0;
 }

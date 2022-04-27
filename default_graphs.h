@@ -199,6 +199,7 @@ namespace graph
             }
 
             veh.dst = prev_node;
+            veh.t = veh_i;
 
             if (veh.path.size () == 0)
               continue;
@@ -225,7 +226,7 @@ namespace graph
         v2.src = 0;
         v2.dst = 5;
         v2.path = {1, 3, 5, 6};
-        v1.t = 1.;
+        v2.t = 10.;
 
         const std::vector<Directional_Vehicle> dir_vehs = {v1, v2};
 

@@ -7,6 +7,7 @@ namespace graph
 {
 class gno_star_modeling: public gno_discrete_modeling_base
 {
+   static constexpr double dist_for_start = 2 * graph::D;
 
   enum class state_t
     {
@@ -30,7 +31,6 @@ class gno_star_modeling: public gno_discrete_modeling_base
 
   double m_t = 0.;
   std::vector<vehicle_discrete_state> m_states;
-  std::vector<size_t> m_veh_on_edge;
 
   std::vector<state> m_machine_states;
   std::vector<graph::uid> m_next_veh;

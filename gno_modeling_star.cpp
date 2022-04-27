@@ -1,11 +1,15 @@
 #include "gno_modeling_star.h"
 #include "gno_graph.h"
+#include "gno_test.h"
 
 namespace graph
 {
   int gno_star_modeling::run (const graph_initial &initial_state)
   {
     m_initial_state = &initial_state;
+
+    if (!OK (graph::check_path (initial_state)))
+      return -1;
 
     if (!OK (init_states ()))
       return -1;
@@ -25,52 +29,13 @@ namespace graph
   int gno_star_modeling::init_states ()
   {
       const graph_initial_state_base *initial_states = m_initial_state->get_initial_state ();
-      const graph_base *graph = m_initial_state->get_graph ();
-
-      graph::uid veh_count = initial_states->vehicle_count ();
+      const graph::uid veh_count = initial_states->vehicle_count ();
 
       m_t = 0.;
       m_states.resize (veh_count);
       m_machine_states.resize (veh_count);
-      m_veh_on_edge.assign (graph->edge_count(), 0);
       m_next_veh.resize (veh_count, graph::invalid_uid);
 
-      std::fill (m_veh_on_edge.begin (), m_veh_on_edge.end (), 0);
-
-      for (graph::uid veh_id = 0; veh_id < veh_count; veh_id++)
-      {
-          vehicle_discrete_state &state = m_states[veh_id];
-
-          //choose way
-          const auto &path = initial_states->vehicle (veh_id).path;
-          if (path.size () < 2)
-              return -1;
-
-          if (path.front () != initial_states->vehicle (veh_id).src)
-              return -2;
-
-          if (path.back () != initial_states->vehicle (veh_id).dst)
-              return -3;
-
-          auto edges = graph->edges (path[0], path[1]);
-
-          if (edges.size () == 0)
-              return -4;
-
-          graph::uid next_edge = edges[0];
-          for (size_t i = 1; i < edges.size (); i++)
-          {
-              graph::uid edge_uid = edges[i];
-              if (m_veh_on_edge[edge_uid] < m_veh_on_edge[next_edge])
-                next_edge = edge_uid;
-          }
-
-          m_veh_on_edge[next_edge] ++;
-
-          state.part = 0.;
-//          state.node_num = 0;
-//          state.edge_uid = next_edge;
-      }
     return 0;
   }
 
@@ -123,7 +88,7 @@ namespace graph
             //start
             double critical_time_1 = m_t - veh.t;
 
-            //2D distance
+            //dist_for_start distance
             double critical_time_2 = 0.;
           }
       }

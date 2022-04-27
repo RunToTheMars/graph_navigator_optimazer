@@ -9,20 +9,12 @@ gno_continuous_modeling::gno_continuous_modeling (gno_discrete_modeling_base *di
 
 int gno_continuous_modeling::run (const graph_initial &initial_state)
 {
-    int res = 0;
-
     const graph::uid veh_count = initial_state.get_initial_state()->vehicle_count ();
 
     m_cricital_count = 0;
-    m_discrete_modeling->set_do_in_critical_time ([this, &res, veh_count, &initial_state] (double time, const std::vector<vehicle_discrete_state> &cur_discrete_states) {
+    m_discrete_modeling->set_do_in_critical_time ([this, veh_count, &initial_state] (double time, const std::vector<vehicle_discrete_state> &cur_discrete_states) {
         if (m_cricital_count > 0)
         {
-            if (fuzzy_eq (time, m_prev_time))
-            {
-                res = -1;
-                return;
-            }
-
             std::vector<vehicle_continuous_state> continuous_states (veh_count);
 
             for (graph::uid veh_id = 0; veh_id < veh_count; veh_id++)
@@ -49,9 +41,7 @@ int gno_continuous_modeling::run (const graph_initial &initial_state)
     });
 
     int r = m_discrete_modeling->run (initial_state);
-    if (r < res)
-      return r;
-    return res;
+    return r;
 }
 }
 
