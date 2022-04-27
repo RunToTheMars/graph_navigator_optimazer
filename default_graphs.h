@@ -109,7 +109,7 @@ namespace graph
         dir_vehs.push_back (dir_veh);
       }
 
-     set_graph (graph_initial, nodes, edges, dir_vehs);
+//     set_graph (graph_initial, nodes, edges, dir_vehs);
     }
 
     void set_graph_manh (graph::graph_initial *graph_initial)
@@ -164,14 +164,15 @@ namespace graph
 
         std::vector<Directional_Vehicle> vehs;
 
+        //for edges manipulation
+        set_graph (graph_initial, nodes, edges, vehs);
+
         const int veh_count = 100;
 
         std::mt19937 gen (0);
-        std::uniform_real_distribution<double> node_random (0, n * m);
-        std::uniform_real_distribution<double> path_count_random (10, n * m);
-        std::uniform_real_distribution<double> dir_4_random (0, 3);
-        std::uniform_real_distribution<double> dir_3_random (0, 2);
-        std::uniform_real_distribution<double> dir_2_random (0, 1);
+        std::uniform_real_distribution<double> node_random (0, nodes.size ());
+        std::uniform_real_distribution<double> path_count_random (5, nodes.size () / 5);
+        std::uniform_real_distribution<double> dir_random (0, 4);
 
         for (int veh_i = 0; veh_i < veh_count; veh_i ++)
         {
@@ -179,40 +180,27 @@ namespace graph
 
             Directional_Vehicle veh;
 
-            int count = static_cast<int> (path_count_random (gen));
-            graph::uid v = static_cast<graph::uid> (node_random (gen));
-            veh.src = v;
-            veh.path.push_back (v);
-            nodes_set.insert (v);
+            const size_t path_size = static_cast<size_t> (path_count_random (gen));
+            const graph::uid src = static_cast<graph::uid> (node_random (gen));
+            veh.src = src;
 
-            for (int step = 0; step < count; step++)
+            graph::uid prev_node = src;
+            for (size_t step = 0; step < path_size; step++)
             {
-              int i = veh.path.back () / m;
-              int j = veh.path.back () % m;
+                const std::vector<graph::uid> edges = graph_initial->get_graph ()->edges_started_from (prev_node);
+                const size_t random_dir = static_cast<size_t> (dir_random (gen)) % edges.size ();
+                const graph::uid edge_uid = edges[random_dir];
 
-              int dir = static_cast<int> (dir_4_random (gen));
-              int ind = -1;
-
-              if (dir == 0 && i < n - 1)
-                ind = (i + 1) * m + j;
-              else if (dir == 1 && i > 0)
-                ind = (i - 1) * m + j;
-              else if (dir == 2 && j < m - 1)
-                ind = i * m + j + 1;
-              else if (dir == 3 && j > 0)
-                ind = i * m + j - 1;
-
-              if (ind == -1)
-                continue;
-
-              if (!nodes_set.insert (ind).second)
+                const graph::uid node_end = graph_initial->get_graph ()->edge (edge_uid).end;
+                if (nodes_set.insert (node_end).second == false)
                   continue;
-
-              veh.path.push_back (ind);
+                veh.path.push_back (edge_uid);
+                prev_node = node_end;
             }
-            veh.dst = veh.path.back ();
 
-            if (veh.path.size () < 2)
+            veh.dst = prev_node;
+
+            if (veh.path.size () == 0)
               continue;
 
             vehs.push_back (veh);
@@ -223,22 +211,23 @@ namespace graph
 
     void set_default_graph_1 (graph::graph_initial *graph_initial)
     {
-        std::vector<Node> nodes = {{-1, 0.5, "A"}, {0., 0.5, ""}, {0.5, 1., ""}, {0.5, 0., ""}, {1, 0.5, ""}, {2, 0.5, "B"}};
-
-        std::vector<Edge> edges = {{0, 1, graph::D}, {0, 1, graph::D}, {1, 2, graph::D}, {1, 3, graph::D}, {2, 4, graph::D}, {3, 4, graph::D}, {4, 5, graph::D}};
+        const double l = 3 * graph::D;
+        const std::vector<Node> nodes = {{-1, 0.5, "A"}, {0., 0.5, ""}, {0.5, 1., ""}, {0.5, 0., ""}, {1, 0.5, ""}, {2, 0.5, "B"}};
+        const std::vector<Edge> edges = {{0, 1, l}, {0, 1, l}, {1, 2, l}, {1, 3, l}, {2, 4, l}, {3, 4, l}, {4, 5, l}};
 
         Directional_Vehicle v1;
         v1.src = 0;
         v1.dst = 5;
-        v1.path = {0, 1, 2, 4, 5};
+        v1.path = {0, 2, 4, 6};
+        v1.t = 0.;
 
         Directional_Vehicle v2;
         v2.src = 0;
         v2.dst = 5;
-        v2.path = {0, 1, 3, 4, 5};
+        v2.path = {1, 3, 5, 6};
+        v1.t = 1.;
 
-
-        std::vector<Directional_Vehicle> dir_vehs = {v1, v2};
+        const std::vector<Directional_Vehicle> dir_vehs = {v1, v2};
 
         set_graph (graph_initial, nodes, edges, dir_vehs);
     }

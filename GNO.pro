@@ -17,9 +17,8 @@ SOURCES += \
     editor_settings_widget.cpp \
     gno_graph.cpp \
     gno_modeling.cpp \
-    gno_modeling_dijkstra.cpp \
-    gno_modeling_simple.cpp \
     gno_modeling_simple_acceleration.cpp \
+    gno_modeling_star.cpp \
     gno_test.cpp \
     graph_axis_model.cpp \
     graph_painter.cpp \
@@ -46,9 +45,8 @@ HEADERS += \
     gno_graph_initial.h \
     gno_graph_initial_state.h \
     gno_modeling.h \
-    gno_modeling_dijkstra.h \
-    gno_modeling_simple.h \
     gno_modeling_simple_acceleration.h \
+    gno_modeling_star.h \
     gno_test.h \
     graph_axis_model.h \
     graph_painter.h \

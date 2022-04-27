@@ -1,7 +1,6 @@
 #include "tab_graph_modeling.h"
 
 #include "model_graph_widget.h"
-#include "gno_modeling_simple.h"
 #include "gno_modeling_simple_acceleration.h"
 #include <chrono>
 
@@ -58,7 +57,10 @@ graph_modeling_tab::graph_modeling_tab (graph::graph_initial *graph_initial, QWi
           QVBoxLayout *model_simple_layout = new QVBoxLayout (model_simple_groupbox);
           model_simple_groupbox->setLayout (model_simple_layout);
 
-          m_simple_model = std::make_unique<graph::gno_modeling_simple> ();
+          graph::gno_modeling_simple_acceleration *simple_acc = new graph::gno_modeling_simple_acceleration ();
+          simple_acc->set_start_acc (0.);
+          simple_acc->set_start_velocity (graph::V_MAX);
+          m_simple_model.reset (simple_acc);
           model_simple_layout->addWidget (m_simple_model_widget = new model_graph_widget (graph_initial, m_simple_model.get (),model_simple_groupbox));
           models_layout->addWidget (model_simple_groupbox, 0, 0);
       }
@@ -68,7 +70,10 @@ graph_modeling_tab::graph_modeling_tab (graph::graph_initial *graph_initial, QWi
           QVBoxLayout *model_simple_acc_layout = new QVBoxLayout (model_simple_acc_groupbox);
           model_simple_acc_groupbox->setLayout (model_simple_acc_layout);
 
-          m_simple_acc_model = std::make_unique<graph::gno_modeling_simple_acceleration> ();
+          graph::gno_modeling_simple_acceleration *simple_acc = new graph::gno_modeling_simple_acceleration ();
+          simple_acc->set_start_acc (graph::A_MAX);
+          simple_acc->set_start_velocity (0.);
+          m_simple_acc_model.reset (simple_acc);
           model_simple_acc_layout->addWidget (m_simple_acc_model_widget = new model_graph_widget (graph_initial, m_simple_acc_model.get (), model_simple_acc_groupbox));
           models_layout->addWidget (model_simple_acc_groupbox, 0, 1);
       }

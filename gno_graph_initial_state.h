@@ -18,7 +18,7 @@ struct Directional_Vehicle
     graph::uid src;
     graph::uid dst;
 
-    //node uids
+    //edge uids
     std::vector<graph::uid> path;
 };
 

@@ -17,7 +17,7 @@ void veh_on_graph_painter::draw (QPainter &painter)
     draw_veh (painter);
 }
 
-static void draw_on_arc_arrow (QPainter &painter, QPointF start, QPointF end, size_t shift, double part, QColor color)
+static void draw_on_arc_arrow (QPainter &painter, QPointF start, QPointF end, size_t shift, double part, QColor color, graph::uid veh_id)
 {
     QPointF diff = end - start;
     QPointF norm = {-diff.y (), diff.x ()};
@@ -37,11 +37,31 @@ static void draw_on_arc_arrow (QPainter &painter, QPointF start, QPointF end, si
 
     painter.setBrush (color);
     painter.drawEllipse (on_arc_arrow_point, 1.5 * graph_painter::point_size, 1.5 * graph_painter::point_size);
+
+    QString name = QString ("%1").arg (veh_id);
+
+    QFontMetrics fm = painter.fontMetrics ();
+    on_arc_arrow_point.setX (on_arc_arrow_point.x () - fm.horizontalAdvance (name) / 2);
+    on_arc_arrow_point.setY (on_arc_arrow_point.y () + fm.height () / 2 - 1);
+
+    QColor font_color;
+
+    int black = color.black ();
+    if (black > 127)
+        font_color = QColor ("white");
+    else
+        font_color = QColor ("black");
+
+    painter.setPen (font_color);
+    painter.drawText (on_arc_arrow_point, name);
 }
 
 void veh_on_graph_painter::draw_veh (QPainter &painter)
 {
   if (!m_line_states)
+    return;
+
+  if (m_line_states->size () == 0)
     return;
 
   double time = m_cur_time;
@@ -97,7 +117,7 @@ void veh_on_graph_painter::draw_veh (QPainter &painter)
         QPointF end = m_axis_painter->get_screen_pos (node_2.x, node_2.y);
         QColor color = color_builder.get_color (static_cast<double> (veh_id));
 
-        draw_on_arc_arrow (painter, start, end, edge_num + 1, edge_part.second, color);
+        draw_on_arc_arrow (painter, start, end, edge_num + 1, edge_part.second, color, veh_id);
       }
   }
 }

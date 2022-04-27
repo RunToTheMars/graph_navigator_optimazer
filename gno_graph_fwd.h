@@ -40,9 +40,8 @@ struct Vehicle
 
 struct vehicle_discrete_state
 {
-    graph::uid edge_uid = graph::invalid_uid;
     double part = 0.;
-    size_t node_num = 0;
+    size_t edge_num = 0;
 };
 
 struct vehicle_continuous_state

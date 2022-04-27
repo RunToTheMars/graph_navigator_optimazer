@@ -253,21 +253,40 @@ void graph_painter::draw_path (QPainter &painter, graph::uid veh_id)
     QFontMetrics fm = painter.fontMetrics ();
     for (size_t i = 0; i < vehicle.path.size (); i++)
     {
-        graph::uid node_uid = vehicle.path[i];
-        const graph::Node &node = m_graph->node (node_uid);
-        QPointF screen_pos = m_axis_painter->get_screen_pos (node.x, node.y);
+        const graph::uid edge_uid = vehicle.path[i];
+        const graph::Edge &edge = m_graph->edge (edge_uid);
+        const graph::Node &node_start = m_graph->node (edge.start);
+        const graph::Node &node_end = m_graph->node (edge.end);
+
+        const QPointF start = m_axis_painter->get_screen_pos (node_start.x, node_start.y);
+        const QPointF end = m_axis_painter->get_screen_pos (node_end.x, node_end.y);
+
+        int k = 0;
+        const std::vector<graph::uid> &edges = m_graph->edges (edge.start, edge.end);
+        for (k = 0; k < edges.size (); k++)
+        {
+          if (edges[k] == edge_uid)
+            break;
+        }
+
+        const QPointF diff = end - start;
+        const QPointF norm = {-diff.y (), diff.x ()};
+
+        const QPointF median = start + 0.5 * diff;
+        QPointF angle_point = median + norm * (k + 1) * 0.05;
 
         painter.setBrush (color);
         painter.setPen(Qt::NoPen);
-        painter.drawEllipse (screen_pos, 2 * get_handle_point_size (), 2 * get_handle_point_size ());
+
+        painter.drawEllipse (angle_point, 1.5 * get_point_size (), 1.5 * get_point_size ());
 
         QString name = QString ("%1").arg (i);
 
-        screen_pos.setX (screen_pos.x () - fm.horizontalAdvance (name) / 2);
-        screen_pos.setY (screen_pos.y () + fm.height () / 2 - 1);
+        angle_point.setX (angle_point.x () - fm.horizontalAdvance (name) / 2);
+        angle_point.setY (angle_point.y () + fm.height () / 2 - 1);
 
         painter.setPen (font_color);
-        painter.drawText (screen_pos, name);
+        painter.drawText (angle_point, name);
     }
 
     painter.restore ();

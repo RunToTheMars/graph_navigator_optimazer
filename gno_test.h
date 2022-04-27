@@ -5,7 +5,7 @@ class graph_initial;
 
 namespace graph
 {
-  int check (const graph_initial &initial);
+  int check_path (const graph_initial &initial);
 }
 
 #endif // GNO_TEST_H
