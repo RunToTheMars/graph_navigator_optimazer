@@ -114,8 +114,8 @@ namespace graph
 
     void set_graph_manh (graph::graph_initial *graph_initial)
     {
-        const int n = 20;
-        const int m = 20;
+        const int n = 10;
+        const int m = 10;
 
         std::vector<Node> nodes;
 
@@ -167,7 +167,7 @@ namespace graph
         //for edges manipulation
         set_graph (graph_initial, nodes, edges, vehs);
 
-        const int veh_count = 100;
+        const int veh_count = 20;
 
         std::mt19937 gen (0);
         std::uniform_real_distribution<double> node_random (0, nodes.size ());
@@ -227,6 +227,29 @@ namespace graph
         v2.dst = 5;
         v2.path = {1, 3, 5, 6};
         v2.t = 10.;
+
+        const std::vector<Directional_Vehicle> dir_vehs = {v1, v2};
+
+        set_graph (graph_initial, nodes, edges, dir_vehs);
+    }
+
+    void set_default_graph_2 (graph::graph_initial *graph_initial)
+    {
+        const double l = 10 * graph::D;
+        const std::vector<Node> nodes = {{0, 0, "A"}, {1, 1, "B"}};
+        const std::vector<Edge> edges = {{0, 1, l}};
+
+        Directional_Vehicle v1;
+        v1.src = 0;
+        v1.dst = 1;
+        v1.path = {0};
+        v1.t = 0.;
+
+        Directional_Vehicle v2;
+        v2.src = 0;
+        v2.dst = 1;
+        v2.path = {0};
+        v2.t = 0.01;
 
         const std::vector<Directional_Vehicle> dir_vehs = {v1, v2};
 

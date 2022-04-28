@@ -8,6 +8,7 @@ class veh_on_graph_painter : public graph_painter
     using parent_t = graph_painter;
 
     double m_cur_time = 0.;
+    bool m_show_d_distance = false;
     std::vector<graph::vehicle_continuous_line_states> *m_line_states = nullptr;
 
 public:
@@ -22,6 +23,8 @@ public:
     }
 
     void set_time (double t) { m_cur_time = t; }
+
+    void show_d_distance (bool show) { m_show_d_distance = show; }
 };
 
 #endif // VEH_ON_GRAPH_PAINTER_H

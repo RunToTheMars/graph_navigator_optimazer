@@ -32,6 +32,7 @@ Q_SIGNALS:
     void clear_signal ();
     void fill_random_signal (unsigned int node_count, unsigned int veh_count);
     void load_default_1_signal ();
+    void load_default_2_signal ();
     void load_manh_signal ();
 
     void editor_state_changed_signal (gno_editor_settings_widget::editor_state state);
@@ -58,6 +59,7 @@ private:
     QSpinBox *m_random_vehicle_count_spinbox = nullptr;
 
     QPushButton *m_load_default_1_button = nullptr;
+    QPushButton *m_load_default_2_button = nullptr;
     QPushButton *m_load_manh_button = nullptr;
 };
 

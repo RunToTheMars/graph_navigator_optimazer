@@ -71,5 +71,6 @@ graph_editor_tab::graph_editor_tab (graph::graph_initial *graph_initial, QWidget
       m_editable_graph_area_render->update ();
   });
   QObject::connect (m_editor_settings, &gno_editor_settings_widget::load_default_1_signal, this, [this] () { graph::set_default_graph_1(m_graph_initial); m_editable_graph_area_render->update (); });
+  QObject::connect (m_editor_settings, &gno_editor_settings_widget::load_default_2_signal, this, [this] () { graph::set_default_graph_2(m_graph_initial); m_editable_graph_area_render->update (); });
   QObject::connect (m_editor_settings, &gno_editor_settings_widget::load_manh_signal, this, [this] () { graph::set_graph_manh(m_graph_initial); m_editable_graph_area_render->update (); });
 }

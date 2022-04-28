@@ -16,7 +16,7 @@ static constexpr time undef_time = -1.;
 
 static constexpr double V_MAX = 60.;
 static constexpr double D = 500.;
-static constexpr double A_MAX = V_MAX * V_MAX / (2 * D);
+static constexpr double A_MAX = V_MAX * V_MAX / (2 * 10 * D);
 
 struct Node
 {

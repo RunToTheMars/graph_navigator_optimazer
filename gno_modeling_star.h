@@ -27,13 +27,16 @@ class gno_star_modeling: public gno_discrete_modeling_base
     double acc = 0.;
 
     double t_el = 0.;
+
+    graph::uid next_veh = graph::invalid_uid;
+    graph::uid prev_veh = graph::invalid_uid;
+    double target_t = 0.;
   };
 
   double m_t = 0.;
   std::vector<vehicle_discrete_state> m_states;
 
   std::vector<state> m_machine_states;
-  std::vector<graph::uid> m_next_veh;
 
   const graph_initial *m_initial_state = nullptr;
 

@@ -48,3 +48,8 @@ void model_graph_widget::set_time (double t)
 {
   area_render->get_painter ()->set_time (t);
 }
+
+veh_on_graph_painter *model_graph_widget::get_painter ()
+{
+  return area_render->get_painter ();
+};

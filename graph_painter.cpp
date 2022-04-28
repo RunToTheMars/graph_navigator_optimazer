@@ -7,6 +7,7 @@
 #include "array"
 #include "utils.h"
 #include "color_builder.h"
+#include <cmath>
 
 #include <QPainter>
 #include <QPen>
@@ -86,7 +87,7 @@ void graph_painter::draw_nodes (QPainter &painter)
   painter.restore ();
 }
 
-static void draw_arrow (QPainter &painter, QPointF start, QPointF end, double point_size)
+static void draw_arrow (QPainter &painter, QPointF start, QPointF end, double point_size, double edge_length, double start_length)
 {
   painter.drawLine (start, end);
 
@@ -124,9 +125,20 @@ static void draw_arrow (QPainter &painter, QPointF start, QPointF end, double po
   arrow_triangle[2] = end;
 
   painter.drawPolygon (arrow_triangle.data (), isize (arrow_triangle));
+
+  ortho /= sqrt (QPointF::dotProduct (ortho, ortho));
+
+  for (int i = 0; i * graph::D < edge_length; i++)
+  {
+    if (i * graph::D < start_length)
+      continue;
+
+    double part = (i * graph::D - start_length) / (edge_length - start_length);
+    painter.drawLine (start + (end - start) * part + ortho, start + diff * part - ortho);
+  }
 }
 
-static void draw_arc_arrow (QPainter &painter, QPointF start, QPointF end, size_t shift, double point_size)
+static void draw_arc_arrow (QPainter &painter, QPointF start, QPointF end, size_t shift, double point_size, double edge_length)
 {
     QPointF diff = end - start;
     QPointF norm = {-diff.y (), diff.x ()};
@@ -138,8 +150,8 @@ static void draw_arc_arrow (QPainter &painter, QPointF start, QPointF end, size_
     QPointF median = start + 0.5 * diff;
     QPointF angle_point = median + norm * shift * 0.05;
 
-    draw_arrow (painter, start, angle_point, point_size);
-    draw_arrow (painter, angle_point, end, point_size);
+    draw_arrow (painter, start, angle_point, point_size, edge_length * 0.5, 0.);
+    draw_arrow (painter, angle_point, end, point_size, edge_length, 0.5 * edge_length);
 }
 
 void graph_painter::draw_edges (QPainter &painter)
@@ -204,7 +216,7 @@ void graph_painter::draw_edges (QPainter &painter)
               QPointF start = m_axis_painter->get_screen_pos (node_1.x, node_1.y);
               QPointF end = m_axis_painter->get_screen_pos (node_2.x, node_2.y);
 
-              draw_arc_arrow (painter, start, end, k - i + 1, get_point_size ());
+              draw_arc_arrow (painter, start, end, k - i + 1, get_point_size (), m_graph->length (uids_map[k].first));
             }
 
             i = j + 1;

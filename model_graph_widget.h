@@ -5,6 +5,7 @@
 #include "gno_graph_fwd.h"
 
 class model_graph_area_render;
+class veh_on_graph_painter;
 
 class model_graph_widget: public QWidget
 {
@@ -22,6 +23,7 @@ public:
   ~model_graph_widget ();
 
   const std::vector<graph::vehicle_continuous_line_states> &get_line_states () const { return m_line_states; }
+  veh_on_graph_painter *get_painter ();
   void set_time (double t);
 
 

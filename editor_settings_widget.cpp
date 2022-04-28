@@ -84,6 +84,7 @@ gno_editor_settings_widget::gno_editor_settings_widget(QWidget *parent): QWidget
 
         {
             fill_layout->addWidget (m_load_default_1_button = new QPushButton ("Default 1", this));
+            fill_layout->addWidget (m_load_default_2_button = new QPushButton ("Line", this));
             fill_layout->addWidget (m_load_manh_button = new QPushButton ("Manhattan", this));
         }
 
@@ -123,5 +124,6 @@ gno_editor_settings_widget::gno_editor_settings_widget(QWidget *parent): QWidget
                          Q_EMIT fill_random_signal (m_random_node_count_spinbox->value (), m_random_vehicle_count_spinbox->value ());
                      });
     QObject::connect (m_load_default_1_button, &QPushButton::clicked, this, [this] () { Q_EMIT load_default_1_signal (); });
+    QObject::connect (m_load_default_2_button, &QPushButton::clicked, this, [this] () { Q_EMIT load_default_2_signal (); });
     QObject::connect (m_load_manh_button, &QPushButton::clicked, this, [this] () { Q_EMIT load_manh_signal (); });
 }

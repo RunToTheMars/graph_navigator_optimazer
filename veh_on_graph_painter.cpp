@@ -15,6 +15,7 @@ void veh_on_graph_painter::draw (QPainter &painter)
 {
     parent_t::draw (painter);
     draw_veh (painter);
+
 }
 
 static void draw_on_arc_arrow (QPainter &painter, QPointF start, QPointF end, size_t shift, double part, QColor color, graph::uid veh_id)
