@@ -239,19 +239,17 @@ namespace graph
         const std::vector<Node> nodes = {{0, 0, "A"}, {1, 1, "B"}};
         const std::vector<Edge> edges = {{0, 1, l}};
 
-        Directional_Vehicle v1;
-        v1.src = 0;
-        v1.dst = 1;
-        v1.path = {0};
-        v1.t = 0.;
+        std::vector<Directional_Vehicle> dir_vehs;
+        for (int i = 0; i < 10; i++)
+        {
+            Directional_Vehicle v;
+            v.src = 0;
+            v.dst = 1;
+            v.path = {0};
+            v.t = i * i;
 
-        Directional_Vehicle v2;
-        v2.src = 0;
-        v2.dst = 1;
-        v2.path = {0};
-        v2.t = 0.01;
-
-        const std::vector<Directional_Vehicle> dir_vehs = {v1, v2};
+            dir_vehs.push_back (v);
+        }
 
         set_graph (graph_initial, nodes, edges, dir_vehs);
     }

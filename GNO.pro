@@ -18,6 +18,7 @@ SOURCES += \
     gno_graph.cpp \
     gno_modeling.cpp \
     gno_modeling_simple_acceleration.cpp \
+    gno_modeling_simple_on_edge.cpp \
     gno_modeling_star.cpp \
     gno_test.cpp \
     graph_axis_model.cpp \
@@ -46,6 +47,7 @@ HEADERS += \
     gno_graph_initial_state.h \
     gno_modeling.h \
     gno_modeling_simple_acceleration.h \
+    gno_modeling_simple_on_edge.h \
     gno_modeling_star.h \
     gno_test.h \
     graph_axis_model.h \
