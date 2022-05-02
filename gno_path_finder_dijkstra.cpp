@@ -73,26 +73,26 @@ std::vector<graph::uid> graph::gno_path_finder_dijkstra::run (const graph_initia
         {
             graph::uid next_node = graph->edge (edge_uid).end;
 
-            int line_state_num = isize (m_line_states) - 1;
+////            int line_state_num = isize (m_line_states) - 1;
 
-            for (int i = 0; i < isize (m_line_states); i++)
-            {
-                if (m_line_states[i].contains (best_time))
-                {
-                    line_state_num = i;
-                    break;
-                }
-            }
+//            for (int i = 0; i < isize (m_line_states); i++)
+//            {
+//                if (m_line_states[i].contains (best_time))
+//                {
+//                    line_state_num = i;
+//                    break;
+//                }
+//            }
 
-            const vehicle_continuous_line_states &line_states = m_line_states[line_state_num];
+//            const vehicle_continuous_line_states &line_states = m_line_states[line_state_num];
 
-            std::vector<vehicle_discrete_state> states;
-            for (graph::uid veh_uid = 0; veh_uid < veh_count; veh_uid++)
-            {
-                auto edge_part =  line_states.states[veh_uid].get_edge_and_par(best_time, line_states.t1, line_states.t2);
-                size_t start_num = edge_part.first == 0? line_states.states[veh_uid].edge_num_start : line_states.states[veh_uid].edge_num_end;
-                states.push_back({edge_part.second, start_num});
-            }
+            std::vector<vehicle_discrete_state> states (veh_count + 1)/* = line_states*/;
+//            for (graph::uid veh_uid = 0; veh_uid < veh_count; veh_uid++)
+//            {
+//                auto edge_part =  line_states.states[veh_uid].get_edge_and_par(best_time, line_states.t1, line_states.t2);
+//                size_t start_num = edge_part.first == 0? line_states.states[veh_uid].edge_num_start : line_states.states[veh_uid].edge_num_end;
+//                states.push_back({edge_part.second, start_num});
+//            }
 
             Directional_Vehicle new_veh;
             new_veh.src = best_node;
@@ -103,7 +103,7 @@ std::vector<graph::uid> graph::gno_path_finder_dijkstra::run (const graph_initia
 
             m_updatable_initial_state->add_vehicle (new_veh);
 
-            states.push_back ({0., 0});
+//            states.push_back ({0., 0});
             m_model->clear_states (*m_updatable_initial);
             m_model->set_states (0., states);
             m_model->set_model_independer (veh_count);
