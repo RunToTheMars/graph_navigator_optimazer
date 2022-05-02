@@ -194,6 +194,9 @@ void graph_path_tab::clear ()
     m_brute_force_widget->get_painter()->set_line_states (nullptr);
     m_dijkstra_widget->get_painter()->set_line_states (nullptr);
 
+    m_brute_force_widget->get_painter()->set_path ({});
+    m_dijkstra_widget->get_painter()->set_path ({});
+
     update_spinboxes ();
 }
 
