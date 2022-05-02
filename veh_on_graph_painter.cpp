@@ -15,7 +15,7 @@ void veh_on_graph_painter::draw (QPainter &painter)
 {
     parent_t::draw (painter);
     draw_veh (painter);
-
+    draw_start_end (painter);
 }
 
 static void draw_on_arc_arrow (QPainter &painter, QPointF start, QPointF end, size_t shift, double part, QColor color, graph::uid veh_id)
@@ -121,4 +121,32 @@ void veh_on_graph_painter::draw_veh (QPainter &painter)
         draw_on_arc_arrow (painter, start, end, edge_num + 1, edge_part.second, color, veh_id);
       }
   }
+}
+
+void veh_on_graph_painter::draw_start_end (QPainter &painter)
+{
+    if (!m_show_src_dst)
+      return;
+
+    draw_start_end (painter, m_src_node, "S");
+    draw_start_end (painter, m_dst_node, "E");
+}
+
+void veh_on_graph_painter::draw_start_end (QPainter &painter, graph::uid node_uid, QString text)
+{
+    if (!m_graph->is_correct_node_uid (node_uid))
+      return;
+
+    const graph::Node &node = m_graph->node (node_uid);
+    QPointF screen_pos = m_axis_painter->get_screen_pos (node.x, node.y);
+
+    painter.setBrush (QColor ("black"));
+    painter.drawEllipse (screen_pos, 1.5 * graph_painter::point_size, 1.5 * graph_painter::point_size);
+
+    QFontMetrics fm = painter.fontMetrics ();
+    screen_pos.setX (screen_pos.x () - fm.horizontalAdvance (text) / 2);
+    screen_pos.setY (screen_pos.y () + fm.height () / 2 - 1);
+
+    painter.setPen (QColor ("white"));
+    painter.drawText (screen_pos, text);
 }

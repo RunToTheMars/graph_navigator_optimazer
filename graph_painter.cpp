@@ -6,7 +6,6 @@
 #include "abstract_axis_painter.h"
 #include "array"
 #include "utils.h"
-#include "color_builder.h"
 #include <cmath>
 
 #include <QPainter>
@@ -33,7 +32,7 @@ void graph_painter::draw (QPainter &painter)
     draw_names (painter);
 
   if (m_show_path)
-    draw_path (painter, m_veh_num);
+    draw_path (painter);
 }
 
 void graph_painter::draw_nodes (QPainter &painter)
@@ -243,29 +242,23 @@ void graph_painter::draw_names (QPainter &painter)
     }
 }
 
-void graph_painter::draw_path (QPainter &painter, graph::uid veh_id)
+void graph_painter::draw_path (QPainter &painter)
 {
-    if (!m_show_path || veh_id >= m_graph_initial_state->vehicle_count ())
-      return;
-
-    graph::Directional_Vehicle vehicle = m_graph_initial_state->vehicle (veh_id);
-
-    default_color_builder color_builder;
-    color_builder.set_val_range (0., static_cast<double> (m_graph_initial_state->vehicle_count ()));
-
-    QColor color = color_builder.get_color (veh_id);
     QColor font_color;
 
-    int black = color.black ();
+    int black = m_path_color.black ();
     if (black > 127)
       font_color = QColor ("white");
     else
       font_color = QColor ("black");
 
     QFontMetrics fm = painter.fontMetrics ();
-    for (size_t i = 0; i < vehicle.path.size (); i++)
+    for (size_t i = 0; i < m_path.size (); i++)
     {
-        const graph::uid edge_uid = vehicle.path[i];
+
+        bool is_first_or_last = i == 0 || i == m_path.size () - 1;
+
+        const graph::uid edge_uid = m_path[i];
         const graph::Edge &edge = m_graph->edge (edge_uid);
         const graph::Node &node_start = m_graph->node (edge.start);
         const graph::Node &node_end = m_graph->node (edge.end);
@@ -287,10 +280,16 @@ void graph_painter::draw_path (QPainter &painter, graph::uid veh_id)
         const QPointF median = start + 0.5 * diff;
         QPointF angle_point = median + norm * (k + 1) * 0.05;
 
-        painter.setBrush (color);
-        painter.setPen(Qt::NoPen);
+        painter.setBrush (m_path_color);
 
-        painter.drawEllipse (angle_point, 1.5 * get_point_size (), 1.5 * get_point_size ());
+        if (is_first_or_last)
+        {
+            painter.setPen({QColor ("yellow"), 2});
+
+            painter.drawEllipse (angle_point, 2 * get_point_size (), 2 * get_point_size ());
+        }
+        else
+            painter.drawEllipse (angle_point, 1.5 * get_point_size (), 1.5 * get_point_size ());
 
         QString name = QString ("%1").arg (i);
 

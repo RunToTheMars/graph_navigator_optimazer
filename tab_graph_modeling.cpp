@@ -48,7 +48,7 @@ graph_modeling_tab::graph_modeling_tab (graph::graph_initial *graph_initial, QWi
     m_time_slider->setValue (0);
   }
 
-  // models
+  // solver
   QGroupBox *models_groupbox = new QGroupBox ("Models", this);
   {
       QGridLayout *models_layout = new QGridLayout (models_groupbox);
@@ -124,6 +124,13 @@ graph_modeling_tab::graph_modeling_tab (graph::graph_initial *graph_initial, QWi
 
 graph_modeling_tab::~graph_modeling_tab () = default;
 
+void graph_modeling_tab::clear ()
+{
+    m_simple_model_widget->get_painter()->set_line_states (nullptr);
+    m_simple_acc_model_widget->get_painter()->set_line_states (nullptr);
+    m_simple_on_edge_model_widget->get_painter()->set_line_states (nullptr);
+}
+
 void graph_modeling_tab::update_max_times ()
 {
   m_max_time = 0.;
@@ -134,11 +141,13 @@ void graph_modeling_tab::update_max_times ()
     max_times.push_back (m_simple_model_widget->get_line_states ().back ().t2);
 
   if (!m_simple_acc_model_widget->get_line_states ().empty ())
-    max_times.push_back (
-        m_simple_acc_model_widget->get_line_states ().back ().t2);
+    max_times.push_back (m_simple_acc_model_widget->get_line_states ().back ().t2);
 
   if (!m_simple_on_edge_model_widget->get_line_states ().empty ())
     max_times.push_back (m_simple_on_edge_model_widget->get_line_states ().back ().t2);
+
+  if (max_times.empty ())
+    return;
 
   m_max_time =  *std::max_element (max_times.begin (), max_times.end ());
 }

@@ -7,6 +7,7 @@ namespace graph
 {
 int gno_modeling_simple_on_edge::run (const graph_initial &initial_state)
 {
+    m_interrupted = false;
     m_initial_state = &initial_state;
 
     if (!OK (graph::check_path (initial_state)))
@@ -17,7 +18,7 @@ int gno_modeling_simple_on_edge::run (const graph_initial &initial_state)
 
     find_critical_time (m_t, m_states);
 
-    while (!is_finished ())
+    while (!is_finished () && !m_interrupted)
     {
         if (!OK (update_states ()))
             return -1;
@@ -179,8 +180,10 @@ int gno_modeling_simple_on_edge::update_states ()
         if (veh_id_other == veh_id)
           continue;
 
-        const Directional_Vehicle &other_veh =
-            initial_states->vehicle (veh_id_other);
+        if (veh_id_other == model_independer_uid)
+          continue;
+
+        const Directional_Vehicle &other_veh = initial_states->vehicle (veh_id_other);
         const vehicle_discrete_state &other_state = m_states[veh_id_other];
         const graph::uid other_edge = other_veh.path[other_state.edge_num];
 

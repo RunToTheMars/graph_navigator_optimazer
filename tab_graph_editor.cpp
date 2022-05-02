@@ -4,6 +4,7 @@
 #include "editor_settings_widget.h"
 #include "default_graphs.h"
 #include "graph_painter.h"
+#include "color_builder.h"
 
 #include <QGroupBox>
 #include <QHBoxLayout>
@@ -55,7 +56,16 @@ graph_editor_tab::graph_editor_tab (graph::graph_initial *graph_initial, QWidget
   });
 
   QObject::connect (m_editor_settings, &gno_editor_settings_widget::show_veh_path, this, [this] (int veh_num) {
-      m_editable_graph_area_render->get_painter ()->show_veh_path (veh_num);
+      graph::uid veh_count = m_graph_initial->get_initial_state()->vehicle_count ();
+      if (veh_num < 0 || veh_num >= veh_count)
+        return;
+
+      default_color_builder builder;
+      builder.set_val_range  (0, veh_count);
+
+      const std::vector<graph::uid> &path = m_graph_initial->get_initial_state()->vehicle (veh_num).path;
+      m_editable_graph_area_render->get_painter ()->set_path (path);
+      m_editable_graph_area_render->get_painter ()->set_path_color (builder.get_color (veh_num));
       m_editable_graph_area_render->update ();
   });
 
@@ -64,13 +74,30 @@ graph_editor_tab::graph_editor_tab (graph::graph_initial *graph_initial, QWidget
                        m_graph_initial->get_graph()->clear ();
                        m_graph_initial->get_initial_state()->clear ();
                        m_editable_graph_area_render->update ();
+                       Q_EMIT graph_changed ();
                    });
 
   QObject::connect (m_editor_settings, &gno_editor_settings_widget::fill_random_signal, this, [this] (unsigned int node_count, unsigned int veh_count) {
       graph::fill_random (m_graph_initial, node_count, veh_count);
       m_editable_graph_area_render->update ();
+      Q_EMIT graph_changed ();
   });
-  QObject::connect (m_editor_settings, &gno_editor_settings_widget::load_default_1_signal, this, [this] () { graph::set_default_graph_1(m_graph_initial); m_editable_graph_area_render->update (); });
-  QObject::connect (m_editor_settings, &gno_editor_settings_widget::load_default_2_signal, this, [this] () { graph::set_default_graph_2(m_graph_initial); m_editable_graph_area_render->update (); });
-  QObject::connect (m_editor_settings, &gno_editor_settings_widget::load_manh_signal, this, [this] () { graph::set_graph_manh(m_graph_initial); m_editable_graph_area_render->update (); });
+
+  QObject::connect (m_editor_settings, &gno_editor_settings_widget::load_default_1_signal, this, [this] () {
+      graph::set_default_graph_1(m_graph_initial);
+      m_editable_graph_area_render->update ();
+      Q_EMIT graph_changed ();
+  });
+
+  QObject::connect (m_editor_settings, &gno_editor_settings_widget::load_default_2_signal, this, [this] () {
+      graph::set_default_graph_2(m_graph_initial);
+      m_editable_graph_area_render->update ();
+      Q_EMIT graph_changed ();
+  });
+
+  QObject::connect (m_editor_settings, &gno_editor_settings_widget::load_manh_signal, this, [this] () {
+      graph::set_graph_manh(m_graph_initial);
+      m_editable_graph_area_render->update ();
+      Q_EMIT graph_changed ();
+  });
 }

@@ -22,9 +22,11 @@ model_graph_widget::model_graph_widget(graph::graph_initial *graph_initial, grap
   QObject::connect (
       run_button, &QPushButton::clicked, this, [this, graph_initial] {
         m_line_states.clear ();
+        area_render->get_painter ()->set_line_states (&m_line_states);
+
         m_continuous_modeling->set_do_on_linear_time (
             [this] (const graph::vehicle_continuous_line_states &states) {
-              m_line_states.push_back (states);
+                m_line_states.push_back (states);
             });
 
         int r = m_continuous_modeling->run (*graph_initial);
@@ -34,7 +36,6 @@ model_graph_widget::model_graph_widget(graph::graph_initial *graph_initial, grap
           return;
         }
 
-        area_render->get_painter ()->set_line_states (&m_line_states);
         set_time (0.);
         area_render->update ();
 

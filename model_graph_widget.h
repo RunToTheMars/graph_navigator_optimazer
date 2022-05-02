@@ -26,7 +26,6 @@ public:
   veh_on_graph_painter *get_painter ();
   void set_time (double t);
 
-
   Q_SIGNAL void update_times_needed ();
 };
 

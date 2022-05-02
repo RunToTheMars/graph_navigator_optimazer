@@ -2,6 +2,7 @@
 
 #include "tab_graph_editor.h"
 #include "tab_graph_modeling.h"
+#include "tab_graph_path.h"
 
 #include <QTabWidget>
 #include <QVBoxLayout>
@@ -23,8 +24,18 @@ gno_main_window::gno_main_window(QWidget *parent): QWidget (parent)
 
     tab_widget->addTab(m_editor_tab = new graph_editor_tab (m_graph_initial.get (), this), "Graph Editor");
     tab_widget->addTab(m_modeling_tab = new graph_modeling_tab (m_graph_initial.get (), this), "Modeling");
+    tab_widget->addTab(m_path_tab = new graph_path_tab (m_graph_initial.get (), this), "Path");
+
+    QObject::connect (m_editor_tab, &graph_editor_tab::graph_changed, this, [this]
+                     {
+                         m_modeling_tab->clear ();
+                         m_path_tab->clear ();
+                     });
 
     layout->addWidget (tab_widget);
+
+    m_modeling_tab->clear ();
+    m_path_tab->clear ();
 }
 
 gno_main_window::~gno_main_window () = default;

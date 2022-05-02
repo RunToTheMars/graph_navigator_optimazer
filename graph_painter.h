@@ -5,6 +5,7 @@
 #include <memory>
 #include <gno_graph.h>
 #include <QPointF>
+#include <QColor>
 
 class abstract_axis_painter;
 class abstract_axis_model;
@@ -36,7 +37,8 @@ protected:
   bool m_show_numbers = false;
 
   bool m_show_path = false;
-  int m_veh_num = 0;
+  QColor m_path_color = QColor ("black");
+  std::vector<graph::uid> m_path;
 
   bool m_is_editable = false;
   double m_point_size_mult = 1.;
@@ -64,13 +66,14 @@ public:
   void draw_nodes (QPainter &painter);
   void draw_edges (QPainter &painter);
   void draw_names (QPainter &painter);
-  void draw_path (QPainter &painter, graph::uid veh_id);
+  void draw_path (QPainter &painter);
 
   void set_show_names (bool show) { m_show_names = show; }
   void set_show_numbers (bool show) { m_show_numbers = show; }
 
   void set_show_path (bool show) { m_show_path = show; }
-  void show_veh_path (int veh_num) { m_veh_num = veh_num; }
+  void set_path (const std::vector<graph::uid> &path) { m_path = path; }
+  void set_path_color (QColor path_color) { m_path_color = path_color; }
 
   void set_is_editable (bool is_editable) { m_is_editable = is_editable; }
 

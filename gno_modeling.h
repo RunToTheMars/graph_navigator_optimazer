@@ -6,6 +6,7 @@
 #include "utils.h"
 #include <vector>
 #include <functional>
+#include <cassert>
 
 namespace graph
 {
@@ -17,6 +18,9 @@ class gno_discrete_modeling_base
 public:
     void set_do_in_critical_time (func_type do_in_critical_time) { m_do_in_critical_time = do_in_critical_time; }
     virtual int run (const graph_initial &initial_state) = 0;
+
+    virtual void set_model_independer (graph::uid /*veh_uid*/) { assert (false); }
+    virtual void interrupt () {}
 
 protected:
     void find_critical_time (double time, const std::vector<vehicle_discrete_state> &states) const { m_do_in_critical_time (time, states); }

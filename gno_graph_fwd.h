@@ -76,6 +76,7 @@ class graph_initial;
 class gno_discrete_modeling_base;
 class gno_continuous_modeling;
 
+class gno_path_finder_base;
 }
 
 #endif // GNO_GRAPH_FWD_H
