@@ -75,20 +75,6 @@ void veh_on_graph_painter::draw_veh (QPainter &painter)
       if (time < line_state.t1 || line_state.t2 < time)
         continue;
 
-      auto get_edge_and_part = [this, time, &line_state] (const graph::vehicle_continuous_state &state) -> std::pair<graph::uid, double>
-      {
-          if (state.edge_uid_start == state.edge_uid_end)
-            return  {state.edge_uid_end, (state.part_end - state.part_start) * (time - line_state.t1) / (line_state.t2 - line_state.t1) + state.part_start};
-          else
-          {
-              double p = (state.part_end - state.part_start + 1) * (time - line_state.t1) / (line_state.t2 - line_state.t1);
-              if (p < 1 - state.part_start)
-                return  {state.edge_uid_start, state.part_start + p};
-              else
-                return {state.edge_uid_end, p - 1 + state.part_start};
-          }
-      };
-
       const auto &states = line_state.states;
 
       default_color_builder color_builder;
@@ -96,8 +82,9 @@ void veh_on_graph_painter::draw_veh (QPainter &painter)
 
       for (graph::uid veh_id = 0; veh_id < isize (states); veh_id ++)
       {
-        auto edge_part = get_edge_and_part (states[veh_id]);
-        const graph::Edge edge = m_graph->edge (edge_part.first);
+        auto edge_part =  states[veh_id].get_edge_and_par (time, line_state.t1, line_state.t2);
+        const graph::uid edge_uid = edge_part.first == 0? states[veh_id].edge_uid_start : states[veh_id].edge_uid_end;
+        const graph::Edge edge = m_graph->edge (edge_uid);
 
         const graph::Node node_1 = m_graph->node (edge.start);
         const graph::Node node_2 = m_graph->node (edge.end);

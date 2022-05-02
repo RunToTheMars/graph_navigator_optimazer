@@ -64,6 +64,7 @@ private:
     std::unique_ptr<graph::gno_continuous_modeling> m_continuous_modeling;
 
     std::unique_ptr<graph::gno_path_finder_base> m_brute_force;
+    std::unique_ptr<graph::gno_path_finder_base> m_dijkstra;
 
     path_graph_widget *m_brute_force_widget = nullptr;
     path_graph_widget *m_dijkstra_widget = nullptr;

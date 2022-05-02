@@ -5,33 +5,9 @@
 
 namespace graph
 {
-int gno_modeling_simple_on_edge::run (const graph_initial &initial_state)
+void gno_modeling_simple_on_edge::clear_states (const graph_initial &initial_state)
 {
-    m_interrupted = false;
-    m_initial_state = &initial_state;
-
-    if (!OK (graph::check_path (initial_state)))
-        return -1;
-
-    if (!OK (init_states ()))
-        return -1;
-
-    find_critical_time (m_t, m_states);
-
-    while (!is_finished () && !m_interrupted)
-    {
-        if (!OK (update_states ()))
-            return -1;
-
-        find_critical_time (m_t, m_states);
-    }
-    return 0;
-}
-
-int gno_modeling_simple_on_edge::init_states ()
-{
-    const graph_initial_state_base *initial_states = m_initial_state->get_initial_state ();
-    const graph::uid veh_count = initial_states->vehicle_count ();
+    const graph::uid veh_count = initial_state.get_initial_state()->vehicle_count ();
 
     m_t = 0.;
     m_states.clear ();
@@ -39,11 +15,9 @@ int gno_modeling_simple_on_edge::init_states ()
 
     m_states.resize (veh_count);
     m_machine_states.resize (veh_count);
-
-    return 0;
 }
 
-bool gno_modeling_simple_on_edge::is_finished () const
+bool gno_modeling_simple_on_edge::is_finished (const graph_initial &/*initial_state*/) const
 {
     for (auto &mst : m_machine_states)
     {
@@ -53,10 +27,10 @@ bool gno_modeling_simple_on_edge::is_finished () const
     return true;
 }
 
-int gno_modeling_simple_on_edge::update_states ()
+int gno_modeling_simple_on_edge::update_states (const graph_initial &initial_state)
 {
-    const graph_base *graph = m_initial_state->get_graph ();
-    const graph_initial_state_base *initial_states = m_initial_state->get_initial_state ();
+    const graph_base *graph = initial_state.get_graph ();
+    const graph_initial_state_base *initial_states = initial_state.get_initial_state ();
 
     //1. find critical time:
     graph::uid global_min_timer = graph::invalid_uid;
@@ -111,6 +85,9 @@ int gno_modeling_simple_on_edge::update_states ()
 
         double dS = veh_v * global_critical_time;
 
+        if (m_machine_states[veh_id].st != state_t::move)
+          continue;
+
         m_states[veh_id].part += dS / graph->length (cur_edge);
     }
 
@@ -122,7 +99,7 @@ int gno_modeling_simple_on_edge::update_states ()
         const Directional_Vehicle &veh = initial_states->vehicle(veh_id);
         const vehicle_discrete_state &cur_state = m_states[veh_id];
 
-        if (fuzzy_eq (m_states[veh_id].part, 1.))
+        if (fuzzy_eq (m_states[veh_id].part, 1.) || m_states[veh_id].part > 1.)
         {
             if (cur_state.edge_num == isize (veh.path) - 1)
             {

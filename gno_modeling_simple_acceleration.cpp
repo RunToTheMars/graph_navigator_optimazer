@@ -5,11 +5,9 @@
 
 namespace graph
 {
-int gno_modeling_simple_acceleration::run (const graph_initial &initial_state)
-{
-    if (!OK (graph::check_path (initial_state)))
-      return -1;
 
+void gno_modeling_simple_acceleration::clear_states (const graph_initial &initial_state)
+{
     const graph_initial_state_base *initial_states = initial_state.get_initial_state ();
     const graph::uid veh_count = initial_states->vehicle_count ();
 
@@ -19,15 +17,6 @@ int gno_modeling_simple_acceleration::run (const graph_initial &initial_state)
 
     m_velocities.assign (veh_count, m_start_velocity);
     m_accelerations.assign (veh_count, m_start_acc);
-
-    find_critical_time (m_t, m_states);
-
-    while (!is_finished (initial_state))
-    {
-      if (!OK (do_step (initial_state)))
-        return -2;
-    }
-    return 0;
 }
 
 bool gno_modeling_simple_acceleration::is_finished (const graph_initial &initial_state) const
@@ -43,7 +32,7 @@ bool gno_modeling_simple_acceleration::is_finished (const graph_initial &initial
     return true;
 }
 
-int gno_modeling_simple_acceleration::do_step (const graph_initial &initial_state)
+int gno_modeling_simple_acceleration::update_states (const graph_initial &initial_state)
 {
     const graph_initial_state_base *initial_states = initial_state.get_initial_state ();
     const graph_base *graph = initial_state.get_graph ();
@@ -137,10 +126,7 @@ int gno_modeling_simple_acceleration::do_step (const graph_initial &initial_stat
             m_accelerations[veh_id] = 0.;
     }
 
-    if (min_critical_time)
-
     m_t += min_critical_time;
-    find_critical_time (m_t, m_states);
     return 0;
 }
 

@@ -1,7 +1,30 @@
 #include "gno_modeling.h"
 
+#include "gno_graph.h"
+#include "gno_test.h"
+
 namespace graph
 {
+
+int gno_discrete_modeling_base::run (const graph_initial &initial_state)
+{
+    m_interrupted = false;
+
+    if (!OK (graph::check_path (initial_state)))
+      return -1;
+
+    m_do_in_critical_time (m_t, m_states);
+
+    while (!is_finished (initial_state) && !m_interrupted)
+    {
+        if (!OK (update_states (initial_state)))
+            return -1;
+
+        m_do_in_critical_time (m_t, m_states);
+    }
+    return 0;
+}
+
 gno_continuous_modeling::gno_continuous_modeling (gno_discrete_modeling_base *discrete_modeling): m_discrete_modeling (discrete_modeling)
 {
 
@@ -27,9 +50,11 @@ int gno_continuous_modeling::run (const graph_initial &initial_state)
                 vehicle_continuous_state &cur_continuous_states = continuous_states[veh_id];
                 cur_continuous_states.part_start = prev_discrete_state.part;
                 cur_continuous_states.edge_uid_start = veh.path [prev_discrete_state.edge_num];
+                cur_continuous_states.edge_num_start = prev_discrete_state.edge_num;
 
                 cur_continuous_states.part_end = cur_discrete_state.part;
                 cur_continuous_states.edge_uid_end = veh.path [cur_discrete_state.edge_num];
+                cur_continuous_states.edge_num_end = cur_discrete_state.edge_num;
             }
 
             m_do_on_linear_time ({m_prev_time, time, std::move (continuous_states)});
@@ -40,6 +65,7 @@ int gno_continuous_modeling::run (const graph_initial &initial_state)
         m_cricital_count ++;
     });
 
+    m_discrete_modeling->clear_states (initial_state);
     int r = m_discrete_modeling->run (initial_state);
     return r;
 }

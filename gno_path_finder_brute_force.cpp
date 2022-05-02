@@ -169,6 +169,7 @@ std::vector<graph::uid> graph::gno_path_finder_brute_force::run (const graph_ini
 
           graph::uid new_veh_uid = new_initial_state.get_initial_state()->vehicle_count () - 1;
 
+          m_model->clear_states (new_initial_state);
           m_model->run (new_initial_state);
           m_model->set_model_independer (new_veh_uid);
 

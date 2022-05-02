@@ -5,6 +5,7 @@
 #include "veh_on_graph_painter.h"
 
 #include "gno_path_finder_brute_force.h"
+#include "gno_path_finder_dijkstra.h"
 #include "gno_modeling_simple_on_edge.h"
 #include "gno_graph_initial.h"
 #include "gno_graph_initial_state.h"
@@ -104,7 +105,9 @@ graph_path_tab::graph_path_tab (graph::graph_initial *graph_initial, QWidget *pa
             QVBoxLayout *solver_dijkstra_layout = new QVBoxLayout (solver_dijkstra_groupbox);
             solver_dijkstra_groupbox->setLayout (solver_dijkstra_layout);
 
-            solver_dijkstra_layout->addWidget (m_dijkstra_widget = new path_graph_widget (graph_initial, nullptr, m_continuous_modeling.get (), solver_dijkstra_groupbox));
+            m_dijkstra = std::make_unique<graph::gno_path_finder_dijkstra> (m_model.get ());
+
+            solver_dijkstra_layout->addWidget (m_dijkstra_widget = new path_graph_widget (graph_initial, m_dijkstra.get (), m_continuous_modeling.get (), solver_dijkstra_groupbox));
             m_dijkstra_widget->get_painter()->show_src_dst (true);
             solvers_layout->addWidget (solver_dijkstra_groupbox, 0, 1);
         }

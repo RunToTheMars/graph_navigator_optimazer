@@ -3,6 +3,7 @@
 
 #include <string>
 #include <vector>
+#include "utils.h"
 
 namespace graph
 {
@@ -51,6 +52,27 @@ struct vehicle_continuous_state
 
     double part_start = 0.;
     double part_end = 0.;
+
+    size_t edge_num_start = -1;
+    size_t edge_num_end = -1;
+
+
+    std::pair<int, double> get_edge_and_par (const double time, const double t1, const double t2) const
+    {
+        if (fuzzy_eq (t2, t1))
+          return {1, part_end};
+
+        if (edge_uid_start == edge_uid_end)
+          return  {1, (part_end - part_start) * (time - t1) / (t2 - t1) + part_start};
+        else
+        {
+            double p = (part_end - part_start + 1) * (time - t1) / (t2 - t1);
+            if (p < 1 - part_start)
+              return  {0, part_start + p};
+            else
+              return {1, p - 1 + part_start};
+        }
+    };
 };
 
 struct vehicle_continuous_line_states
@@ -66,6 +88,11 @@ struct vehicle_continuous_line_states
         t1 = t1_;
         t2 = t2_;
         states = std::move (states_);
+    }
+
+    bool contains (double t) const
+    {
+      return fuzzy_eq (t, t1) || fuzzy_eq (t, t2) || (t1 < t && t < t2);
     }
 };
 

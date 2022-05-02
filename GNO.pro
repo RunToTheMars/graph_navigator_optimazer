@@ -21,6 +21,7 @@ SOURCES += \
     gno_modeling_simple_on_edge.cpp \
     gno_modeling_star.cpp \
     gno_path_finder_brute_force.cpp \
+    gno_path_finder_dijkstra.cpp \
     gno_test.cpp \
     graph_axis_model.cpp \
     graph_painter.cpp \
@@ -54,6 +55,7 @@ HEADERS += \
     gno_modeling_star.h \
     gno_path_finder.h \
     gno_path_finder_brute_force.h \
+    gno_path_finder_dijkstra.h \
     gno_test.h \
     graph_axis_model.h \
     graph_painter.h \

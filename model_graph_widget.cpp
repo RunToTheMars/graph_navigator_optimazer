@@ -29,6 +29,7 @@ model_graph_widget::model_graph_widget(graph::graph_initial *graph_initial, grap
                 m_line_states.push_back (states);
             });
 
+        m_discrete_modeling->clear_states (*graph_initial);
         int r = m_continuous_modeling->run (*graph_initial);
         if (!OK (r))
         {
