@@ -7,6 +7,8 @@ namespace graph
 {
 class gno_path_finder_brute_force: public gno_path_finder_base
 {
+  static constexpr size_t max_path_size = 10;
+
   double m_min_time = 0.;
   std::vector<graph::uid> m_min_path;
   gno_discrete_modeling_base *m_model = nullptr;

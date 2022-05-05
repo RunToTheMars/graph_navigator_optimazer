@@ -76,6 +76,7 @@ static void do_on_path_find_rec (const std::vector<int> &actual_nodes, std::vect
 
 static void do_on_path_find (const std::vector<int> &actual_nodes, graph::uid src, graph::uid dst,
                              const graph::graph_base *graph,
+                             size_t max_path_size,
                              std::function<void (const std::stack<graph::uid> &/*path*/)> on_path_find)
 {
   std::stack<graph::uid> path;
@@ -91,7 +92,7 @@ static void do_on_path_find (const std::vector<int> &actual_nodes, graph::uid sr
       path.push (edge_uid);
       exist_node[node_uid] = 1;
 
-      do_on_path_find_rec (actual_nodes, exist_node, dst, 5, graph, path, on_path_find);
+      do_on_path_find_rec (actual_nodes, exist_node, dst, max_path_size, graph, path, on_path_find);
 
       path.pop ();
       exist_node[node_uid] = 0;
@@ -139,7 +140,7 @@ std::vector<graph::uid> graph::gno_path_finder_brute_force::run (const graph_ini
     }
     graph_initial new_initial_state (const_cast<graph_base *>(initial_state.get_graph ()), &graph_initial_state);
 
-    do_on_path_find (actual_nodes, src, dst, graph, [this, &new_initial_state, src, dst, start_time, veh] (const std::stack<graph::uid> &path_stack) {
+    do_on_path_find (actual_nodes, src, dst, graph, max_path_size, [this, &new_initial_state, src, dst, start_time, veh] (const std::stack<graph::uid> &path_stack) {
         std::vector<graph::uid> path (path_stack._Get_container().begin (), path_stack._Get_container().end ());
 
           m_model->set_do_in_critical_time (
