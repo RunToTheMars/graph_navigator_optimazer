@@ -8,7 +8,10 @@
 \usepackage{amsthm}
 \DeclareMathOperator*{\minn}{min}
 \newtheorem{theorem}{Theorem}[section]
-\newtheorem{state}[theorem]{Утверждение}
+\newtheorem{state}{Утверждение}[section]
+\newtheorem{lemma}{Лемма}[section]
+\newtheorem{corollary}{Следствие}[section]
+
 
 \usepackage[left=2cm,right=1.5cm,top=2cm,bottom=2cm]{geometry}
 \linespread{1.25}
@@ -47,7 +50,7 @@ $T_i (\textbf{p})$. Интуитивно вполне очевидно, что �
 $$T_i (\textbf{p}) = \sum \limits_{e \in E} \overline{\tau}_{e, i} (\textbf{p}) = \sum \limits_{e \in \textbf{p}_i} \overline{\tau}_{e, i} (\textbf{p}), $$
 где функции $\overline{\tau}_{e, i} (\textbf{p})$ есть временные затраты $i$-ого участника на ребре $e$ при комбинации путей $\textbf{p}$. Поскольку подразумевается, что передвижение участников происходит непрерывно во времени, то, можно считать, что временные затраты на ребре $e$ есть затраченное участником время на этом ребре
 
-$$  \overline{\tau}_{e, i} (\textbf{p}) = \int_{0}^{\infty} \theta_{e, i} (\textbf{p}, t) dt, $$
+$$  \overline{\tau}_{e, i} (\textbf{p}) = \int\limits_{0}^{\infty} \theta_{e, i} (\textbf{p}, t) dt, $$
 где 
 
 $$
@@ -66,7 +69,7 @@ $$n_e(\textbf{p}, t) = \sum \limits_{i = 1}^n \theta_{e, i} (\textbf{p}, t) = \{
 
 \begin{equation}
 \label{eq:target_func_n_e}
-T(\textbf{p}) = \sum \limits_{e \in E} \int_{0}^{\infty} n_e (\textbf{p}, t) dt
+T(\textbf{p}) = \sum \limits_{e \in E} \int\limits_{0}^{\infty} n_e (\textbf{p}, t) dt
 \end{equation}
 
 Поскольку передвижение каждого участника проходит непрерывно, функции $\theta_{e, i} (\textbf{p}, t)$ являются индикаторами некоторых интервалов $[t_{e, i}^{in} (\textbf{p}), t_{e, i}^{out} (\textbf{p})]$. Также $\theta_{e, i} (\textbf{p}, t)$ описывают движение по некоторому простому пути $\textbf{p}_i$, поэтому стоит ввести ограничения на $t_{e, i}^{in} (\textbf{p}), t_{e, i}^{out} (\textbf{p})$:
@@ -93,7 +96,7 @@ T(\textbf{p}) = \sum \limits_{e \in E} \int_{0}^{\infty} n_e (\textbf{p}, t) dt
 
 \begin{equation}
 \label{eq:velocity_eq}
-\int_{0}^{\infty} \theta_{e, i} (\textbf{p}, t) v_i(\textbf{p}, t) dt = l_e, e \in \textbf{p}_i, i = 1, \dots, n
+\int\limits_{0}^{\infty} \theta_{e, i} (\textbf{p}, t) v_i(\textbf{p}, t) dt = l_e, e \in \textbf{p}_i, i = 1, \dots, n
 \end{equation}
 
 Будем говорить, что уравнения \eqref{eq:velocity_eq} задают \textit{модель движения участников}. Таким образом задача \eqref{eq:target_task_T} эквивалентна следующей системе
@@ -101,7 +104,7 @@ T(\textbf{p}) = \sum \limits_{e \in E} \int_{0}^{\infty} n_e (\textbf{p}, t) dt
 \begin{equation}
 \label{eq:target_task_theta_v}
 \begin{cases}
-	\sum \limits_{e \in E} \int_{0}^{\infty} n_e (\textbf{p}, t)dt -> \minn\limits_{ \textbf{p} \in P}
+	\sum \limits_{e \in E} \int\limits_{0}^{\infty} n_e (\textbf{p}, t)dt -> \minn\limits_{ \textbf{p} \in P}
 	\\
 	I_{e, i} (\textbf{p}) \overline{\tau}_{e, i}^{min}(\textbf{p}) \le t_{e, i}^{out}(\textbf{p}) - t_{e, i}^{in}(\textbf{p}) \le I_{e, i}(\textbf{p}) \overline{\tau}_{e, i}^{max}(\textbf{p}), e \in E, i = 1, \dots, n,
 	\\
@@ -109,7 +112,7 @@ T(\textbf{p}) = \sum \limits_{e \in E} \int_{0}^{\infty} n_e (\textbf{p}, t) dt
 	\\
 	I_{e, i} (\textbf{p}) \in \{0, 1\} \text { - описывают простой путь $\textbf{p}_i$},
 	\\
-	\int_{0}^{\infty} \theta_{e, i} (\textbf{p}, t) v_i(\textbf{p}, t) dt = l_e, e \in \textbf{p}_i
+	\int\limits_{0}^{\infty} \theta_{e, i} (\textbf{p}, t) v_i(\textbf{p}, t) dt = l_e, e \in \textbf{p}_i
 \end{cases}
 \end{equation}
 
@@ -128,6 +131,31 @@ T(\textbf{p}) = \sum \limits_{e \in E} \int_{0}^{\infty} n_e (\textbf{p}, t) dt
 Такую модель движения в дальнейшем будем называть \textit{макроскопической}.
 Например, естествено расмотреть модель $ v (n_e (\textbf{p}, t)) = \frac{v_{max}}{n_e (\textbf{p}, t)}$
 
+\begin{lemma}
+	\label{lemma:lt}
+	Пусть даны переменные $a$, $b$ целочисленного программирования и известно, что существует $M > 0$ : $|a| < M$, $|b| < M$. Тогда можно добавить новую целочисленную переменную $\textbf{1} (\{a < b\}) \in \{0, 1\}$ такую, что
+	
+	\begin{equation*}
+		\textbf{1} (\{a < b\}) = 
+		\begin{cases}
+			1, a < b,
+			\\
+			0, a \ge b
+		\end{cases}
+	\end{equation*}
+
+\end{lemma}
+
+\begin{proof}
+	Добавим в нашу задачу два неравенства:
+	
+	$$ 2M (\textbf{1} (\{a < b\}) - 1) < b - a \le 2M\textbf{1} (\{a < b\}) $$
+	
+	Очевидная проверка показывает, что неравенство выполняется для любых $a, b$.
+	
+	
+\end{proof}
+
 \begin{state}
 	Пусть модель движения $ v_i(\textbf{p}, t)$ макроскопическая. Тогда задача \eqref{eq:target_task_theta_v} есть задача смешанного целочисленного линейного программирования.
 \end{state}
@@ -135,9 +163,74 @@ T(\textbf{p}) = \sum \limits_{e \in E} \int_{0}^{\infty} n_e (\textbf{p}, t) dt
 \begin{proof}
 	Докажем для случая $n = 2$. Для случаев $n \ge 2$ доказательство аналогичное.
 	
-	Пусть имеется задача смешанного целочисленного линейного программирования \eqref{eq:restr_t} с переменными $t_{e, i}^{in}, t_{e, i}^{out}, I_{e, i}, e \in E, i = 1, 2$
+	Пусть имеется задача смешанного целочисленного линейного программирования \eqref{eq:restr_t} с переменными $t_{e, i}^{in}, t_{e, i}^{out}, I_{e, i}, e \in E, i = 1, 2$. Преобразуем условие \eqref{eq:velocity_eq} к каноническому виду. Для удобства обозначим обоих участников индексами $i, j \in \{1, 2\}$.
 	
-	$$\int_{0}^{\infty} \theta_{e, i} (\textbf{p}, t) v_i(\textbf{p}, t)$$
+	$$\int\limits_{0}^{\infty} \theta_{e, i} (\textbf{p}, t) v_i(\textbf{p}, t)dt = \int\limits_{0}^{\infty} \theta_{e, i} (\textbf{p}, t) \sum \limits _{e^1 \in E} \theta_{e^1, i} (\textbf{p}, t) v (n_{e^1} (\textbf{p}, t)) dt = $$
+	
+	$$\int\limits_{0}^{\infty} \theta_{e, i} (\textbf{p}, t)  v (n_{e} (\textbf{p}, t)) dt = 
+	  \int\limits_{ \substack{n_{e} (\textbf{p}, t) = 1}} \theta_{e, i} (\textbf{p}, t)  v (n_{e} (\textbf{p}, t)) dt +
+	  \int\limits_{ \substack{n_{e} (\textbf{p}, t) = 2}} \theta_{e, i} (\textbf{p}, t)  v (n_{e} (\textbf{p}, t)) dt = $$
+	
+	$$\int\limits_{ \substack{\theta_{e, j} (\textbf{p}, t) = 0}} \theta_{e, i} (\textbf{p}, t)  v (1) dt +
+	  \int\limits_{ \substack{\theta_{e, j} (\textbf{p}, t) = 1}} \theta_{e, i} (\textbf{p}, t)  v (2) dt = $$
+	  
+    $$\int\limits_{0}^{\infty} \theta_{e, i} (\textbf{p}, t)  v (1) dt - 
+      \int\limits_{ \substack{\theta_{e, j} (\textbf{p}, t) = 1}} \theta_{e, i} (\textbf{p}, t)  v (1) dt +
+	  \int\limits_{ \substack{\theta_{e, j} (\textbf{p}, t) = 1}} \theta_{e, i} (\textbf{p}, t)  v (2) dt = $$
+	  
+	$$v (1) \int\limits_{0}^{\infty} \theta_{e, i} (\textbf{p}, t) dt +
+	  (v (2) - v(1)) \int\limits_{0}^{\infty} \theta_{e, i} (\textbf{p}, t) \theta_{e, j} (\textbf{p}, t) dt = $$
+	  
+    $$v (1) \overline{\tau}_{e, i} (\textbf{p}) +
+    (v (2) - v(1)) \int\limits_{0}^{\infty} \theta_{e, i} (\textbf{p}, t) \theta_{e, j} (\textbf{p}, t) dt = l_e, e \in \textbf{p}_i$$
+	  
+	Неизвестный интеграл - время совместного проезда участников на ребре $e$.
+	  
+	В переменных задачи смешанного целочисленного программирования получим:
+	
+	$$v(1) (t_{e, i}^{out} - t_{e, i}^{in}) + (v(2) - v(1)) (t_{e, ij}^{out} - t_{e, ij}^{in}) = l_e I_{e, i},$$
+	
+	где новые перемнные $t_{e, ij}^{in}$, $t_{e, ij}^{out}$ отвечают за начало и конец совместного проезда участников. Просуммировав по всем ребрам $e \in E$, получим
+	
+	$$v(1) \sum \limits _{e \in E} (t_{e, i}^{out} - t_{e, i}^{in}) = \sum \limits _{e \in E} l_e I_{e, i} - (v(2) - v(1)) \sum \limits _{e \in E} (t_{e, ij}^{out} - t_{e, ij}^{in})$$
+	
+	Заметим, что часть слева есть функция оптимизации, поэтому функцию оптимизации можно переписать в виде
+	$$v(1) \sum \limits _{e \in E} l_e I_{e, i} + (v(1) - v(2))  \sum \limits _{e \in E} (t_{e, ij}^{out} - t_{e, ij}^{in}) \rightarrow \minn $$
+	
+	Для завершения доказательства необходимо показать, что переменные $t_{e, ij}^{in}, t_{e, ij}^{out}$ описываются линейными ограничениями. Напомним, что $[t_{e, ij}^{in}, t_{e, ij}^{out}] = [t_{e, i}^{in}, t_{e, i}^{out}] \cap [t_{e, j}^{in}, t_{e, j}^{out}]$. Обозначим $\Delta t = t_{e, ij}^{out} - t_{e, ij}^{in}, \Delta t_1 =  t_{e, i}^{out} - t_{e, i}^{in}, \Delta t_2 =  t_{e, j}^{out} - t_{e, j}^{in}, \Delta t_3 =  t_{e, i}^{out} - t_{e, j}^{in}, \Delta t_4 =  t_{e, j}^{out} - t_{e, i}^{in}$
+	
+	Используя лемму \ref{lemma:lt}, при $M = max (\overline{\tau}_{e, i}^{max}, \overline{\tau}_{e, j}^{max})$, добавим в задачу новые переменные $\textbf{1} (\{ \Delta t_k > \Delta t_l\}), k \ne l, k, l \in {1, 2, 3, 4}$. Рассмотрим велечину $T_{max} = \sum \limits_{e \in E} max (\overline{\tau}_{e, i}^{max}, \overline{\tau}_{e, j}^{max})$. Добавим в нашу задачу следующие неравенства: 
+	
+	$$\Delta t \ge 0, $$
+	$$\Delta t \ge \Delta t_k - T_{max} \sum \limits_{l != k} {\textbf{1} (\{ \Delta t_k > \Delta t_l\})}, k = 1, 2, 3, 4$$
+	
+	Тогда переменная $\Delta t$ есть длина отрезка $[t_{e, ij}^{in}, t_{e, ij}^{out}]$. 
+	
+\end{proof}
+
+\begin{corollary}
+	\label{corollary:rel}
+	
+	
+	\begin{equation*}
+		\textbf{1} (\{a < b\}) = 
+		\begin{cases}
+			1, a < b,
+			\\
+			0, a \ge b
+		\end{cases}
+	\end{equation*}
+	
+\end{corollary}
+
+\begin{proof}
+	Добавим в нашу задачу два неравенства:
+	
+	$$ 2M (\textbf{1} (\{a < b\}) - 1) < b - a \le 2M\textbf{1} (\{a < b\}) $$
+	
+	Очевидная проверка показывает, что неравенство выполняется для любых $a, b$.
+	
+	
 \end{proof}
 
 \end{document}
