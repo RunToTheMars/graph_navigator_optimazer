@@ -42,7 +42,7 @@ T (\textbf{p}^*) = \minn\limits_{ \textbf{p} \in P} T (\textbf{p})
 Комбинацию путей $\textbf{p}^*$ будем называть \textit {оптимальной}, а суммарные временные затраты  $ T (\textbf{p}^*)$ \textit {оптимальным временем передвижения участников}.
 
 \newpage
-\section{Поиск функции временных затрат}
+\section{Построение функций временных затрат}
 
 Сложность численного решения задачи поиска оптимальной комбинации путей во многом зависит от аналитического задания функций
 $T_i (\textbf{p})$. Интуитивно вполне очевидно, что на временные затраты при проезде по пути $\textbf{p}_i$ в первую очередь влияют временные затраты на ребрах, составляющих маршрут $\textbf{p}_i$. Поэтому без ограничения общности считаем, что функции временных затрат есть суммарные временные затраты на каждом ребре этого пути
@@ -77,40 +77,45 @@ T(\textbf{p}) = \sum \limits_{e \in E} \int\limits_{0}^{\infty} n_e (\textbf{p},
 \begin{equation}
 \label{eq:restr_t}
  \begin{cases}
-	I_{e, i} (\textbf{p}) \overline{\tau}_{e, i}^{min}(\textbf{p}) \le t_{e, i}^{out}(\textbf{p}) - t_{e, i}^{in}(\textbf{p}) \le I_{e, i}(\textbf{p}) \overline{\tau}_{e, i}^{max}(\textbf{p}), e \in E, i = 1, \dots, n,
+	\overline{\tau}_{e, i}^{min} \le t_{e, i}^{out}(\textbf{p}) - t_{e, i}^{in}(\textbf{p}) \le \overline{\tau}_{e, i}^{max}, e \in \textbf{p}_i, i = 1, \dots, n,
+	\\
+	t_{e, i}^{out}(\textbf{p}) - t_{e, i}^{in}(\textbf{p}) = 0, e \notin \textbf{p}_i, i = 1, \dots, n,
 	\\
 	 \sum \limits_{ \substack{E_1 = \{ e \in E: e = (X_1, B) \} \\ e \in E_1}} t_{e, i}^{out} (\textbf{p}) = \sum \limits_{ \substack{E_2 = \{ e \in E: e = (B, X_2) \} \\ e \in E_2}} t_{e, i}^{in} (\textbf{p}), B \in V, i = 1, \dots, n, E_1 \ne \emptyset, E_2 \ne \emptyset,
-	\\
-	I_{e, i} (\textbf{p}) \in \{0, 1\} \text { - описывают простой путь $\textbf{p}_i$ \footnotemark},
 \end{cases}
 \end{equation}
 
-\footnotetext {Данное условие есть система уравнений на $I_{e, i} (\textbf{p})$, строющая биекцию между $I_{e, i}$ и \textbf{p}}
-
 где конснтанты $\overline{\tau}_{e, i}^{min}$ и $\overline{\tau}_{e, i}^{max}$ - ограничения на функцию $\overline{\tau}_{e, i} (\textbf{p})$. Без ограничения общности считаем, что мы рассматриваем такое движение, что эти константы существуют (ограничено время проезда участника по ребру) и они положительны (нельзя пройти ребро за время $\overline{\tau}_{e, i} (\textbf{p})$ = 0).
 
-Заметим, что система \eqref{eq:restr_t} эквивалентна задаче смешнного целочисленного линейного программирования. Однако, в такой постановке задача эквивалентна задаче поиска кратчайшего пути между вершинами $A_i$ в $B_i$ с весами $\overline{\tau}_{e, i}^{min}$. На практике машины, находящиеся вблизи друг друга влияют на скорости друг друга.
+Целевая функция в этом случае есть
+
+\begin{equation}
+	\label{eq:target_func}
+		\sum \limits_{i = 1}^n \sum \limits_{e \in E} t_{e, i}^{out}(\textbf{p}) - t_{e, i}^{in}(\textbf{p}) \rightarrow \minn \limits _{\textbf{p} \in P}
+\end{equation}
+
+Заметим, что система \eqref{eq:restr_t}, \eqref{eq:target_func} эквивалентна задаче смешнного целочисленного линейного программирования. Однако, в такой постановке задача эквивалентна задаче поиска кратчайшего пути для каждой машины $i$ между вершинами $A_i$ в $B_i$ с весами $\overline{\tau}_{e, i}^{min}$. На практике машины, находящиеся вблизи друг друга влияют на скорости друг друга.
 
 Для того, чтобы учесть влияние участников друг на друга, для каждого участника $i$ введем микроскопическую характеристику движения $v_i(\textbf{p}, t)$, описывающую скорость участника.
 Тогда, имеет место
 
 \begin{equation}
 \label{eq:velocity_eq}
-\int\limits_{0}^{\infty} \theta_{e, i} (\textbf{p}, t) v_i(\textbf{p}, t) dt = l_e, e \in \textbf{p}_i, i = 1, \dots, n
+\int\limits_{0}^{\infty} \theta_{e, i} (\textbf{p}, t) v_i(\textbf{p}, t) dt = l_e, e \in \textbf{p}_i, i = 1, \dots, n,
 \end{equation}
 
-Будем говорить, что уравнения \eqref{eq:velocity_eq} задают \textit{модель движения участников}. Таким образом задача \eqref{eq:target_task_T} эквивалентна следующей системе
+где $l_e$ - длина ребра $e \in E$. Будем говорить, что уравнения \eqref{eq:velocity_eq} задают \textit{модель движения участников}. Таким образом задача \eqref{eq:target_task_T} эквивалентна следующей задаче оптимизации
 
 \begin{equation}
 \label{eq:target_task_theta_v}
 \begin{cases}
-	\sum \limits_{e \in E} \int\limits_{0}^{\infty} n_e (\textbf{p}, t)dt -> \minn\limits_{ \textbf{p} \in P}
+	\sum \limits_{i = 1}^n \sum \limits_{e \in E} t_{e, i}^{out}(\textbf{p}) - t_{e, i}^{in}(\textbf{p}) \rightarrow \minn \limits _{\textbf{p} \in P}
 	\\
-	I_{e, i} (\textbf{p}) \overline{\tau}_{e, i}^{min}(\textbf{p}) \le t_{e, i}^{out}(\textbf{p}) - t_{e, i}^{in}(\textbf{p}) \le I_{e, i}(\textbf{p}) \overline{\tau}_{e, i}^{max}(\textbf{p}), e \in E, i = 1, \dots, n,
+	\overline{\tau}_{e, i}^{min} \le t_{e, i}^{out}(\textbf{p}) - t_{e, i}^{in}(\textbf{p}) \le \overline{\tau}_{e, i}^{max}, e \in \textbf{p}_i, i = 1, \dots, n,
+	\\
+	t_{e, i}^{out}(\textbf{p}) - t_{e, i}^{in}(\textbf{p}) = 0, e \notin \textbf{p}_i, i = 1, \dots, n,
 	\\
 	\sum \limits_{ \substack{E_1 = \{ e \in E: e = (X_1, B) \} \\ e \in E_1}} t_{e, i}^{out} (\textbf{p}) = \sum \limits_{ \substack{E_2 = \{ e \in E: e = (B, X_2) \} \\ e \in E_2}} t_{e, i}^{in} (\textbf{p}), B \in V, i = 1, \dots, n, E_1 \ne \emptyset, E_2 \ne \emptyset,
-	\\
-	I_{e, i} (\textbf{p}) \in \{0, 1\} \text { - описывают простой путь $\textbf{p}_i$},
 	\\
 	\int\limits_{0}^{\infty} \theta_{e, i} (\textbf{p}, t) v_i(\textbf{p}, t) dt = l_e, e \in \textbf{p}_i
 \end{cases}
@@ -118,6 +123,9 @@ T(\textbf{p}) = \sum \limits_{e \in E} \int\limits_{0}^{\infty} n_e (\textbf{p},
 
 Заметим, что в случае, когда условие \eqref{eq:velocity_eq} можно описать в виде задачи смешанного целочисленного программирования, 
 задача \eqref{eq:target_task_theta_v} может быть решена стандартным решателем.
+
+\newpage
+\section{Модели движения}
 
 \subsection*{Макроскопические модели}
 
@@ -157,6 +165,9 @@ T(\textbf{p}) = \sum \limits_{e \in E} \int\limits_{0}^{\infty} n_e (\textbf{p},
 \end{proof}
 
 \begin{state}
+	
+	\label{state:lin_prog}
+	
 	Пусть модель движения $ v_i(\textbf{p}, t)$ макроскопическая. Тогда задача \eqref{eq:target_task_theta_v} есть задача смешанного целочисленного линейного программирования.
 \end{state}
 
@@ -194,8 +205,8 @@ T(\textbf{p}) = \sum \limits_{e \in E} \int\limits_{0}^{\infty} n_e (\textbf{p},
 	
 	$$v(1) \sum \limits _{e \in E} (t_{e, i}^{out} - t_{e, i}^{in}) = \sum \limits _{e \in E} l_e I_{e, i} - (v(2) - v(1)) \sum \limits _{e \in E} (t_{e, ij}^{out} - t_{e, ij}^{in})$$
 	
-	Заметим, что часть слева есть функция оптимизации, поэтому функцию оптимизации можно переписать в виде
-	$$v(1) \sum \limits _{e \in E} l_e I_{e, i} + (v(1) - v(2))  \sum \limits _{e \in E} (t_{e, ij}^{out} - t_{e, ij}^{in}) \rightarrow \minn $$
+	Заметим, что левая часть есть временные затраты участника $i$, поэтому задачу оптимизации можно переписать в виде
+	$$ \frac{1}{v (1)} \sum\limits_{i = 1}^n \sum \limits _{e \in E} l_e I_{e, i} + \frac{v(1) - v(2)}{v (1)}  \sum\limits_{i = 1}^n \sum \limits _{e \in E} (t_{e, ij}^{out} - t_{e, ij}^{in}) \rightarrow \minn $$
 	
 	Для завершения доказательства необходимо показать, что переменные $t_{e, ij}^{in}, t_{e, ij}^{out}$ описываются линейными ограничениями. Напомним, что $[t_{e, ij}^{in}, t_{e, ij}^{out}] = [t_{e, i}^{in}, t_{e, i}^{out}] \cap [t_{e, j}^{in}, t_{e, j}^{out}]$. Обозначим $\Delta t = t_{e, ij}^{out} - t_{e, ij}^{in}, \Delta t_1 =  t_{e, i}^{out} - t_{e, i}^{in}, \Delta t_2 =  t_{e, j}^{out} - t_{e, j}^{in}, \Delta t_3 =  t_{e, i}^{out} - t_{e, j}^{in}, \Delta t_4 =  t_{e, j}^{out} - t_{e, i}^{in}$
 	
@@ -210,27 +221,80 @@ T(\textbf{p}) = \sum \limits_{e \in E} \int\limits_{0}^{\infty} n_e (\textbf{p},
 
 \begin{corollary}
 	\label{corollary:rel}
-	
-	
-	\begin{equation*}
-		\textbf{1} (\{a < b\}) = 
-		\begin{cases}
-			1, a < b,
-			\\
-			0, a \ge b
-		\end{cases}
-	\end{equation*}
+
+	Пусть модель движения $ v_i(\textbf{p}, t) = \sum \limits _{e \in E} \theta_{e, i} (\textbf{p}, t) v (n_e (\textbf{p}, t))$ макроскопическая и последовательность $v(n) > 0, \forall n \in \mathbb{Z}_+$ убывает. Предположим, что оптимальное время движения в модели c постоянными скоростями $v(1)$ есть $\widetilde{T}$. Тогда имеет место
+
+	$$ \frac{2 v(1) - v(n)}{v(1)} \widetilde{T} \le T \le \frac {v(1)}{v(n)} \widetilde{T}$$
 	
 \end{corollary}
 
 \begin{proof}
-	Добавим в нашу задачу два неравенства:
+	Докажем каждое неравенство в отдельности
 	
-	$$ 2M (\textbf{1} (\{a < b\}) - 1) < b - a \le 2M\textbf{1} (\{a < b\}) $$
+	1. В модели, где все участники едут с постоянными скоростям движение происходит по кратчайшим путям. Тогда временные затраты есть $\widetilde{T} = \frac{1}{v(1)} \sum \limits _{i = 1} ^ n \sum\limits_{e \in p_i} l_e$, где $p_i$ - кратчайшие пути.
+	На тех же путях задается самый худший случай макроскопической модели - все едут с минимальной скоростью, то есть $ T = \frac{1}{v(n)} \sum \limits _{i = 1} ^ n \sum\limits_{e \in p_i} l_e$. Тогда получим
 	
-	Очевидная проверка показывает, что неравенство выполняется для любых $a, b$.
+	$$T \le  \frac{1}{v(n)} \sum \limits _{i = 1} ^ n \sum\limits_{e \in p_i} l_e = \frac {v(1)}{v(n)} \widetilde{T}$$
 	
+	2. Проделывая аналогичне выкладки что и в доказательстве \ref{state:lin_prog}, можно получить, что функция оптимизация есть 
 	
+	$$ \frac{1}{v (1)} \sum\limits_{i = 1}^n \sum \limits _{e \in E} l_e I_{e, i} +  \sum\limits_{k = 2}^{n} \frac{v(1) - v(k)}{v (1)}  \sum\limits_{i = 1}^n \sum \limits _{e \in E} \sum\limits _{\substack{ s_k \in 2^n \\ |s_k| = k}}  \Delta t_{e, s_k} \rightarrow \minn ,$$
+	
+	где имеются ограничения
+    
+    $$I_{e, i} \frac{l_e}{v(1)} \le  \sum\limits _{\substack{ s_k \in 2^n \\ i \in s_k}}  \Delta t_{e, s_k} \le I_{e, i} \frac{l_e}{v(n)} , e \in E,  i = 1, \dots, n$$
+	
+	Тогда получим
+		$$T \ge 
+		  \minn \left(  \frac{1}{v (1)} \sum\limits_{i = 1}^n \sum \limits _{e \in E} l_e I_{e, i} \right) 
+		+ \minn \left(  \sum\limits_{k = 2}^{n} \frac{v(1) - v(k)}{v (1)}  \sum\limits_{i = 1}^n \sum \limits _{e \in E} \sum\limits _{\substack{ s_k \in 2^n \\ |s_k| = k}}  \Delta t_{e, s_k} \right) \ge $$
+		
+		$$\ge \widetilde{T} + \frac{v(1) - v(n)}{v(1)} \widetilde{T} =  \frac{2 v(1) - v(n)}{v(1)} \widetilde{T} $$
+
 \end{proof}
+
+\subsection*{Микроскопические модели}
+\textit {Микроскопическими} называются модели, в которых явно исследуется движение каждого автомобиля.
+Выбор такой модели позволяет теоретически достичь более точного описания движения автомобилей по сравнению с макроскопической моделью, однако этот подход требует больших вычислительных ресурсов при практических применениях.
+
+Например, на практике скорость автомобиля напрямую зависит от скорости и положения автомобиля спереди. 
+
+Для простоты рассмотрим однополосное бесконечное движение. Пусть $x_i(t) \in [0, +\infty)$ - координаты на полосе участника $i$. Предположим, что скорость участника ограничена некоторой общей велечиной $v_{max}$. Пусть в момент времени $t = 0$ выполняется $x_1(0) \le х_2(0) \le \dots \le x_n(0)$.
+
+\subsubsection*{Модель пропорциональной скорости}
+Рассмотрим пример, когда скорость машины пропорциональна расстоянию до следующей машины.
+Для удобства положим $d_{i} (t) = x_{i + 1} (t) - x_{i} (t), i = 1, \dots, n - 1$.
+Без ограничения общности считаем, что  $d_{i} (0) < D$, где $D$ - характерное расстояние взаимодействия участников.
+
+Пусть модель движения есть
+\begin{equation}
+	\label{eq:micro}
+	v_i(t)=
+	\begin{cases}
+		v_{max}, & i = n
+		\\
+		v_{max} \frac{d_i(t)}{D} ,& i \ne n
+	\end{cases}
+\end{equation}
+
+Для поиска функций $x_i(t)$ достаточно рассмотреть систему дифференциальных уравнений
+
+$$ \dot{d_i} (t) = v_{i + 1} (t) - v_i (t) $$
+
+Решением такой системы является
+
+$$d_{n - k} (\tau) = \sum \limits_{l = 0} ^ {k - 1} \left(\frac{d_{n - k + l} (0) - D}{l!} \tau^l e ^ {-\tau}\right) + D ,$$
+
+где $\tau = \frac{v_{max}}{D}t$. Модель обладает тем свойством, что порядок участников постоянен и участники не покидают зону взаимодействия $D$. 
+
+Данная модель хорошо описывает реальное движение участников, однако ее практическое применение вызывает сложности, поскольку решение уравнения $x_i (t) = x_0$ может быть найдено только приближенно.
+
+\subsubsection*{Модель снижения скорости}
+
+Предположим, что существует некоторая велечина $c_n$, которая отвечает за снижение скорости хвоста скопления участников:
+
+$$v_{n - k} = v_{max} - c_n k, \text{  } k = 0, \dots, n - 1$$
+
+Велечину $c_n$ выберем из соображений, что $v_0 = \frac{v_{max}}{n}$. Тогда $c_n = \frac{v_{max}}{n}$. Если исследовать данную модель на графе, то функция скоростей будут кусочно постоянными. Это связано с тем, что некоторые участники сьезжают с пути друг друга или покидают характерное расстояние взаимодействия. Поэтому она не лучшим образом описывает реальное движение, однако проста в использовании.
 
 \end{document}
