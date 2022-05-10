@@ -1,8 +1,9 @@
 \babel@toc {russian}{}\relax 
 \contentsline {section}{\numberline {1}Введение}{3}{}%
 \contentsline {section}{\numberline {2}Постановка задачи}{4}{}%
-\contentsline {section}{\numberline {3}Построение функций временных затрат}{5}{}%
-\contentsline {section}{\numberline {4}Модели движения}{7}{}%
-\contentsline {subsection}{\numberline {4.1}Макроскопические модели}{7}{}%
-\contentsline {subsection}{\numberline {4.2}Микроскопические модели}{9}{}%
-\contentsline {section}{\numberline {5}Равновесие транспортных потоков}{10}{}%
+\contentsline {subsection}{\numberline {2.1}Общая постановка задачи}{4}{}%
+\contentsline {subsection}{\numberline {2.2}Постановка задачи в терминах модели движения}{4}{}%
+\contentsline {section}{\numberline {3}Модели движения}{8}{}%
+\contentsline {subsection}{\numberline {3.1}Макроскопические модели}{8}{}%
+\contentsline {subsection}{\numberline {3.2}Микроскопические модели}{11}{}%
+\contentsline {section}{\numberline {4}Равновесие транспортных потоков}{12}{}%
