@@ -1,14 +1,14 @@
 \babel@toc {russian}{}\relax 
-\contentsline {section}{\numberline {1}Введение}{3}{}%
-\contentsline {section}{\numberline {2}Постановка задачи}{4}{}%
-\contentsline {subsection}{\numberline {2.1}Общая постановка задачи}{4}{}%
-\contentsline {subsection}{\numberline {2.2}Постановка задачи в терминах модели движения}{5}{}%
-\contentsline {section}{\numberline {3}Модели движения}{9}{}%
-\contentsline {subsection}{\numberline {3.1}Макроскопические модели}{9}{}%
-\contentsline {subsection}{\numberline {3.2}Микроскопические модели}{12}{}%
-\contentsline {section}{\numberline {4}Равновесие транспортных потоков}{14}{}%
-\contentsline {subsection}{\numberline {4.1}Некооперативное и кооперативное равновесие}{14}{}%
-\contentsline {subsection}{\numberline {4.2}Поиск кооперативного равновесия}{15}{}%
-\contentsline {section}{\numberline {5}Результаты}{16}{}%
-\contentsline {section}{\numberline {6}Заключение}{17}{}%
-\contentsline {section}{Литература}{18}{}%
+\contentsline {section}{Введение}{3}{section*.2}%
+\contentsline {section}{\numberline {1}Постановка задачи}{4}{section.1}%
+\contentsline {subsection}{\numberline {1.1}Общая постановка задачи}{4}{subsection.1.1}%
+\contentsline {subsection}{\numberline {1.2}Постановка задачи в терминах модели движения}{4}{subsection.1.2}%
+\contentsline {section}{\numberline {2}Модели движения}{9}{section.2}%
+\contentsline {subsection}{\numberline {2.1}Макроскопические модели}{9}{subsection.2.1}%
+\contentsline {subsection}{\numberline {2.2}Микроскопические модели}{12}{subsection.2.2}%
+\contentsline {section}{\numberline {3}Равновесие транспортных потоков}{14}{section.3}%
+\contentsline {subsection}{\numberline {3.1}Некооперативное и кооперативное равновесие}{14}{subsection.3.1}%
+\contentsline {subsection}{\numberline {3.2}Поиск кооперативного равновесия}{15}{subsection.3.2}%
+\contentsline {section}{\numberline {4}Результаты}{17}{section.4}%
+\contentsline {section}{\numberline {5}Заключение}{18}{section.5}%
+\contentsline {section}{Литература}{19}{section*.6}%
