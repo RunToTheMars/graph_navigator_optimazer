@@ -6,4 +6,9 @@
 \contentsline {section}{\numberline {3}Модели движения}{9}{}%
 \contentsline {subsection}{\numberline {3.1}Макроскопические модели}{9}{}%
 \contentsline {subsection}{\numberline {3.2}Микроскопические модели}{12}{}%
-\contentsline {section}{\numberline {4}Равновесие транспортных потоков}{13}{}%
+\contentsline {section}{\numberline {4}Равновесие транспортных потоков}{14}{}%
+\contentsline {subsection}{\numberline {4.1}Некооперативное и кооперативное равновесие}{14}{}%
+\contentsline {subsection}{\numberline {4.2}Поиск кооперативного равновесия}{15}{}%
+\contentsline {section}{\numberline {5}Результаты}{16}{}%
+\contentsline {section}{\numberline {6}Заключение}{17}{}%
+\contentsline {section}{Литература}{18}{}%
