@@ -93,7 +93,7 @@ graph_path_tab::graph_path_tab (graph::graph_initial *graph_initial, QWidget *pa
             QVBoxLayout *solver_brute_force_layout = new QVBoxLayout (solver_brute_force_groupbox);
             solver_brute_force_groupbox->setLayout (solver_brute_force_layout);
 
-            m_brute_force = std::make_unique<graph::gno_path_finder_brute_force> (m_model.get ());
+            m_brute_force = std::make_unique<graph::gno_path_finder_brute_force> (m_model.get (), false);
 
             solver_brute_force_layout->addWidget (m_brute_force_widget = new path_graph_widget (graph_initial, m_brute_force.get (), m_continuous_modeling.get (), solver_brute_force_groupbox));
             m_brute_force_widget->get_painter()->show_src_dst (true);
@@ -105,11 +105,35 @@ graph_path_tab::graph_path_tab (graph::graph_initial *graph_initial, QWidget *pa
             QVBoxLayout *solver_dijkstra_layout = new QVBoxLayout (solver_dijkstra_groupbox);
             solver_dijkstra_groupbox->setLayout (solver_dijkstra_layout);
 
-            m_dijkstra = std::make_unique<graph::gno_path_finder_dijkstra> (m_model.get ());
+            m_dijkstra = std::make_unique<graph::gno_path_finder_dijkstra> (m_model.get (), false);
 
             solver_dijkstra_layout->addWidget (m_dijkstra_widget = new path_graph_widget (graph_initial, m_dijkstra.get (), m_continuous_modeling.get (), solver_dijkstra_groupbox));
             m_dijkstra_widget->get_painter()->show_src_dst (true);
             solvers_layout->addWidget (solver_dijkstra_groupbox, 0, 1);
+        }
+
+        {
+            QGroupBox *solver_brute_force_groupbox = new QGroupBox ("Brute Force (Depence)", this);
+            QVBoxLayout *solver_brute_force_layout = new QVBoxLayout (solver_brute_force_groupbox);
+            solver_brute_force_groupbox->setLayout (solver_brute_force_layout);
+
+            m_brute_force_with_depence = std::make_unique<graph::gno_path_finder_brute_force> (m_model.get (), true);
+
+            solver_brute_force_layout->addWidget (m_brute_force_with_depence_widget = new path_graph_widget (graph_initial, m_brute_force_with_depence.get (), m_continuous_modeling.get (), solver_brute_force_groupbox));
+            m_brute_force_with_depence_widget->get_painter()->show_src_dst (true);
+            solvers_layout->addWidget (solver_brute_force_groupbox, 1, 0);
+        }
+
+        {
+            QGroupBox *solver_dijkstra_groupbox = new QGroupBox ("Dijkstra (Depence)", this);
+            QVBoxLayout *solver_dijkstra_layout = new QVBoxLayout (solver_dijkstra_groupbox);
+            solver_dijkstra_groupbox->setLayout (solver_dijkstra_layout);
+
+            m_dijkstra_with_depence = std::make_unique<graph::gno_path_finder_dijkstra> (m_model.get (), true);
+
+            solver_dijkstra_layout->addWidget (m_dijkstra_with_depence_widget = new path_graph_widget (graph_initial, m_dijkstra_with_depence.get (), m_continuous_modeling.get (), solver_dijkstra_groupbox));
+            m_dijkstra_with_depence_widget->get_painter()->show_src_dst (true);
+            solvers_layout->addWidget (solver_dijkstra_groupbox, 1, 1);
         }
     }
 
@@ -120,6 +144,8 @@ graph_path_tab::graph_path_tab (graph::graph_initial *graph_initial, QWidget *pa
                      {
                        m_brute_force_widget->set_start_time (text.toDouble ());
                        m_dijkstra_widget->set_start_time (text.toDouble ());
+                       m_brute_force_with_depence_widget->set_start_time (text.toDouble ());
+                       m_dijkstra_with_depence_widget->set_start_time (text.toDouble ());
                      });
 
     QObject::connect (m_run_button, &QPushButton::clicked, this, [this] { run (); });
@@ -129,6 +155,8 @@ graph_path_tab::graph_path_tab (graph::graph_initial *graph_initial, QWidget *pa
 
     QObject::connect (m_brute_force_widget, &path_graph_widget::update_times_needed, this, [this] { update_max_times (); });
     QObject::connect (m_dijkstra_widget, &path_graph_widget::update_times_needed, this, [this] { update_max_times (); });
+    QObject::connect (m_brute_force_with_depence_widget, &path_graph_widget::update_times_needed, this, [this] { update_max_times (); });
+    QObject::connect (m_dijkstra_with_depence_widget, &path_graph_widget::update_times_needed, this, [this] { update_max_times (); });
 
     QObject::connect (this, &graph_path_tab::set_val, this, [this] (int i) { m_time_slider->setValue (i); });
     QObject::connect (this, &graph_path_tab::done, this, [this] { stop (); });
@@ -136,8 +164,12 @@ graph_path_tab::graph_path_tab (graph::graph_initial *graph_initial, QWidget *pa
     QObject::connect (m_show_src_dst_checkbox, &QCheckBox::clicked, this, [this] (bool checked) {
         m_brute_force_widget->get_painter()->show_src_dst (checked);
         m_dijkstra_widget->get_painter()->show_src_dst (checked);
+        m_brute_force_with_depence_widget->get_painter()->show_src_dst (checked);
+        m_dijkstra_with_depence_widget->get_painter()->show_src_dst (checked);
         m_brute_force_widget->get_painter()->update ();
         m_dijkstra_widget->get_painter()->update ();
+        m_brute_force_with_depence_widget->get_painter()->update ();
+        m_dijkstra_with_depence_widget->get_painter()->update ();
     });
 
     QObject::connect (m_show_path_checkbox, &QCheckBox::clicked, this, [this] (bool checked) {
@@ -149,15 +181,23 @@ graph_path_tab::graph_path_tab (graph::graph_initial *graph_initial, QWidget *pa
 
         m_brute_force_widget->get_painter()->set_show_path (checked);
         m_dijkstra_widget->get_painter()->set_show_path (checked);
+        m_brute_force_with_depence_widget->get_painter()->set_show_path (checked);
+        m_dijkstra_with_depence_widget->get_painter()->set_show_path (checked);
 
         m_brute_force_widget->get_painter()->set_path (m_brute_force_widget->get_path ());
         m_dijkstra_widget->get_painter()->set_path (m_dijkstra_widget->get_path ());
+        m_brute_force_with_depence_widget->get_painter()->set_path (m_brute_force_with_depence_widget->get_path ());
+        m_dijkstra_with_depence_widget->get_painter()->set_path (m_dijkstra_with_depence_widget->get_path ());
 
         m_brute_force_widget->get_painter()->set_path_color (veh_color);
         m_dijkstra_widget->get_painter()->set_path_color (veh_color);
+        m_brute_force_with_depence_widget->get_painter()->set_path_color (veh_color);
+        m_dijkstra_with_depence_widget->get_painter()->set_path_color (veh_color);
 
         m_brute_force_widget->get_painter()->update ();
         m_dijkstra_widget->get_painter()->update ();
+        m_brute_force_with_depence_widget->get_painter()->update ();
+        m_dijkstra_with_depence_widget->get_painter()->update ();
     });
 
     QSplitter *splitter = new QSplitter (Qt::Orientation::Vertical, this);
@@ -168,6 +208,8 @@ graph_path_tab::graph_path_tab (graph::graph_initial *graph_initial, QWidget *pa
 
     m_brute_force_widget->get_painter()->show_src_dst (false);
     m_dijkstra_widget->get_painter()->show_src_dst (false);
+    m_brute_force_with_depence_widget->get_painter()->show_src_dst (false);
+    m_dijkstra_with_depence_widget->get_painter()->show_src_dst (false);
 
     update_spinboxes ();
     set_start_end ();
@@ -187,15 +229,21 @@ void graph_path_tab::set_start_end ()
 
   m_brute_force_widget->set_src_dst (m_start_spinbox->value (), m_end_spinbox->value ());
   m_dijkstra_widget->set_src_dst (m_start_spinbox->value (), m_end_spinbox->value ());
+  m_brute_force_with_depence_widget->set_src_dst (m_start_spinbox->value (), m_end_spinbox->value ());
+  m_dijkstra_with_depence_widget->set_src_dst (m_start_spinbox->value (), m_end_spinbox->value ());
 }
 
 void graph_path_tab::clear ()
 {
     m_brute_force_widget->get_painter()->set_line_states (nullptr);
     m_dijkstra_widget->get_painter()->set_line_states (nullptr);
+    m_brute_force_with_depence_widget->get_painter()->set_line_states (nullptr);
+    m_dijkstra_with_depence_widget->get_painter()->set_line_states (nullptr);
 
     m_brute_force_widget->get_painter()->set_path ({});
     m_dijkstra_widget->get_painter()->set_path ({});
+    m_brute_force_with_depence_widget->get_painter()->set_path ({});
+    m_dijkstra_with_depence_widget->get_painter()->set_path ({});
 
     update_spinboxes ();
 }
@@ -212,6 +260,12 @@ void graph_path_tab::update_max_times ()
     if (!m_dijkstra_widget->get_line_states ().empty ())
         max_times.push_back (m_dijkstra_widget->get_line_states ().back ().t2);
 
+    if (!m_brute_force_with_depence_widget->get_line_states ().empty ())
+        max_times.push_back (m_brute_force_with_depence_widget->get_line_states ().back ().t2);
+
+    if (!m_dijkstra_with_depence_widget->get_line_states ().empty ())
+        max_times.push_back (m_dijkstra_with_depence_widget->get_line_states ().back ().t2);
+
     if (max_times.empty ())
         return;
 
@@ -222,9 +276,13 @@ void graph_path_tab::update_max_times ()
 
     m_brute_force_widget->get_painter()->set_path (m_brute_force_widget->get_path ());
     m_dijkstra_widget->get_painter()->set_path (m_dijkstra_widget->get_path ());
+    m_brute_force_with_depence_widget->get_painter()->set_path (m_brute_force_with_depence_widget->get_path ());
+    m_dijkstra_with_depence_widget->get_painter()->set_path (m_dijkstra_with_depence_widget->get_path ());
 
     m_brute_force_widget->get_painter()->update ();
     m_dijkstra_widget->get_painter()->update ();
+    m_brute_force_with_depence_widget->get_painter()->update ();
+    m_dijkstra_with_depence_widget->get_painter()->update ();
 }
 
 void graph_path_tab::set_time_from_slider ()
@@ -241,6 +299,12 @@ void graph_path_tab::set_time (double t)
 
     m_dijkstra_widget->get_painter()->set_time (t);
     m_dijkstra_widget->update ();
+
+    m_brute_force_with_depence_widget->get_painter()->set_time (t);
+    m_brute_force_with_depence_widget->update ();
+
+    m_dijkstra_with_depence_widget->get_painter()->set_time (t);
+    m_dijkstra_with_depence_widget->update ();
 
     m_time_line->setText (QString(" %1").arg(t, 0, 'g'));
 }

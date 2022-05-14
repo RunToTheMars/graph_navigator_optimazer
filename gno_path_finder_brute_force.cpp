@@ -100,7 +100,7 @@ static void do_on_path_find (const std::vector<int> &actual_nodes, graph::uid sr
 
 }
 
-graph::gno_path_finder_brute_force::gno_path_finder_brute_force (graph::gno_discrete_modeling_base *model): m_model (model)
+graph::gno_path_finder_brute_force::gno_path_finder_brute_force (graph::gno_discrete_modeling_base *model, bool use_depence): m_model (model), m_use_depence (use_depence)
 {
 
 }
@@ -172,7 +172,8 @@ std::vector<graph::uid> graph::gno_path_finder_brute_force::run (const graph_ini
 
           m_model->clear_states (new_initial_state);
           m_model->run (new_initial_state);
-          m_model->set_model_independer (new_veh_uid);
+          if (!m_use_depence)
+            m_model->set_model_independer (new_veh_uid);
 
           new_initial_state.get_initial_state()->remove_vehicle (new_veh_uid);
         });

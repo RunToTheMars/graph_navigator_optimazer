@@ -8,7 +8,8 @@
 
 #include <stack>
 
-graph::gno_path_finder_dijkstra::gno_path_finder_dijkstra (graph::gno_discrete_modeling_base *model): m_model (model)
+graph::gno_path_finder_dijkstra::gno_path_finder_dijkstra (graph::gno_discrete_modeling_base *model, bool use_depence):
+    m_model (model), m_use_depence (use_depence)
 {
     m_continuous_modeling = std::make_unique<graph::gno_continuous_modeling> (model);
 }
@@ -106,7 +107,9 @@ std::vector<graph::uid> graph::gno_path_finder_dijkstra::run (const graph_initia
 //            states.push_back ({0., 0});
             m_model->clear_states (*m_updatable_initial);
             m_model->set_states (0., states);
-            m_model->set_model_independer (veh_count);
+
+            if (!m_use_depence)
+              m_model->set_model_independer (veh_count);
 
             double time_for_edge = -1.;
 

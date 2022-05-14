@@ -167,7 +167,7 @@ namespace graph
         //for edges manipulation
         set_graph (graph_initial, nodes, edges, vehs);
 
-        const int veh_count = 20;
+        const int veh_count = 50;
 
         std::mt19937 gen (0);
         std::uniform_real_distribution<double> node_random (0, nodes.size ());

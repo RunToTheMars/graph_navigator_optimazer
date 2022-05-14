@@ -65,9 +65,14 @@ private:
 
     std::unique_ptr<graph::gno_path_finder_base> m_brute_force;
     std::unique_ptr<graph::gno_path_finder_base> m_dijkstra;
+    std::unique_ptr<graph::gno_path_finder_base> m_brute_force_with_depence;
+    std::unique_ptr<graph::gno_path_finder_base> m_dijkstra_with_depence;
 
     path_graph_widget *m_brute_force_widget = nullptr;
     path_graph_widget *m_dijkstra_widget = nullptr;
+
+    path_graph_widget *m_brute_force_with_depence_widget = nullptr;
+    path_graph_widget *m_dijkstra_with_depence_widget = nullptr;
 
     double m_max_time = 0.;
 
