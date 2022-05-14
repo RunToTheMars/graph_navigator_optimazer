@@ -1,12 +1,13 @@
 \babel@toc {russian}{}\relax 
 \contentsline {section}{\numberline {1}Постановка задачи}{5}{}%
-\contentsline {section}{\numberline {2}Возможные правила движения}{6}{}%
-\contentsline {subsection}{\numberline {2.1}Микроскопические модели}{6}{}%
-\contentsline {subsection}{\numberline {2.2}Макроскопические модели}{7}{}%
-\contentsline {section}{\numberline {3}Моделирование}{8}{}%
-\contentsline {subsection}{\numberline {3.1}Независимость движения участников от добавленного АТС}{8}{}%
-\contentsline {subsection}{\numberline {3.2}Взаимосвязь движений нового участника и группы АТС}{8}{}%
-\contentsline {section}{\numberline {4}Поиск оптимального пути}{9}{}%
-\contentsline {subsection}{\numberline {4.1}Перебор. Сложность}{9}{}%
-\contentsline {subsection}{\numberline {4.2}Дейкстра}{10}{}%
-\contentsline {subsubsection}{\numberline {4.2.1}Модифицированный алгоритм Дейкстры}{10}{}%
+\contentsline {section}{\numberline {2}Модели движения}{6}{}%
+\contentsline {subsection}{\numberline {2.1}Макроскопические модели}{7}{}%
+\contentsline {subsection}{\numberline {2.2}Микроскопические модели}{7}{}%
+\contentsline {section}{\numberline {3}Моделирование}{9}{}%
+\contentsline {subsection}{\numberline {3.1}Независимость движения участников от добавленного АТС}{9}{}%
+\contentsline {subsection}{\numberline {3.2}Взаимосвязь движений нового участника и группы АТС}{9}{}%
+\contentsline {section}{\numberline {4}Поиск оптимального пути}{10}{}%
+\contentsline {subsection}{\numberline {4.1}Перебор. Сложность}{10}{}%
+\contentsline {subsection}{\numberline {4.2}Дейкстра}{11}{}%
+\contentsline {subsubsection}{\numberline {4.2.1}Модифицированный алгоритм Дейкстры}{11}{}%
+\contentsline {section}{Литература}{19}{}%
