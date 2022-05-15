@@ -17,7 +17,7 @@ class gno_path_finder_brute_force: public gno_path_finder_base
 public:
   gno_path_finder_brute_force (gno_discrete_modeling_base *model, bool use_depence);
 
-  std::vector<graph::uid> run (const graph_initial &initial_state, graph::uid src, graph::uid dst, Vehicle veh, double t);
+  std::vector<graph::uid> run (const graph_initial &initial_state, graph::uid veh_uid);
 };
 }
 

@@ -102,11 +102,9 @@ static void do_on_path_find (const std::vector<int> &actual_nodes, graph::uid sr
 
 graph::gno_path_finder_brute_force::gno_path_finder_brute_force (graph::gno_discrete_modeling_base *model, bool use_depence): m_model (model), m_use_depence (use_depence)
 {
-
 }
 
-std::vector<graph::uid> graph::gno_path_finder_brute_force::run (const graph_initial &initial_state,
-                                                                graph::uid src, graph::uid dst, Vehicle veh, double start_time)
+std::vector<graph::uid> graph::gno_path_finder_brute_force::run (const graph_initial &initial_state, graph::uid veh_uid)
 {
   m_modeling_count = 0;
   const graph::graph_base *graph = initial_state.get_graph ();
@@ -115,13 +113,15 @@ std::vector<graph::uid> graph::gno_path_finder_brute_force::run (const graph_ini
   if (actual_nodes.empty ())
     return {};
 
+  Directional_Vehicle veh_opt = initial_state.get_initial_state()->vehicle (veh_uid);
+
   {
     std::vector<int> actual_src_nodes (graph->node_count (), 0);
 
     std::vector<int> actual_dst_nodes (graph->node_count (), 0);
 
-    go_from_start (actual_src_nodes, src, graph);
-    go_from_end (actual_dst_nodes, dst, graph);
+    go_from_start (actual_src_nodes, veh_opt.src, graph);
+    go_from_end (actual_dst_nodes, veh_opt.dst, graph);
 
     for (graph::uid node_uid = 0; node_uid < graph->node_count (); node_uid++)
     {
@@ -129,7 +129,7 @@ std::vector<graph::uid> graph::gno_path_finder_brute_force::run (const graph_ini
         actual_nodes[node_uid] = 1;
     }
 
-    if (actual_nodes[src] == 0 || actual_nodes[dst] == 0)
+    if (actual_nodes[veh_opt.src] == 0 || actual_nodes[veh_opt.dst] == 0)
       return {};
   }
 
@@ -141,44 +141,41 @@ std::vector<graph::uid> graph::gno_path_finder_brute_force::run (const graph_ini
     }
     graph_initial new_initial_state (const_cast<graph_base *>(initial_state.get_graph ()), &graph_initial_state);
 
-    do_on_path_find (actual_nodes, src, dst, graph, max_path_size, [this, &new_initial_state, src, dst, start_time, veh] (const std::stack<graph::uid> &path_stack) {
+    do_on_path_find (actual_nodes, veh_opt.src, veh_opt.dst, graph, max_path_size, [this, &new_initial_state, veh_uid] (const std::stack<graph::uid> &path_stack) {
         std::vector<graph::uid> path (path_stack._Get_container().begin (), path_stack._Get_container().end ());
 
-          m_model->set_do_in_critical_time (
-              [this, &path] (double time, const std::vector<vehicle_discrete_state> &states) {
-                const vehicle_discrete_state &state = states.back ();
-                if (state.edge_num != path.size () - 1 ||
-                    !fuzzy_eq (state.part, 1.))
-                  return;
-
-                m_model->interrupt ();
-
-                if (m_min_path.empty () || (graph::MINIMIZE && time < m_min_time) || (!graph::MINIMIZE && time > m_min_time))
+        std::vector<double> times (new_initial_state.get_initial_state()->vehicle_count (), 0.);
+        m_model->set_do_in_critical_time (
+              [this, new_initial_state, &times] (double time, const std::vector<vehicle_discrete_state> &states) {
+                for (graph::uid veh_uid = 0; veh_uid < new_initial_state.get_initial_state()->vehicle_count (); veh_uid++)
                 {
-                  m_min_path = path;
-                  m_min_time = time;
+                    if (times[veh_uid] > 0)
+                        continue;
+
+                    const vehicle_discrete_state &state = states[veh_uid];
+
+                    if (fuzzy_eq (state.part, 1.) && state.edge_num == isize (new_initial_state.get_initial_state()->vehicle (veh_uid).path) - 1)
+                      times[veh_uid] = time;
                 }
-              });
+            });
 
-          Directional_Vehicle new_veh;
-          new_veh.src = src;
-          new_veh.dst = dst;
-          new_veh.path = path;
-          new_veh.vehicle = veh;
-          new_veh.t = start_time;
-
-          new_initial_state.get_initial_state()->add_vehicle (new_veh);
-
-          graph::uid new_veh_uid = new_initial_state.get_initial_state()->vehicle_count () - 1;
+          Directional_Vehicle &updated_veh = new_initial_state.get_initial_state()->vehicle (veh_uid);
+          updated_veh.path = path;
 
           m_model->clear_states (new_initial_state);
           m_model->run (new_initial_state);
+
+          double val = m_phi (times);
+          if (m_min_path.empty () ||  ((graph::MINIMIZE && val < m_min_time) || (!graph::MINIMIZE && val > m_min_time)))
+          {
+              m_min_time = val;
+              m_min_path = path;
+          }
+
           if (!m_use_depence)
-            m_model->set_model_independer (new_veh_uid);
+            m_model->set_model_independer (veh_uid);
 
           m_modeling_count ++;
-
-          new_initial_state.get_initial_state()->remove_vehicle (new_veh_uid);
         });
 
   return m_min_path;

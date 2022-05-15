@@ -10,6 +10,6 @@
 \contentsline {subsection}{\numberline {3.1}Некооперативное и кооперативное равновесие}{15}{subsection.3.1}%
 \contentsline {subsection}{\numberline {3.2}Поиск кооперативного равновесия}{17}{subsection.3.2}%
 \contentsline {section}{\numberline {4}Результаты}{20}{section.4}%
-\contentsline {subsection}{\numberline {4.1}Поиск оптимальной комбинации при одинаковом приоритете}{20}{subsection.4.1}%
+\contentsline {subsection}{\numberline {4.1}Поиск оптимальной комбинации при одинаковом приоритете участников}{20}{subsection.4.1}%
 \contentsline {section}{\numberline {5}Заключение}{21}{section.5}%
-\contentsline {section}{Литература}{22}{section*.5}%
+\contentsline {section}{Литература}{22}{section*.8}%

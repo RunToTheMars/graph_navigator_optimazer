@@ -26,6 +26,8 @@ multipath_graph_widget::multipath_graph_widget(graph::graph_initial *graph_initi
     m_res_line->setDisabled (true);
     m_res_line->setText ("?");
 
+//    area_render->get_painter()->set_show_names (true);
+
     QObject::connect (
         run_button, &QPushButton::clicked, this, [this, graph_initial] {
             m_best_multipath = m_multipath_finder->run (*graph_initial);

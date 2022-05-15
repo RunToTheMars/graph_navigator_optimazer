@@ -62,6 +62,8 @@ namespace graph
 
   std::vector<std::vector<graph::uid>> gno_multipath_finder_loop::run (const graph_initial &initial_state)
   {
+      int modeling_count = 0;
+      int steps = 0;
       m_editable_graph_initial_state.reset ();
       m_editable_graph_initial.reset ();
 
@@ -76,30 +78,26 @@ namespace graph
 
       while (true)
       {
-          graph::graph_initial_state_impl editable_graph_initial_state;
-          graph::graph_initial editable_graph_initial (const_cast<graph::graph_base *>(initial_state.get_graph ()), &editable_graph_initial_state);
-
-          for (graph::uid veh_uid = 0; veh_uid < m_editable_graph_initial_state->vehicle_count (); veh_uid++)
-          {
-              graph::Directional_Vehicle veh = m_editable_graph_initial_state->vehicle (veh_uid);
-              editable_graph_initial_state.add_vehicle (veh);
-          }
           bool updated = false;
 
           for (graph::uid veh_uid = 0; veh_uid < initial_state.get_initial_state ()->vehicle_count (); veh_uid++)
           {
+              double old_average = average (m_editable_graph_initial.get ());
+              graph::Directional_Vehicle old_veh = m_editable_graph_initial_state->vehicle (veh_uid);
 
-
-              double old_average = average (&editable_graph_initial);
-              graph::Directional_Vehicle old_veh = editable_graph_initial_state.vehicle (0);
-
-              editable_graph_initial_state.remove_vehicle (0);
-
-              std::vector<graph::uid> new_path = m_path_finder->run (editable_graph_initial, old_veh.src, old_veh.dst, old_veh.vehicle, old_veh.t);
-              graph::Directional_Vehicle new_veh = old_veh;
-              new_veh.path = new_path;
-              editable_graph_initial_state.add_vehicle (new_veh);
-              double new_average = average (&editable_graph_initial);
+              m_path_finder->set_phi ([veh_uid] (const std::vector<double> &values)
+                                     {
+//                                         double res = 0.;
+//                                         for (auto v: values)
+//                                             res += v;
+//                                         return res;
+                                         return values[veh_uid];
+                                     });
+              std::vector<graph::uid> new_path = m_path_finder->run (*m_editable_graph_initial, veh_uid);
+              steps ++;
+              modeling_count += m_path_finder->m_modeling_count;
+              m_editable_graph_initial_state->vehicle (veh_uid).path = new_path;
+              double new_average = average (m_editable_graph_initial.get ());
 
               bool is_other_path = new_path.size () != old_veh.path.size ();
               if (!is_other_path)
@@ -121,7 +119,7 @@ namespace graph
                 break;
               }
 
-              editable_graph_initial_state.vehicle (editable_graph_initial_state.vehicle_count () - 1).path = old_veh.path;
+              m_editable_graph_initial_state->vehicle (veh_uid).path = old_veh.path;
           }
 
           if (!updated)

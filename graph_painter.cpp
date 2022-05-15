@@ -133,7 +133,7 @@ static void draw_arrow (QPainter &painter, QPointF start, QPointF end, double po
       continue;
 
     double part = (i * graph::D - start_length) / (edge_length - start_length);
-    painter.drawLine (start + (end - start) * part + ortho, start + diff * part - ortho);
+    painter.drawLine (start + (end - start) * part + 2 * ortho, start + diff * part - 2 * ortho);
   }
 }
 
@@ -248,6 +248,12 @@ void graph_painter::draw_names (QPainter &painter)
 
         painter.drawText (screen_pos, name);
     }
+
+    /* twice the size than the current font size */
+    font.setPointSize(font.pointSize() / 2);
+
+    /* set the modified font to the painter */
+    painter.setFont(font);
 }
 
 void graph_painter::draw_path (QPainter &painter)

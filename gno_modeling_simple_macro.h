@@ -13,7 +13,7 @@ class gno_modeling_simple_macro final: public gno_discrete_modeling_base
         wait,
         move,
         finished,
-        };
+    };
 
     struct state
     {

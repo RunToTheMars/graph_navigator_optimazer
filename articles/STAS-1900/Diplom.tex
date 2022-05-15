@@ -7,6 +7,8 @@
 \usepackage{indentfirst}
 \usepackage{amsthm}
 \usepackage{algorithm,algpseudocode}
+\usepackage{caption}
+\usepackage{subcaption}
 \usepackage[hidelinks]{hyperref}
 \DeclareMathOperator*{\minn}{min}
 \DeclareMathOperator*{\argmin}{argmin}
@@ -524,7 +526,14 @@ $$\overline{\tau}_{CD, i} (\textbf{p}) \approx 0.$$
 \subsection{Поиск кооперативного равновесия}
 Рассмотрим ряд алгоритмов, позволяющих получить некоторое кооперативное равновесие.
 
-Общим свойством всех этих алгоритмов является предположение о том, что существует некоторый алгоритм $\alpha (\Phi_i)$, позволяющий решить задачу оптимизации некоторой функции стоимости $\Phi_i (\textbf{p}) = \phi_i(T_1(\textbf{p}), \ldots, T_n(\textbf{p}))$ посредством выбора пути $p_i$. В работе Л.\,Е.~Разумовой~\cite{Luba} представлен один из таких алгоритмов построения оптимального пути $p_i$ за полиномиальное относительно входных данных время при условии, что функция $\Phi_i (\textbf{p})$ удовлетворяет неравенству
+Общим свойством всех этих алгоритмов является предположение о том, что существует некоторый алгоритм $\alpha (\Phi_i)$, позволяющий решить задачу оптимизации некоторой функции стоимости $\Phi_i (\textbf{p}) = \phi_i(T_1(\textbf{p}), \ldots, T_n(\textbf{p}))$ посредством выбора пути $p_i$:
+
+\begin{equation}
+\label{eq:task_mini}
+\alpha (\Phi_i): \Phi_i (\textbf{p}) \rightarrow \min \limits _{p_i \in P_i}
+\end{equation}
+
+В работе Л.\,Е.~Разумовой~\cite{Luba} представлен один из таких алгоритмов построения оптимального пути $p_i$ за полиномиальное относительно входных данных время при условии, что функция $\Phi_i (\textbf{p})$ удовлетворяет неравенству
 \begin{equation}
 	\label{eq:luba_1}
 	\Phi_i (p_1, \ldots, p_{i - 1}, pe, p_{i + 1}, \ldots, p_n) \le 
@@ -537,11 +546,14 @@ $$\overline{\tau}_{CD, i} (\textbf{p}) \approx 0.$$
   	\Phi_i (p_1, \ldots, p_{i - 1}, q, p_{i + 1}, \ldots, p_n).
 \end{equation}
 
+В той же работе показано, что в том случае, когда добавление любого участника не влияет на движение других участников, функции $\Phi_i = T_i$ удовлетворяют условиям  $\eqref{eq:luba_1}, \eqref{eq:luba_2}$ в моделях, описанных в нашей работе. На практике же, это влияние существует. Погрешность алгоритма $\alpha (\Phi_i)$ в таком случае зависит от экстримальных свойств функции $v_i (\textbf{p, t})$.
+
 Предположим, что имеются некоторые функции стоимости $\Phi_i (\textbf{p})$, удовлетворяющие условиям \eqref{eq:luba_1}, \eqref{eq:luba_2}, и процессы оптимизации стоимостей $\phi_i$ и $\phi$ по времени $T_i$ одинаковы:
 \begin{equation}
 	\label{eq:phi_restr}
 	\frac{\partial \phi_i}{\partial T_i} \equiv \frac{\partial \phi}{\partial T_i}, \text{ } i = 1, \ldots, n.
 \end{equation}
+
 При условиях \eqref{eq:luba_1}, \eqref{eq:luba_2}, \eqref{eq:phi_restr} возможно описать полиномиальный алгоритм $\beta(\{\Phi_i\}_{i = 1}^n)$, позволяющий перейти к меньшей стоимости передвижения путем изменения некоторого пути  $p_i$ участника $i$. Для поиска кооперативного рановесия достаточно найти неподвижную точку алгоритма $\beta$. 
 
 \begin{algorithm}[H]
@@ -594,9 +606,44 @@ $$\overline{\tau}_{CD, i} (\textbf{p}) \approx 0.$$
 \newpage
 \section{Результаты}
 
-Рассмотрим ряд примеров, которые исследуют движение участников, используя подход, основанный на поиске <<локального минимума>>.
+Рассмотрим ряд примеров, которые исследуют движение участников, используя подход, основанный на поиске <<локального минимума>>. В качестве алгоритма решения задачи $\eqref{eq:task_mini}$ используется обычный перебор путей. Это обусловлено тем, что данный алгоритм дает точное решение и имеет меньшую сложность $O(|P_i| * S)$ чем сложность $O(|E| * S)$ алгоритма, описанного в \cite{Luba}. Велечина $S$ является сложностью моделирования движения (см. алгоритм \ref{alg:modeling}).
 
-\subsection{Поиск оптимальной комбинации при одинаковом приоритете}
+\subsection{Поиск оптимальной комбинации при одинаковом приоритете участников}
+
+Рассмотрим задачу поиска оптимальных комбинаций путей с функций затрат 
+
+\begin{equation*}
+	\phi(T_1, \ldots, T_n) = \sum\limits_{i = 1}^nT_i.
+\end{equation*}
+
+Рассмотрим движение $n = 30$ участников по дорожной сети $G$ (см. рис. \ref{ris:graph_average}).
+
+\begin{figure}[H]
+	\begin{center}
+	\includegraphics[width = .5\linewidth, height=120pt]{imgs/graph_simple.jpg}
+	\caption{Пример дорожной сети. Деление на ребрах - мера длины, равная $L = 500$. $n = 30$ участников передвигается из точки $A$ в точку $B$. Участники стартуют с небольшими задержками из точки отправления.}
+	\label{ris:graph_average}
+	\end{center}
+\end{figure}
+
+Для исследования алгоритма \ref{alg:coop_find1}, запустим его с эмпирическими функциями $\overline{\Phi}_i = \Phi$ и сравним результат с функциями $\Phi_i = T_i$. Также для поиска самых невыгодных комбинаций путей можно рассмотреть аналогичную задачу 
+$$\Phi (\textbf{p}) \rightarrow \max \limits_{\textbf{p} \in P},$$
+
+\begin{figure}
+	\centering
+	\begin{subfigure}[b]{0.3\textwidth}
+		\centering 
+		\includegraphics[width=1.1\textwidth, height=60pt]{imgs/average_good.jpg}
+	\end{subfigure}
+	\hskip 15ex
+	\begin{subfigure}[b]{0.3\textwidth}
+		\centering
+		\includegraphics[width=1.1\textwidth, height=60pt]{imgs/average_bad.jpg}
+	\end{subfigure}
+	\caption{Пример худшего (слева) и лучшего (справа) случая распределения путей участников.}
+	\label{fig:average_min_max}
+\end{figure}
+
 
 \newpage
 \section{Заключение}

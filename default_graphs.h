@@ -12,8 +12,8 @@
 
 namespace graph
 {
-    static constexpr int veh_on_rombe = 20;
-    static constexpr int rombe_depth = 3;
+    static constexpr int veh_on_rombe = 30;
+    static constexpr int rombe_depth = 4;
 
     void set_graph (graph::graph_initial *graph_initial,
                     const std::vector<Node> &nodes,
@@ -331,6 +331,8 @@ namespace graph
         std::vector<Node> nodes = {{0., 0., "A"}};
         std::vector<Edge> edges;
 
+        auto get_length = [&node_height, &gen] () { return node_height (gen); };
+
         const int ddepth = rombe_depth;
 
         int pow = 1;
@@ -342,9 +344,9 @@ namespace graph
             {
                 const Node prev_node = nodes[j];
                 nodes.push_back ({prev_node.x - dist, prev_node.y + 1, ""});
-                edges.push_back ({j, isize (nodes) - 1, node_height (gen)});
+                edges.push_back ({j, isize (nodes) - 1, get_length ()});
                 nodes.push_back ({prev_node.x + dist, prev_node.y + 1, ""});
-                edges.push_back ({j, isize (nodes) - 1, node_height (gen)});
+                edges.push_back ({j, isize (nodes) - 1, get_length ()});
             }
             pow *= 2;
         }
@@ -359,8 +361,8 @@ namespace graph
                 nodes.push_back ({(prev_node.x + prev_node_next.x) / 2., prev_node.y + 1, ""});
 
                 Node node = nodes.back ();
-                edges.push_back ({j, isize (nodes) - 1, node_height (gen)});
-                edges.push_back ({j + 1, isize (nodes) - 1, node_height (gen)});
+                edges.push_back ({j, isize (nodes) - 1, get_length ()});
+                edges.push_back ({j + 1, isize (nodes) - 1, get_length ()});
             }
             pow /= 2;
         }
@@ -424,6 +426,8 @@ namespace graph
         std::vector<Node> nodes = {{0., 0., "A"}};
         std::vector<Edge> edges;
 
+        auto get_length = [&node_height, &gen] () { return node_height (gen); };
+
         const int ddepth = rombe_depth;
 
         int pow = 1;
@@ -435,9 +439,9 @@ namespace graph
             {
                 const Node prev_node = nodes[j];
                 nodes.push_back ({prev_node.x - dist, prev_node.y + 1, ""});
-                edges.push_back ({j, isize (nodes) - 1, node_height (gen)});
+                edges.push_back ({j, isize (nodes) - 1, get_length ()});
                 nodes.push_back ({prev_node.x + dist, prev_node.y + 1, ""});
-                edges.push_back ({j, isize (nodes) - 1, node_height (gen)});
+                edges.push_back ({j, isize (nodes) - 1, get_length ()});
             }
             pow *= 2;
         }
@@ -452,8 +456,8 @@ namespace graph
                 nodes.push_back ({(prev_node.x + prev_node_next.x) / 2., prev_node.y + 1, ""});
 
                 Node node = nodes.back ();
-                edges.push_back ({j, isize (nodes) - 1, node_height (gen)});
-                edges.push_back ({j + 1, isize (nodes) - 1, node_height (gen)});
+                edges.push_back ({j, isize (nodes) - 1, get_length ()});
+                edges.push_back ({j + 1, isize (nodes) - 1, get_length ()});
             }
             pow /= 2;
         }
