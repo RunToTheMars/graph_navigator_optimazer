@@ -1,5 +1,5 @@
-#ifndef TAB_GRAPH_MODELING_H
-#define TAB_GRAPH_MODELING_H
+#ifndef TAB_GRAPH_MULTIPATH_H
+#define TAB_GRAPH_MULTIPATH_H
 
 #include "QWidget"
 #include <memory>
@@ -13,7 +13,7 @@ class QLineEdit;
 class QPushButton;
 class model_graph_widget;
 
-class graph_modeling_tab: public QWidget
+class graph_multipath_tab: public QWidget
 {
     Q_OBJECT
 
@@ -23,8 +23,8 @@ class graph_modeling_tab: public QWidget
     double m_max_time = 0.;
 
 public:
-    graph_modeling_tab (graph::graph_initial *graph_initial, QWidget *parent);
-    ~graph_modeling_tab ();
+    graph_multipath_tab (graph::graph_initial *graph_initial, QWidget *parent);
+    ~graph_multipath_tab ();
 
     void clear ();
 
@@ -48,20 +48,11 @@ private:
     QSpinBox *m_sleep_spinbox = nullptr;
     QSlider *m_time_slider = nullptr;
 
-    std::unique_ptr<graph::gno_discrete_modeling_base> m_simple_micro_model;
-    model_graph_widget *m_simple_micro_model_widget = nullptr;
-
-    std::unique_ptr<graph::gno_discrete_modeling_base> m_simple_acc_model;
-    model_graph_widget *m_simple_acc_model_widget = nullptr;
-
-    std::unique_ptr<graph::gno_discrete_modeling_base> m_simple_on_edge_model;
-    model_graph_widget *m_simple_on_edge_model_widget = nullptr;
-
-    std::unique_ptr<graph::gno_discrete_modeling_base> m_simple_macro_model;
-    model_graph_widget *m_simple_macro_model_widget = nullptr;
+    std::unique_ptr<graph::gno_discrete_modeling_base> m_model;
+    model_graph_widget *m_modeling_widget = nullptr;
 
     std::atomic_bool m_stop;
     std::thread m_run_thread;
 };
 
-#endif // TAB_GRAPH_MODELING_H
+#endif // TAB_GRAPH_MULTIPATH_H

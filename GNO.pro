@@ -19,6 +19,7 @@ SOURCES += \
     gno_modeling.cpp \
     gno_modeling_simple_acceleration.cpp \
     gno_modeling_simple_macro.cpp \
+    gno_modeling_simple_micro.cpp \
     gno_modeling_simple_on_edge.cpp \
     gno_modeling_star.cpp \
     gno_path_finder_brute_force.cpp \
@@ -34,6 +35,7 @@ SOURCES += \
     render_area_widget.cpp \
     tab_graph_editor.cpp \
     tab_graph_modeling.cpp \
+    tab_graph_multipath.cpp \
     tab_graph_path.cpp \
     thread_pool.cpp \
     veh_on_graph_painter.cpp
@@ -53,6 +55,7 @@ HEADERS += \
     gno_modeling.h \
     gno_modeling_simple_acceleration.h \
     gno_modeling_simple_macro.h \
+    gno_modeling_simple_micro.h \
     gno_modeling_simple_on_edge.h \
     gno_modeling_star.h \
     gno_path_finder.h \
@@ -68,6 +71,7 @@ HEADERS += \
     render_area_widget.h \
     tab_graph_editor.h \
     tab_graph_modeling.h \
+    tab_graph_multipath.h \
     tab_graph_path.h \
     thread_pool.h \
     utils.h \

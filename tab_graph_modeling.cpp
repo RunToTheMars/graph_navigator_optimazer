@@ -5,6 +5,7 @@
 #include "gno_modeling_simple_on_edge.h"
 #include "gno_modeling_simple_acceleration.h"
 #include "gno_modeling_simple_macro.h"
+#include "gno_modeling_simple_micro.h"
 #include <chrono>
 
 #include "QVBoxLayout"
@@ -56,15 +57,12 @@ graph_modeling_tab::graph_modeling_tab (graph::graph_initial *graph_initial, QWi
       models_groupbox->setLayout (models_layout);
 
       {
-          QGroupBox *model_simple_groupbox = new QGroupBox ("Simple Const V", this);
+          QGroupBox *model_simple_groupbox = new QGroupBox ("Simple Micro", this);
           QVBoxLayout *model_simple_layout = new QVBoxLayout (model_simple_groupbox);
           model_simple_groupbox->setLayout (model_simple_layout);
 
-          graph::gno_modeling_simple_acceleration *simple_acc = new graph::gno_modeling_simple_acceleration ();
-          simple_acc->set_start_acc (0.);
-          simple_acc->set_start_velocity (graph::V_MAX);
-          m_simple_model.reset (simple_acc);
-          model_simple_layout->addWidget (m_simple_model_widget = new model_graph_widget (graph_initial, m_simple_model.get (),model_simple_groupbox));
+          m_simple_micro_model = std::make_unique<graph::gno_modeling_simple_micro> (graph::V_MAX, graph::V_MIN, graph::A_MAX, graph::D, graph::L);
+          model_simple_layout->addWidget (m_simple_micro_model_widget = new model_graph_widget (graph_initial, m_simple_micro_model.get (),model_simple_groupbox));
           models_layout->addWidget (model_simple_groupbox, 0, 0);
       }
 
@@ -117,7 +115,7 @@ graph_modeling_tab::graph_modeling_tab (graph::graph_initial *graph_initial, QWi
 
   QObject::connect (m_time_slider, &QSlider::valueChanged, this, [this] { set_time_from_slider (); });
 
-  QObject::connect (m_simple_model_widget, &model_graph_widget::update_times_needed, this, [this] { update_max_times (); });
+  QObject::connect (m_simple_micro_model_widget, &model_graph_widget::update_times_needed, this, [this] { update_max_times (); });
   QObject::connect (m_simple_acc_model_widget, &model_graph_widget::update_times_needed, this, [this] { update_max_times (); });
   QObject::connect (m_simple_on_edge_model_widget, &model_graph_widget::update_times_needed, this, [this] { update_max_times (); });
   QObject::connect (m_simple_macro_model_widget, &model_graph_widget::update_times_needed, this, [this] { update_max_times (); });
@@ -130,7 +128,7 @@ graph_modeling_tab::~graph_modeling_tab () = default;
 
 void graph_modeling_tab::clear ()
 {
-    m_simple_model_widget->get_painter()->set_line_states (nullptr);
+    m_simple_micro_model_widget->get_painter()->set_line_states (nullptr);
     m_simple_acc_model_widget->get_painter()->set_line_states (nullptr);
     m_simple_on_edge_model_widget->get_painter()->set_line_states (nullptr);
     m_simple_macro_model_widget->get_painter()->set_line_states (nullptr);
@@ -142,8 +140,8 @@ void graph_modeling_tab::update_max_times ()
 
   std::vector<double> max_times;
 
-  if (!m_simple_model_widget->get_line_states ().empty ())
-    max_times.push_back (m_simple_model_widget->get_line_states ().back ().t2);
+  if (!m_simple_micro_model_widget->get_line_states ().empty ())
+    max_times.push_back (m_simple_micro_model_widget->get_line_states ().back ().t2);
 
   if (!m_simple_acc_model_widget->get_line_states ().empty ())
     max_times.push_back (m_simple_acc_model_widget->get_line_states ().back ().t2);
@@ -169,8 +167,8 @@ void graph_modeling_tab::set_time_from_slider ()
 
 void graph_modeling_tab::set_time (double t)
 {
-  m_simple_model_widget->set_time (t);
-  m_simple_model_widget->update ();
+  m_simple_micro_model_widget->set_time (t);
+  m_simple_micro_model_widget->update ();
 
   m_simple_acc_model_widget->set_time (t);
   m_simple_acc_model_widget->update ();

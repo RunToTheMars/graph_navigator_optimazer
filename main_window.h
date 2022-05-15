@@ -7,6 +7,7 @@
 class graph_editor_tab;
 class graph_modeling_tab;
 class graph_path_tab;
+class graph_multipath_tab;
 class QGroupBox;
 
 class gno_main_window: public QWidget
@@ -25,6 +26,7 @@ private:
     graph_editor_tab *m_editor_tab = nullptr;
     graph_modeling_tab *m_modeling_tab = nullptr;
     graph_path_tab *m_path_tab = nullptr;
+    graph_multipath_tab *m_multipath_tab = nullptr;
 };
 
 #endif // MAIN_WINDOW_H

@@ -367,7 +367,7 @@ namespace graph
         std::vector<Directional_Vehicle> dir_vehs;
 
         set_graph (graph_initial, nodes, edges, dir_vehs);
-        for (int i = 0; i < 100; i++)
+        for (int i = 0; i < 33; i++)
         {
             Directional_Vehicle v;
 
@@ -400,6 +400,13 @@ namespace graph
 
             dir_vehs.push_back (v);
         }
+//        Directional_Vehicle v;
+//        v.src = 0;
+//        v.dst = isize (nodes) - 1;
+//        v.t = 40.;
+//        v.path = {1, 4, 10, 22, 46, 78, 102, 114, 120, 123};
+
+//        dir_vehs.push_back (v);
 
         set_graph (graph_initial, nodes, edges, dir_vehs);
     }
