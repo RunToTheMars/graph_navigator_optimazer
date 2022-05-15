@@ -139,6 +139,8 @@ std::vector<graph::uid> graph::gno_path_finder_dijkstra::run (const graph_initia
 
         node_done[best_node] = 1;
         node_done_count ++;
+        if (best_node == dst)
+          break;
     }
 
     std::vector<graph::uid> path;
