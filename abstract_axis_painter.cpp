@@ -94,60 +94,62 @@ void abstract_axis_painter::update_rect (QPainter &painter)
   int left_margin   = default_margin_horizontal,
       right_margin  = default_margin_horizontal;
 
-  QFontMetrics fm = painter.fontMetrics ();
-
+  if (m_model->data (axis_settings::draw_axis).value <bool> ())
   {
-    //axis name
-    bottom_margin += fm.height ();
-    bottom_margin += m_axis_painter_x->text_top_spacing ();
-    bottom_margin += m_axis_painter_x->text_bottom_spacing ();
+      QFontMetrics fm = painter.fontMetrics ();
 
-    //values
-    bottom_margin += m_axis_painter_x->value_left_spacing ();
-    bottom_margin += m_axis_painter_x->value_right_spacing ();
+      {
+          //axis name
+          bottom_margin += fm.height ();
+          bottom_margin += m_axis_painter_x->text_top_spacing ();
+          bottom_margin += m_axis_painter_x->text_bottom_spacing ();
 
-    //segments
-    bottom_margin += m_axis_painter_x->min_segment_one_side_size ();
+          //values
+          bottom_margin += m_axis_painter_x->value_left_spacing ();
+          bottom_margin += m_axis_painter_x->value_right_spacing ();
+
+          //segments
+          bottom_margin += m_axis_painter_x->min_segment_one_side_size ();
+
+      }
+
+      {
+          int precision = m_model->data (axis_settings::precision).value <int> ();
+
+          double min_y = m_model->data (axis_settings::min_y).value<double> ();
+          double max_y = m_model->data (axis_settings::max_y).value<double> ();
+          double diff_y = max_y - min_y;
+          double step = diff_y / (default_segments - 1);
+
+          int max_width = 0;
+          for (int segment_y = 0; segment_y < default_segments; segment_y++)
+          {
+              double segment_value = min_y + step * segment_y;
+              QString str_value = value_to_string (segment_value, 'g', precision);
+              int width = fm.horizontalAdvance (str_value);
+              if (width > max_width)
+                  max_width = width;
+          }
+
+          QString name = m_model->data (axis_settings::name_y).value <QString> ();
+
+          //axis name
+          left_margin += fm.horizontalAdvance (name);
+          left_margin += m_axis_painter_x->text_left_spacing ();
+          left_margin += m_axis_painter_x->text_right_spacing ();
+
+          //values
+          left_margin += m_axis_painter_x->text_left_spacing ();
+          left_margin += max_width;
+          left_margin += m_axis_painter_x->text_right_spacing ();
+
+          //segments
+          left_margin += m_axis_painter_x->min_segment_one_side_size ();
+
+          m_axis_painter_y->set_max_width (max_width);
+      }
 
   }
-
-  {
-    int precision = m_model->data (axis_settings::precision).value <int> ();
-
-    double min_y = m_model->data (axis_settings::min_y).value<double> ();
-    double max_y = m_model->data (axis_settings::max_y).value<double> ();
-    double diff_y = max_y - min_y;
-    double step = diff_y / (default_segments - 1);
-
-    int max_width = 0;
-    for (int segment_y = 0; segment_y < default_segments; segment_y++)
-    {
-      double segment_value = min_y + step * segment_y;
-      QString str_value = value_to_string (segment_value, 'g', precision);
-      int width = fm.horizontalAdvance (str_value);
-      if (width > max_width)
-        max_width = width;
-    }
-
-    QString name = m_model->data (axis_settings::name_y).value <QString> ();
-
-    //axis name
-    left_margin += fm.horizontalAdvance (name);
-    left_margin += m_axis_painter_x->text_left_spacing ();
-    left_margin += m_axis_painter_x->text_right_spacing ();
-
-    //values
-    left_margin += m_axis_painter_x->text_left_spacing ();
-    left_margin += max_width;
-    left_margin += m_axis_painter_x->text_right_spacing ();
-
-    //segments
-    left_margin += m_axis_painter_x->min_segment_one_side_size ();
-
-    m_axis_painter_y->set_max_width (max_width);
-  }
-
-
 
   QRectF initial_rect = get_initial_rect ();
   m_draw_rect = QRectF (initial_rect.left () + left_margin, initial_rect.top () + top_margin,
@@ -191,7 +193,8 @@ void abstract_axis_painter::draw (QPainter &painter)
   configure_axis (painter);
 
   draw_background (painter);
-  draw_axis (painter);
+  if (m_model->data (axis_settings::draw_axis).value <bool> ())
+    draw_axis (painter);
   set_clipping (painter);
 }
 

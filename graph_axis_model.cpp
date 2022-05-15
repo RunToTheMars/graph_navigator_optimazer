@@ -12,13 +12,15 @@ graph_axis_model::~graph_axis_model () = default;
 
 QVariant graph_axis_model::data (axis_settings setting) const
 {
-  const double margin_x = 0.2 * (m_graph->max_x () - m_graph->min_x ());
-  const double margin_y = 0.2 * (m_graph->max_y () - m_graph->min_y ());
+  const double margin_x = 0.03 * (m_graph->max_x () - m_graph->min_x ());
+  const double margin_y = 0.03 * (m_graph->max_y () - m_graph->min_y ());
 
   switch (setting)
   {
   case axis_settings::draw_grid:
-    return true;
+    return false;
+  case axis_settings::draw_axis:
+      return false;
   case axis_settings::min_x:
     return m_graph->min_x () - margin_x;
   case axis_settings::max_x:

@@ -6,6 +6,7 @@ class QVariant;
 enum class axis_settings
 {
     draw_grid,        /// bool
+    draw_axis,        /// bool
     min_x,            /// double
     min_y,            /// double
     max_x,            /// double

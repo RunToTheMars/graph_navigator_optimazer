@@ -360,6 +360,8 @@ namespace graph
             pow /= 2;
         }
 
+        nodes.back ().name = "B";
+
         std::uniform_real_distribution<double> dir_random (0, 2);
         std::uniform_real_distribution<double> node_random (0, isize (nodes));
         std::vector<Directional_Vehicle> dir_vehs;
