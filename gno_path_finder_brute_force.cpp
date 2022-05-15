@@ -153,7 +153,7 @@ std::vector<graph::uid> graph::gno_path_finder_brute_force::run (const graph_ini
 
                 m_model->interrupt ();
 
-                if (m_min_path.empty () || time < m_min_time)
+                if (m_min_path.empty () || (graph::MINIMIZE && time < m_min_time) || (!graph::MINIMIZE && time > m_min_time))
                 {
                   m_min_path = path;
                   m_min_time = time;

@@ -12,6 +12,7 @@ class QSpinBox;
 class QLineEdit;
 class QPushButton;
 class model_graph_widget;
+class multipath_graph_widget;
 
 class graph_multipath_tab: public QWidget
 {
@@ -48,8 +49,16 @@ private:
     QSpinBox *m_sleep_spinbox = nullptr;
     QSlider *m_time_slider = nullptr;
 
+    std::unique_ptr<graph::gno_multipath_finder_base> m_multipath_finder_nothing;
+    multipath_graph_widget *m_multipath_nothing_widget;
+
+    std::unique_ptr<graph::gno_multipath_finder_base> m_multipath_finder_loop;
+    multipath_graph_widget *m_multipath_loop_widget;
+
+    std::unique_ptr<graph::gno_path_finder_base> m_path_finder;
+
     std::unique_ptr<graph::gno_discrete_modeling_base> m_model;
-    model_graph_widget *m_modeling_widget = nullptr;
+    std::unique_ptr<graph::gno_continuous_modeling> m_continuous_modeling;
 
     std::atomic_bool m_stop;
     std::thread m_run_thread;

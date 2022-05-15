@@ -22,6 +22,8 @@ SOURCES += \
     gno_modeling_simple_micro.cpp \
     gno_modeling_simple_on_edge.cpp \
     gno_modeling_star.cpp \
+    gno_multipath_finder_loop.cpp \
+    gno_multipath_finder_nothing.cpp \
     gno_path_finder_brute_force.cpp \
     gno_path_finder_dijkstra.cpp \
     gno_test.cpp \
@@ -31,6 +33,7 @@ SOURCES += \
     main_window.cpp \
     model_graph_area_render.cpp \
     model_graph_widget.cpp \
+    multipath_graph_widget.cpp \
     path_graph_widget.cpp \
     render_area_widget.cpp \
     tab_graph_editor.cpp \
@@ -58,6 +61,9 @@ HEADERS += \
     gno_modeling_simple_micro.h \
     gno_modeling_simple_on_edge.h \
     gno_modeling_star.h \
+    gno_multipath_finder.h \
+    gno_multipath_finder_loop.h \
+    gno_multipath_finder_nothing.h \
     gno_path_finder.h \
     gno_path_finder_brute_force.h \
     gno_path_finder_dijkstra.h \
@@ -67,6 +73,7 @@ HEADERS += \
     main_window.h \
     model_graph_area_render.h \
     model_graph_widget.h \
+    multipath_graph_widget.h \
     path_graph_widget.h \
     render_area_widget.h \
     tab_graph_editor.h \

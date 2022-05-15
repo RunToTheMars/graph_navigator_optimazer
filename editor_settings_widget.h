@@ -36,6 +36,7 @@ Q_SIGNALS:
     void load_manh_signal ();
     void load_default_3_signal ();
     void load_default_4_signal ();
+    void load_default_5_signal ();
 
     void editor_state_changed_signal (gno_editor_settings_widget::editor_state state);
 
@@ -65,6 +66,7 @@ private:
     QPushButton *m_load_manh_button = nullptr;
     QPushButton *m_load_default_3_button = nullptr;
     QPushButton *m_load_default_4_button = nullptr;
+    QPushButton *m_load_default_5_button = nullptr;
 };
 
 #endif // EDITOR_SETTINGS_WIDGET_H

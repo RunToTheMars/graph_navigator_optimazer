@@ -2,8 +2,13 @@
 
 #include "veh_on_graph_painter.h"
 #include "model_graph_widget.h"
+#include "multipath_graph_widget.h"
 #include "gno_modeling_simple_on_edge.h"
 #include "gno_modeling_simple_macro.h"
+#include "gno_modeling_simple_micro.h"
+#include "gno_multipath_finder_nothing.h"
+#include "gno_multipath_finder_loop.h"
+#include "gno_path_finder_brute_force.h"
 #include <chrono>
 
 #include "QVBoxLayout"
@@ -49,21 +54,25 @@ graph_multipath_tab::graph_multipath_tab (graph::graph_initial *graph_initial, Q
     }
 
     // solver
+//    m_model = std::make_unique<graph::gno_modeling_simple_macro> ();
+//    m_model = std::make_unique<graph::gno_modeling_simple_micro> (graph::V_MAX, graph::V_MIN, graph::A_MAX, graph::D, graph::L);;
+    m_model = std::make_unique<graph::gno_modeling_simple_on_edge> ();
+    m_continuous_modeling = std::make_unique<graph::gno_continuous_modeling> (m_model.get ());
+    m_path_finder = std::make_unique<graph::gno_path_finder_brute_force> (m_model.get (), true);
+
     QGroupBox *models_groupbox = new QGroupBox ("Multipaths", this);
     {
         QGridLayout *models_layout = new QGridLayout (models_groupbox);
         models_groupbox->setLayout (models_layout);
 
         {
-            QGroupBox *modeling_groupbox = new QGroupBox ("Modeling", this);
+            QGroupBox *modeling_groupbox = new QGroupBox ("Nothing", this);
             QVBoxLayout *modeling_layout = new QVBoxLayout (modeling_groupbox);
             modeling_groupbox->setLayout (modeling_layout);
 
-            m_model = std::make_unique<graph::gno_modeling_simple_on_edge> ();
-            modeling_layout->addWidget (m_modeling_widget = new model_graph_widget (graph_initial, m_model.get (), modeling_groupbox));
+            m_multipath_finder_nothing = std::make_unique<graph::gno_multipath_finder_nothing> ();
+            modeling_layout->addWidget (m_multipath_nothing_widget = new multipath_graph_widget (graph_initial, m_multipath_finder_nothing.get (), m_continuous_modeling.get (), modeling_groupbox));
             models_layout->addWidget (modeling_groupbox, 0, 0);
-
-            m_modeling_widget->get_painter ()->show_d_distance (true);
         }
 
         {
@@ -71,11 +80,9 @@ graph_multipath_tab::graph_multipath_tab (graph::graph_initial *graph_initial, Q
             QVBoxLayout *modeling_layout = new QVBoxLayout (modeling_groupbox);
             modeling_groupbox->setLayout (modeling_layout);
 
-            m_model = std::make_unique<graph::gno_modeling_simple_on_edge> ();
-            modeling_layout->addWidget (m_modeling_widget = new model_graph_widget (graph_initial, m_model.get (), modeling_groupbox));
+            m_multipath_finder_loop = std::make_unique<graph::gno_multipath_finder_loop> (m_path_finder.get (), m_continuous_modeling.get ());
+            modeling_layout->addWidget (m_multipath_loop_widget = new multipath_graph_widget (graph_initial, m_multipath_finder_loop.get (), m_continuous_modeling.get (), modeling_groupbox));
             models_layout->addWidget (modeling_groupbox, 0, 1);
-
-            m_modeling_widget->get_painter ()->show_d_distance (true);
         }
     }
 
@@ -90,7 +97,8 @@ graph_multipath_tab::graph_multipath_tab (graph::graph_initial *graph_initial, Q
 
     QObject::connect (m_time_slider, &QSlider::valueChanged, this, [this] { set_time_from_slider (); });
 
-    QObject::connect (m_modeling_widget, &model_graph_widget::update_times_needed, this, [this] { update_max_times (); });
+    QObject::connect (m_multipath_nothing_widget, &multipath_graph_widget::update_times_needed, this, [this] { update_max_times (); });
+    QObject::connect (m_multipath_loop_widget, &multipath_graph_widget::update_times_needed, this, [this] { update_max_times (); });
 
     QObject::connect (this, &graph_multipath_tab::set_val, this, [this] (int i) { m_time_slider->setValue (i); });
     QObject::connect (this, &graph_multipath_tab::done, this, [this] { stop (); });
@@ -100,7 +108,6 @@ graph_multipath_tab::~graph_multipath_tab () = default;
 
 void graph_multipath_tab::clear ()
 {
-    m_modeling_widget->get_painter()->set_line_states (nullptr);
 }
 
 void graph_multipath_tab::update_max_times ()
@@ -109,8 +116,11 @@ void graph_multipath_tab::update_max_times ()
 
     std::vector<double> max_times;
 
-    if (!m_modeling_widget->get_line_states ().empty ())
-        max_times.push_back (m_modeling_widget->get_line_states ().back ().t2);
+    if (!m_multipath_nothing_widget->get_line_states ().empty ())
+        max_times.push_back (m_multipath_nothing_widget->get_line_states ().back ().t2);
+
+    if (!m_multipath_loop_widget->get_line_states ().empty ())
+        max_times.push_back (m_multipath_loop_widget->get_line_states ().back ().t2);
 
     if (max_times.empty ())
         return;
@@ -127,8 +137,11 @@ void graph_multipath_tab::set_time_from_slider ()
 
 void graph_multipath_tab::set_time (double t)
 {
-    m_modeling_widget->set_time (t);
-    m_modeling_widget->update ();
+    m_multipath_loop_widget->get_painter ()->set_time (t);
+    m_multipath_loop_widget->update ();
+
+    m_multipath_nothing_widget->get_painter()->set_time (t);
+    m_multipath_nothing_widget->update ();
 
     m_time_line->setText (QString(" %1").arg(t, 0, 'g'));
 }

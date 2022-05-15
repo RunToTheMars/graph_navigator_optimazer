@@ -228,6 +228,14 @@ void graph_painter::draw_names (QPainter &painter)
 {
     QFontMetrics fm = painter.fontMetrics ();
 
+    QFont font = painter.font() ;
+
+    /* twice the size than the current font size */
+    font.setPointSize(font.pointSize() * 2);
+
+    /* set the modified font to the painter */
+    painter.setFont(font);
+
     for (graph::uid i = 0; i < m_graph->node_count (); i++)
     {
         const graph::Node &node = m_graph->node (i);

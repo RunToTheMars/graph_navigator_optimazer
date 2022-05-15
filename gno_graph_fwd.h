@@ -21,6 +21,8 @@ static constexpr double D = 500.;
 static constexpr double A_MAX = V_MAX * V_MAX / (2 * D);
 static constexpr double L = 100;
 
+static constexpr bool MINIMIZE = true;
+
 struct Node
 {
     double x = 0.;
@@ -106,6 +108,7 @@ class gno_discrete_modeling_base;
 class gno_continuous_modeling;
 
 class gno_path_finder_base;
+class gno_multipath_finder_base;
 }
 
 #endif // GNO_GRAPH_FWD_H
