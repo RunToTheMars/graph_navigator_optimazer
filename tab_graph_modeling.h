@@ -57,6 +57,9 @@ private:
     std::unique_ptr<graph::gno_discrete_modeling_base> m_simple_on_edge_model;
     model_graph_widget *m_simple_on_edge_model_widget = nullptr;
 
+    std::unique_ptr<graph::gno_discrete_modeling_base> m_simple_macro_model;
+    model_graph_widget *m_simple_macro_model_widget = nullptr;
+
     std::atomic_bool m_stop;
     std::thread m_run_thread;
 };

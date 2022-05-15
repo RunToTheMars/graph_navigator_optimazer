@@ -17,6 +17,7 @@ graph::gno_path_finder_dijkstra::gno_path_finder_dijkstra (graph::gno_discrete_m
 std::vector<graph::uid> graph::gno_path_finder_dijkstra::run (const graph_initial &initial,
                                                               graph::uid src, graph::uid dst, Vehicle veh, double start_time)
 {
+    m_modeling_count = 0;
     const graph::graph_base *graph = initial.get_graph ();
     const graph_initial_state_base *initial_state = initial.get_initial_state();
 
@@ -96,11 +97,36 @@ std::vector<graph::uid> graph::gno_path_finder_dijkstra::run (const graph_initia
 //            }
 
             Directional_Vehicle new_veh;
-            new_veh.src = best_node;
-            new_veh.dst = next_node;
-            new_veh.path = {edge_uid};
-            new_veh.vehicle = veh;
-            new_veh.t = best_time;
+            if (!m_use_depence)
+            {
+                new_veh.src = best_node;
+                new_veh.dst = next_node;
+                new_veh.path = {edge_uid};
+                new_veh.vehicle = veh;
+                new_veh.t = best_time;
+            }
+            else
+            {
+                new_veh.src = src;
+                new_veh.dst = next_node;
+
+                std::vector<graph::uid> path;
+
+                path.push_back (edge_uid);
+                graph::uid prev_edge = from_edge[best_node];
+                while (prev_edge != graph::invalid_uid)
+                {
+                    path.push_back (prev_edge);
+                    prev_edge = from_edge[graph->edge (prev_edge).start];
+                }
+
+                std::reverse (path.begin (), path.end ());
+
+                new_veh.path = path;
+                new_veh.vehicle = veh;
+                new_veh.t = start_time;
+            }
+
 
             m_updatable_initial_state->add_vehicle (new_veh);
 
@@ -126,6 +152,8 @@ std::vector<graph::uid> graph::gno_path_finder_dijkstra::run (const graph_initia
             int r = m_model->run (*m_updatable_initial);
             if (!OK (r))
               return {};
+
+            m_modeling_count ++;
 
             double next_node_time = time_to_node[next_node];
             if (next_node_time < 0 || time_for_edge < next_node_time)

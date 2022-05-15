@@ -4,6 +4,7 @@
 #include "model_graph_widget.h"
 #include "gno_modeling_simple_on_edge.h"
 #include "gno_modeling_simple_acceleration.h"
+#include "gno_modeling_simple_macro.h"
 #include <chrono>
 
 #include "QVBoxLayout"
@@ -92,15 +93,17 @@ graph_modeling_tab::graph_modeling_tab (graph::graph_initial *graph_initial, QWi
           m_simple_on_edge_model_widget->get_painter ()->show_d_distance (true);
       }
 
-//      {
-//          QGroupBox *model_simple_groupbox = new QGroupBox ("Simple 4", this);
-//          QVBoxLayout *model_simple_layout = new QVBoxLayout (model_simple_groupbox);
-//          model_simple_groupbox->setLayout (model_simple_layout);
+      {
+          QGroupBox *model_simple_macro_groupbox = new QGroupBox ("Simple Macro", this);
+          QVBoxLayout *model_simple_macro_layout = new QVBoxLayout (model_simple_macro_groupbox);
+          model_simple_macro_groupbox->setLayout (model_simple_macro_layout);
 
-////          m_simple_model = std::make_unique<graph::gno_modeling_simple> ();
-////          model_simple_layout->addWidget (m_simple_model_widget = new model_graph_widget (graph_initial, m_simple_model.get (),model_simple_groupbox));
-//          models_layout->addWidget (model_simple_groupbox, 1, 1);
-//      }
+          m_simple_macro_model = std::make_unique<graph::gno_modeling_simple_macro> ();
+          model_simple_macro_layout->addWidget (m_simple_macro_model_widget = new model_graph_widget (graph_initial, m_simple_macro_model.get (), model_simple_macro_groupbox));
+          models_layout->addWidget (model_simple_macro_groupbox, 1, 1);
+
+          m_simple_macro_model_widget->get_painter ()->show_d_distance (true);
+      }
   }
 
 
@@ -117,6 +120,7 @@ graph_modeling_tab::graph_modeling_tab (graph::graph_initial *graph_initial, QWi
   QObject::connect (m_simple_model_widget, &model_graph_widget::update_times_needed, this, [this] { update_max_times (); });
   QObject::connect (m_simple_acc_model_widget, &model_graph_widget::update_times_needed, this, [this] { update_max_times (); });
   QObject::connect (m_simple_on_edge_model_widget, &model_graph_widget::update_times_needed, this, [this] { update_max_times (); });
+  QObject::connect (m_simple_macro_model_widget, &model_graph_widget::update_times_needed, this, [this] { update_max_times (); });
 
   QObject::connect (this, &graph_modeling_tab::set_val, this, [this] (int i) { m_time_slider->setValue (i); });
   QObject::connect (this, &graph_modeling_tab::done, this, [this] { stop (); });
@@ -129,6 +133,7 @@ void graph_modeling_tab::clear ()
     m_simple_model_widget->get_painter()->set_line_states (nullptr);
     m_simple_acc_model_widget->get_painter()->set_line_states (nullptr);
     m_simple_on_edge_model_widget->get_painter()->set_line_states (nullptr);
+    m_simple_macro_model_widget->get_painter()->set_line_states (nullptr);
 }
 
 void graph_modeling_tab::update_max_times ()
@@ -145,6 +150,9 @@ void graph_modeling_tab::update_max_times ()
 
   if (!m_simple_on_edge_model_widget->get_line_states ().empty ())
     max_times.push_back (m_simple_on_edge_model_widget->get_line_states ().back ().t2);
+
+  if (!m_simple_macro_model_widget->get_line_states ().empty ())
+      max_times.push_back (m_simple_macro_model_widget->get_line_states ().back ().t2);
 
   if (max_times.empty ())
     return;
@@ -169,6 +177,9 @@ void graph_modeling_tab::set_time (double t)
 
   m_simple_on_edge_model_widget->set_time (t);
   m_simple_on_edge_model_widget->update ();
+
+  m_simple_macro_model_widget->set_time (t);
+  m_simple_macro_model_widget->update ();
 
   m_time_line->setText (QString(" %1").arg(t, 0, 'g'));
 }

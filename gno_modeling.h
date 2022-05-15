@@ -51,6 +51,8 @@ class gno_continuous_modeling final
 public:
     gno_continuous_modeling (gno_discrete_modeling_base *discrete_modeling);
 
+    gno_discrete_modeling_base *discrete_model () { return m_discrete_modeling; }
+
     void set_do_on_linear_time (func_type do_on_linear_time) { m_do_on_linear_time = do_on_linear_time; }
     int run (const graph_initial &initial_state);
 };

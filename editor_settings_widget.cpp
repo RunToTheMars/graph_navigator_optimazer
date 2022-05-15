@@ -87,7 +87,7 @@ gno_editor_settings_widget::gno_editor_settings_widget(QWidget *parent): QWidget
             fill_layout->addWidget (m_load_default_2_button = new QPushButton ("Line", this));
             fill_layout->addWidget (m_load_manh_button = new QPushButton ("Manhattan", this));
             fill_layout->addWidget (m_load_default_3_button = new QPushButton ("Tree Graph", this));
-            fill_layout->addWidget (m_load_default_4_button = new QPushButton ("Tree Graph Edited", this));
+            fill_layout->addWidget (m_load_default_4_button = new QPushButton ("Rombe Graph", this));
         }
 
         layout->addWidget (fill_groupbox);

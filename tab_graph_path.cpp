@@ -7,6 +7,7 @@
 #include "gno_path_finder_brute_force.h"
 #include "gno_path_finder_dijkstra.h"
 #include "gno_modeling_simple_on_edge.h"
+#include "gno_modeling_simple_macro.h"
 #include "gno_graph_initial.h"
 #include "gno_graph_initial_state.h"
 #include "gno_graph.h"
@@ -81,7 +82,8 @@ graph_path_tab::graph_path_tab (graph::graph_initial *graph_initial, QWidget *pa
     }
 
     // solvers
-    m_model = std::make_unique<graph::gno_modeling_simple_on_edge> ();
+    m_model = std::make_unique<graph::gno_modeling_simple_macro> ();
+//    m_model = std::make_unique<graph::gno_modeling_simple_on_edge> ();
     m_continuous_modeling = std::make_unique<graph::gno_continuous_modeling> (m_model.get ());
 
     QGroupBox *solvers_groupbox = new QGroupBox ("Solvers", this);
@@ -227,10 +229,13 @@ void graph_path_tab::set_start_end ()
   m_start_spinbox->setRange (0, m_graph_initial->get_graph()->node_count());
   m_end_spinbox->setRange (0, m_graph_initial->get_graph()->node_count());
 
-  m_brute_force_widget->set_src_dst (m_start_spinbox->value (), m_end_spinbox->value ());
-  m_dijkstra_widget->set_src_dst (m_start_spinbox->value (), m_end_spinbox->value ());
-  m_brute_force_with_depence_widget->set_src_dst (m_start_spinbox->value (), m_end_spinbox->value ());
-  m_dijkstra_with_depence_widget->set_src_dst (m_start_spinbox->value (), m_end_spinbox->value ());
+  int start = m_start_spinbox->value ();
+  int end = m_end_spinbox->value ();
+
+  m_brute_force_widget->set_src_dst (start, end);
+  m_dijkstra_widget->set_src_dst (start, end);
+  m_brute_force_with_depence_widget->set_src_dst (start, end);
+  m_dijkstra_with_depence_widget->set_src_dst (start, end);
 }
 
 void graph_path_tab::clear ()

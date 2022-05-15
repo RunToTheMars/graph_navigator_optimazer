@@ -108,6 +108,7 @@ graph::gno_path_finder_brute_force::gno_path_finder_brute_force (graph::gno_disc
 std::vector<graph::uid> graph::gno_path_finder_brute_force::run (const graph_initial &initial_state,
                                                                 graph::uid src, graph::uid dst, Vehicle veh, double start_time)
 {
+  m_modeling_count = 0;
   const graph::graph_base *graph = initial_state.get_graph ();
   std::vector<int> actual_nodes (graph->node_count (), 0);
 
@@ -174,6 +175,8 @@ std::vector<graph::uid> graph::gno_path_finder_brute_force::run (const graph_ini
           m_model->run (new_initial_state);
           if (!m_use_depence)
             m_model->set_model_independer (new_veh_uid);
+
+          m_modeling_count ++;
 
           new_initial_state.get_initial_state()->remove_vehicle (new_veh_uid);
         });
