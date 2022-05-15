@@ -86,6 +86,8 @@ gno_editor_settings_widget::gno_editor_settings_widget(QWidget *parent): QWidget
             fill_layout->addWidget (m_load_default_1_button = new QPushButton ("Default 1", this));
             fill_layout->addWidget (m_load_default_2_button = new QPushButton ("Line", this));
             fill_layout->addWidget (m_load_manh_button = new QPushButton ("Manhattan", this));
+            fill_layout->addWidget (m_load_default_3_button = new QPushButton ("Tree Graph", this));
+            fill_layout->addWidget (m_load_default_4_button = new QPushButton ("Tree Graph Edited", this));
         }
 
         layout->addWidget (fill_groupbox);
@@ -126,4 +128,6 @@ gno_editor_settings_widget::gno_editor_settings_widget(QWidget *parent): QWidget
     QObject::connect (m_load_default_1_button, &QPushButton::clicked, this, [this] () { Q_EMIT load_default_1_signal (); });
     QObject::connect (m_load_default_2_button, &QPushButton::clicked, this, [this] () { Q_EMIT load_default_2_signal (); });
     QObject::connect (m_load_manh_button, &QPushButton::clicked, this, [this] () { Q_EMIT load_manh_signal (); });
+    QObject::connect (m_load_default_3_button, &QPushButton::clicked, this, [this] () { Q_EMIT load_default_3_signal (); });
+    QObject::connect (m_load_default_4_button, &QPushButton::clicked, this, [this] () { Q_EMIT load_default_4_signal (); });
 }

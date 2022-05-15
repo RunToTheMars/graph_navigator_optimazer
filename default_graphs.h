@@ -253,6 +253,97 @@ namespace graph
 
         set_graph (graph_initial, nodes, edges, dir_vehs);
     }
+
+    void set_default_graph_3 (graph::graph_initial *graph_initial)
+    {
+        const double l = 10 * graph::D;
+        const std::vector<Node> nodes = {{0, 0, "A"}, {1, 1, "B"}};
+        const std::vector<Edge> edges = {{0, 1, l}};
+
+        std::vector<Directional_Vehicle> dir_vehs;
+        for (int i = 0; i < 10; i++)
+        {
+            Directional_Vehicle v;
+            v.src = 0;
+            v.dst = 1;
+            v.path = {0};
+            v.t = i * i;
+
+            dir_vehs.push_back (v);
+        }
+
+        set_graph (graph_initial, nodes, edges, dir_vehs);
+    }
+
+    void set_default_graph_4 (graph::graph_initial *graph_initial)
+    {
+        std::mt19937 gen (0);
+        std::uniform_real_distribution<double> node_height (graph::D, 10 * graph::D);
+        const int depth = 4;
+        std::vector<Node> nodes = {{0, 0, A}};
+        std::vector<Edge> edges;
+
+        std::vector<std::pair<int, int>> edge_map;
+        for (int i = 1; i < 4; i++)
+        {
+            const double dist = 1. / (2 ^ depth);
+            const int nodes_count = isize (nodes);
+            for (int j = nodes_count - 2 ^ (depth - 1); j < nodes_count; j++)
+            {
+              const Node &prev_node = nodes[j];
+              nodes.push_back ({prev_node.x - dist, prev_node.y + 1, ""});
+              edges.push_back ({j, isize (nodes) - 1, graph::D});
+              nodes.push_back ({prev_node.x + dist, prev_node.y + 1, ""});
+              edges.push_back ({j, isize (nodes) - 1, graph::D});
+
+              edge_map.push_back ({isize (nodes) - 2, isize (nodes) - 1})
+            }
+        }
+
+        std::uniform_real_distribution<double> dir_random (0, 2);
+        std::uniform_real_distribution<double> node_random (0, isize (nodes));
+        std::vector<Directional_Vehicle> dir_vehs;
+        for (int i = 0; i < 10; i++)
+        {
+            Directional_Vehicle v;
+
+            const graph::uid src = static_cast<graph::uid> (node_random (gen));
+            const graph::uid dst = nodes.size () - 1;
+            if (src == dst)
+              continue;
+
+            v.src = src;
+            v.dst = dst;
+
+            int cur_node = src;
+            while (cur_node < isize (edge_map))
+            {
+                const int next_node_dir = static_cast<int> (dir_random (gen)) % 2;
+                int next_node_ind = 0;
+                if (next_node_dir == 0)
+                {
+                    next_node_ind = edge_map[cur_node]
+                }
+                const std::vector<graph::uid> edges = graph_initial->get_graph ()->edges_started_from (prev_node);
+                const size_t random_dir = static_cast<size_t> (dir_random (gen)) % edges.size ();
+                const graph::uid edge_uid = edges[random_dir];
+
+                const graph::uid node_end = graph_initial->get_graph ()->edge (edge_uid).end;
+                if (nodes_set.insert (node_end).second == false)
+                    continue;
+                veh.path.push_back (edge_uid);
+                prev_node = node_end;
+            }
+
+
+            v.path = {0};
+            v.t = i * i;
+
+            dir_vehs.push_back (v);
+        }
+
+        set_graph (graph_initial, nodes, edges, dir_vehs);
+    }
 }
 
 #endif // DEFAULT_GRAPHS_H
