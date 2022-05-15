@@ -1,11 +1,9 @@
 \babel@toc {russian}{}\relax 
 \contentsline {section}{\numberline {1}Постановка задачи}{5}{}%
-\contentsline {section}{\numberline {2}Модели движения}{6}{}%
+\contentsline {section}{\numberline {2}Модели движения}{7}{}%
 \contentsline {subsection}{\numberline {2.1}Макроскопические модели}{7}{}%
-\contentsline {subsection}{\numberline {2.2}Микроскопические модели}{7}{}%
+\contentsline {subsection}{\numberline {2.2}Микроскопические модели}{8}{}%
 \contentsline {section}{\numberline {3}Моделирование}{9}{}%
-\contentsline {subsection}{\numberline {3.1}Независимость движения участников от добавленного АТС}{9}{}%
-\contentsline {subsection}{\numberline {3.2}Взаимосвязь движений нового участника и группы АТС}{9}{}%
 \contentsline {section}{\numberline {4}Поиск оптимального пути}{10}{}%
 \contentsline {subsection}{\numberline {4.1}Перебор. Сложность}{10}{}%
 \contentsline {subsection}{\numberline {4.2}Дейкстра}{11}{}%
