@@ -87,11 +87,24 @@ namespace graph
 
               m_path_finder->set_phi ([veh_uid] (const std::vector<double> &values)
                                      {
+                                         double res = 0.;
+//                                         for (auto v: values)
+//                                             res += v;
+
+//                                         res += graph::M * values.size () * values.front ();
+//                                         res += graph::M * values.size () * values[values.size () / 2];
+//                                         res += graph::M * values.size () * values.back ();
+//                                         return res;
 //                                         double res = 0.;
 //                                         for (auto v: values)
 //                                             res += v;
 //                                         return res;
-                                         return values[veh_uid];
+//                                         return values[veh_uid];
+
+                                           res += values.front ();
+                                           res += values[values.size () / 2];
+                                           res += values.back ();
+                                           return res;
                                      });
               std::vector<graph::uid> new_path = m_path_finder->run (*m_editable_graph_initial, veh_uid);
               steps ++;

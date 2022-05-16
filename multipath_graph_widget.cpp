@@ -79,10 +79,22 @@ multipath_graph_widget::multipath_graph_widget(graph::graph_initial *graph_initi
             }
 
             double average_time = 0.;
-            for (graph::uid veh_uid = 0; veh_uid < graph_initial->get_initial_state ()->vehicle_count (); veh_uid++)
-              average_time += times[veh_uid];
+//            for (graph::uid veh_uid = 0; veh_uid < graph_initial->get_initial_state ()->vehicle_count (); veh_uid++)
+//            {
+//                average_time += times[veh_uid];
+//            }
 
-            average_time /= graph_initial->get_initial_state ()->vehicle_count ();
+//            average_time += graph::M * times.size () * times.front ();
+//            average_time += graph::M * times.size () * times[times.size () / 2];
+//            average_time += graph::M * times.size () * times.back ();
+
+              average_time += times.front ();
+              average_time += times[times.size () / 2];
+              average_time += times.back ();
+
+
+            average_time /= 3;
+            //average_time /= graph_initial->get_initial_state ()->vehicle_count ();
 
             m_res_line->setText (QString ("%1").arg (average_time));
             get_painter ()->set_time (0.);

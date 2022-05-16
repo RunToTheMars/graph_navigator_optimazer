@@ -388,6 +388,21 @@ namespace graph
 
             int cur_node = src;
 
+
+            if (i == 0 || i == veh_on_rombe - 1 || i == veh_on_rombe / 2)
+            {
+                const auto &edges = graph_initial->get_graph ()->edges_started_from (cur_node);
+                v.path.push_back (edges[0]);
+                cur_node = graph_initial->get_graph ()->edge (edges[0]).end;
+            }
+            else
+            {
+                const auto &edges = graph_initial->get_graph ()->edges_started_from (cur_node);
+                v.path.push_back (edges[1]);
+                cur_node = graph_initial->get_graph ()->edge (edges[1]).end;
+            }
+
+
             while (1)
             {
                 const auto &edges = graph_initial->get_graph ()->edges_started_from (cur_node);
@@ -485,6 +500,19 @@ namespace graph
             v.src = src;
 
             int cur_node = src;
+
+//            if (i == 0 || i == veh_on_rombe - 1 || i == veh_on_rombe / 2)
+//            {
+//                const auto &edges = graph_initial->get_graph ()->edges_started_from (cur_node);
+//                v.path.push_back (edges[0]);
+//                cur_node = graph_initial->get_graph ()->edge (edges[0]).end;
+//            }
+//            else
+//            {
+//                const auto &edges = graph_initial->get_graph ()->edges_started_from (cur_node);
+//                v.path.push_back (edges[1]);
+//                cur_node = graph_initial->get_graph ()->edge (edges[1]).end;
+//            }
 
             while (1)
             {

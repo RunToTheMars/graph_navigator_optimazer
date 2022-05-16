@@ -11,5 +11,6 @@
 \contentsline {subsection}{\numberline {3.2}Поиск кооперативного равновесия}{17}{subsection.3.2}%
 \contentsline {section}{\numberline {4}Результаты}{20}{section.4}%
 \contentsline {subsection}{\numberline {4.1}Поиск оптимальной комбинации при одинаковом приоритете участников}{20}{subsection.4.1}%
-\contentsline {section}{\numberline {5}Заключение}{21}{section.5}%
-\contentsline {section}{Литература}{22}{section*.8}%
+\contentsline {subsection}{\numberline {4.2}Поиск оптимальной комбинации с приоритетными участниками}{21}{subsection.4.2}%
+\contentsline {section}{\numberline {5}Заключение}{23}{section.5}%
+\contentsline {section}{Литература}{24}{section*.10}%
