@@ -1,0 +1,83 @@
+\documentclass{beamer}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T2A]{fontenc}
+\usepackage[english,russian]{babel}
+
+
+\usepackage{tikz}
+\usetikzlibrary{arrows,decorations.pathmorphing,backgrounds,fit,positioning,shapes,shapes.symbols,chains}
+
+\usetheme{Frankfurt}
+
+% Переведем заголовки блоков на русский
+\uselanguage{russian}
+\languagepath{russian}
+\deftranslation[to=russian]{Theorem}{Теорема}
+\deftranslation[to=russian]{Example}{Пример}
+
+
+% \usefonttheme{professionalfonts}
+\usefonttheme{serif}
+% \usefonttheme{structureitalicserif}
+
+
+\DeclareMathOperator*{\minn}{min}
+\DeclareMathOperator*{\argmin}{argmin}
+
+\begin{document}
+
+\title{Оптимизация транспортного потока при заданных пунктах отправления и назначения всех участников движения}
+\author{Пехтерев С.И. 610 группа\\Научный руководитель: д.ф.-м.н. Васенин В.А.}
+\institute[]{}
+\date[15.05.2022]{15 мая 2022}
+
+% Создание заглавной страницы
+% \frame{\titlepage}
+\maketitle
+
+
+% % Автоматическая генерация содержания
+% \frame{
+%   \frametitle{План}
+%   \tableofcontents
+% }
+
+\section{Задача кооперативной оптимизации транспортного потока}
+
+\begin{frame}\frametitle{Основные определения}
+\emph{Дорожной сетью} назовем тройку $G = (V, E, l)$, где $(V, E)$ --- ориентированный граф с длинами ребер $l: E \rightarrow \mathbb{R}_{>0} $.  Предположим, что имеется $n$ участников с заданными точками отправления $A_i \in V$ и прибытия $B_i \in V$. Пусть множество $P_i$ есть множество всех простых путей из $A_i$ в $B_i$. Элемент декартового произведения ${P = \prod \limits_{i = 1} ^ n P_i}$ назовем \emph{комбинацией путей}. Пусть известно, что при комбинации путей участников $\textbf{p} = \left(p_1, \ldots, p_n\right)\in P$ $i$-ый участник затрачивает $T_i(\textbf{p}) \in \mathbb{R}_{\ge 0}$ времени на свой путь. 
+Функции $T_i$ назовем \textit{функциями временных затрат} участника $i$.
+\end{frame}
+
+\begin{frame}\frametitle{Некооперативное прокладывание пути}
+  
+  \textit{Некооперативным прокладыванием пути} в дорожной сети $G$ назовем пятерку $F = (n, G, \{A_i\}_{i = 1}^{n}, \{B_i\}_{i = 1}^{n}, \{T_i\}_{i = 1}^{n})$. Некооперативное прокладывание пути предполагает, что каждый участник стремится сократить собственные временные затраты выбором пути $p_i$, несмотря на временные затраты других участников. 
+\end{frame}
+
+\begin{frame}\frametitle{Задача прокладывания набора путей}
+  Введем некоторую функцию $\Phi (\textbf{p}) = \phi (T_1 (\textbf{p}), \ldots, T_n(\textbf{p}))$, определенную на множестве всех возможных комбинаций путей $P$ и отображающую его во множество действительных чисел. С помощью нее участники могут отслеживать, как влияет изменение их пути на общую картину движения. Такую функцию назовем \textit{функцией стоимости}.
+
+Для заданных некооперативного прокладывания пути $F$ и функции стоимости $\Phi$ необходимо найти комбинацию путей $\textbf{p}^*$ такую, что функция стоимости на ней минимальна, то есть
+\begin{equation}
+  \Phi (\textbf{p}^*) = \minn\limits_{ \textbf{p} \in P} \Phi (\textbf{p}).
+\end{equation}
+  
+\end{frame}
+
+
+\section{Модель движения}
+
+\begin{frame}\frametitle{}
+\textit{Модель движения} $v_i(\textbf{p}, t)$ - положительная функция, отделенная от нуля ограниченная функция, для которой верно
+
+
+\end{frame}
+
+
+\begin{frame}
+Спасибо за внимание!
+\end{frame}
+
+
+\end{document}

@@ -1,0 +1,3 @@
+\babel@toc {russian}{}\relax 
+\beamer@sectionintoc {1}{Задача кооперативной оптимизации транспортного потока}{2}{0}{1}
+\beamer@sectionintoc {2}{Модель движения}{5}{0}{2}
