@@ -130,9 +130,34 @@ $$p^* = \argmin_{p \in P(A, B)} T(p),$$
 
 
 \begin{frame}\frametitle{Результаты моделирования}
-  Вставить картинку.
+	\begin{center}
+		\includegraphics[scale=0.2]{Graph_N.jpg}
+	\end{center}
+   
+   Граф дорожной сети $G$, на котором производилось моделирование движения. $|V| = 46, \; |E| = 60$, ребра произвольной длины.
 \end{frame}
 
+\begin{frame}\frametitle{Результаты моделирования}
+	Были получены результаты:
+	\begin{table}[H]
+		\label{tab:res_average}
+		\centering
+		\begin{tabular}{|c|c|c|c|c|}
+			\hline
+			\multicolumn{1}{|c|}{ $t_{st}$} & $v_{max}$  & $v_{min}$ & $a$ &  $T(p^*)$ \\ \hline
+			\multicolumn{1}{|c|}{$5$}       & 60         & 10        & 4.375 &   955.321         \\ \hline
+			\multicolumn{1}{|c|}{$5$}       & 60         & 20        &  4   &     935.259        \\ \hline
+			\multicolumn{1}{|c|}{$5$ }      & 80         & 10        &  7.875   &    716.872         \\ \hline
+			\multicolumn{1}{|c|}{$5$}       & 80 & 20                  & 7.5 &        707.094           \\ \hline
+			\multicolumn{1}{|c|}{$40$}      & 60 & 10                  & 4.375    &  1172.52            \\ \hline
+			\multicolumn{1}{|c|}{$40$ }     & 60 & 20                  & 4   &       1083       \\ \hline
+			\multicolumn{1}{|c|}{$40$}      & 80 & 10                  & 7.875    &    906.91          \\ \hline
+			\multicolumn{1}{|c|}{$40$ }     & 80 & 20                  & 7.5   &       864.625       \\ \hline
+			
+		\end{tabular}
+		\caption{Результаты запуска модифицированного алгоритма Дейкстры. В таблце представлены значения времени на прохождение оптмального пути с параметрами $v_{max}, \; v_{min}, \; a = \frac{v^2_{max}-v^2_{min}}{2(D-l)}$.}
+	\end{table}
+\end{frame}
 
 
 \begin{frame}\frametitle{Выводы}
