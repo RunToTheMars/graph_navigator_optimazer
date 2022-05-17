@@ -114,7 +114,7 @@ std::vector<graph::uid> graph::gno_path_finder_dijkstra::run (const graph_initia
             double val = m_phi (times);
 
             double next_node_val = phi_to_node[next_node];
-            if (next_node_val < 0 || val < next_node_val)
+            if (phi_to_node_valid[next_node] == 0 || ((graph::MINIMIZE && val < next_node_val) || (!graph::MINIMIZE && val > next_node_val)))
             {
               phi_to_node[next_node] = val;
               phi_to_node_valid[next_node] = 1;

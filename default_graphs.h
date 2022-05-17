@@ -12,8 +12,8 @@
 
 namespace graph
 {
-    static constexpr int veh_on_rombe = 30;
-    static constexpr int rombe_depth = 4;
+    static constexpr int veh_on_rombe = 50;
+    static constexpr int rombe_depth = 5;
 
     void set_graph (graph::graph_initial *graph_initial,
                     const std::vector<Node> &nodes,
@@ -389,18 +389,18 @@ namespace graph
             int cur_node = src;
 
 
-            if (i == 0 || i == veh_on_rombe - 1 || i == veh_on_rombe / 2)
-            {
-                const auto &edges = graph_initial->get_graph ()->edges_started_from (cur_node);
-                v.path.push_back (edges[0]);
-                cur_node = graph_initial->get_graph ()->edge (edges[0]).end;
-            }
-            else
-            {
-                const auto &edges = graph_initial->get_graph ()->edges_started_from (cur_node);
-                v.path.push_back (edges[1]);
-                cur_node = graph_initial->get_graph ()->edge (edges[1]).end;
-            }
+//            if (i == 0 || i == veh_on_rombe - 1 || i == veh_on_rombe / 2)
+//            {
+//                const auto &edges = graph_initial->get_graph ()->edges_started_from (cur_node);
+//                v.path.push_back (edges[0]);
+//                cur_node = graph_initial->get_graph ()->edge (edges[0]).end;
+//            }
+//            else
+//            {
+//                const auto &edges = graph_initial->get_graph ()->edges_started_from (cur_node);
+//                v.path.push_back (edges[1]);
+//                cur_node = graph_initial->get_graph ()->edge (edges[1]).end;
+//            }
 
 
             while (1)
@@ -437,7 +437,6 @@ namespace graph
     {
         std::mt19937 gen (0);
         std::uniform_real_distribution<double> node_height (graph::D, 25 * graph::D);
-        const int depth = 4;
         std::vector<Node> nodes = {{0., 0., "A"}};
         std::vector<Edge> edges;
 

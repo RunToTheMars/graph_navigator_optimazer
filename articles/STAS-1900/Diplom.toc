@@ -4,13 +4,13 @@
 \contentsline {subsection}{\numberline {1.1}Общая постановка задачи}{5}{subsection.1.1}%
 \contentsline {subsection}{\numberline {1.2}Постановка задачи в терминах модели движения}{6}{subsection.1.2}%
 \contentsline {section}{\numberline {2}Модели движения}{10}{section.2}%
-\contentsline {subsection}{\numberline {2.1}Макроскопические модели}{10}{subsection.2.1}%
-\contentsline {subsection}{\numberline {2.2}Микроскопические модели}{13}{subsection.2.2}%
-\contentsline {section}{\numberline {3}Равновесие транспортных потоков}{15}{section.3}%
-\contentsline {subsection}{\numberline {3.1}Некооперативное и кооперативное равновесие}{15}{subsection.3.1}%
-\contentsline {subsection}{\numberline {3.2}Поиск кооперативного равновесия}{17}{subsection.3.2}%
-\contentsline {section}{\numberline {4}Результаты}{20}{section.4}%
-\contentsline {subsection}{\numberline {4.1}Поиск оптимальной комбинации при одинаковом приоритете участников}{20}{subsection.4.1}%
-\contentsline {subsection}{\numberline {4.2}Поиск оптимальной комбинации с приоритетными участниками}{21}{subsection.4.2}%
-\contentsline {section}{\numberline {5}Заключение}{23}{section.5}%
-\contentsline {section}{Литература}{24}{section*.10}%
+\contentsline {subsection}{\numberline {2.1}Макроскопические модели}{11}{subsection.2.1}%
+\contentsline {subsection}{\numberline {2.2}Микроскопические модели}{14}{subsection.2.2}%
+\contentsline {section}{\numberline {3}Равновесие транспортных потоков}{16}{section.3}%
+\contentsline {subsection}{\numberline {3.1}Некооперативное и кооперативное равновесие}{16}{subsection.3.1}%
+\contentsline {subsection}{\numberline {3.2}Поиск кооперативного равновесия}{18}{subsection.3.2}%
+\contentsline {section}{\numberline {4}Результаты}{21}{section.4}%
+\contentsline {subsection}{\numberline {4.1}Поиск оптимальной комбинации при одинаковом приоритете участников}{21}{subsection.4.1}%
+\contentsline {subsection}{\numberline {4.2}Поиск оптимальной комбинации с приоритетными участниками}{22}{subsection.4.2}%
+\contentsline {section}{\numberline {5}Заключение}{24}{section.5}%
+\contentsline {section}{Литература}{25}{section*.10}%
