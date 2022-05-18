@@ -7,10 +7,10 @@
 \contentsline {subsection}{\numberline {2.1}Макроскопические модели}{11}{subsection.2.1}%
 \contentsline {subsection}{\numberline {2.2}Микроскопические модели}{14}{subsection.2.2}%
 \contentsline {section}{\numberline {3}Равновесие транспортных потоков}{16}{section.3}%
-\contentsline {subsection}{\numberline {3.1}Некооперативное и кооперативное равновесие}{16}{subsection.3.1}%
-\contentsline {subsection}{\numberline {3.2}Поиск кооперативного равновесия}{18}{subsection.3.2}%
-\contentsline {section}{\numberline {4}Результаты}{21}{section.4}%
-\contentsline {subsection}{\numberline {4.1}Поиск оптимальной комбинации при одинаковом приоритете участников}{21}{subsection.4.1}%
-\contentsline {subsection}{\numberline {4.2}Поиск оптимальной комбинации с приоритетными участниками}{22}{subsection.4.2}%
-\contentsline {section}{\numberline {5}Заключение}{24}{section.5}%
-\contentsline {section}{Литература}{25}{section*.10}%
+\contentsline {subsection}{\numberline {3.1}Некооперативное и кооперативное равновесие}{17}{subsection.3.1}%
+\contentsline {subsection}{\numberline {3.2}Поиск кооперативного равновесия}{19}{subsection.3.2}%
+\contentsline {section}{\numberline {4}Результаты}{22}{section.4}%
+\contentsline {subsection}{\numberline {4.1}Поиск оптимальной комбинации при одинаковом приоритете участников}{22}{subsection.4.1}%
+\contentsline {subsection}{\numberline {4.2}Поиск оптимальной комбинации с приоритетными участниками}{23}{subsection.4.2}%
+\contentsline {section}{\numberline {5}Заключение}{25}{section.5}%
+\contentsline {section}{Литература}{26}{section*.10}%
