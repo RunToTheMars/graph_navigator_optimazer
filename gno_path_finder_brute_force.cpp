@@ -108,6 +108,9 @@ graph::gno_path_finder_brute_force::gno_path_finder_brute_force (graph::gno_disc
 std::vector<graph::uid> graph::gno_path_finder_brute_force::run (const graph_initial &initial_state, graph::uid veh_uid)
 {
   m_modeling_count = 0;
+  m_min = 1e100;
+  m_max = 0.;
+  m_average = 0.;
   auto start = std::chrono::system_clock::now();
 
   const graph::graph_base *graph = initial_state.get_graph ();
@@ -169,6 +172,15 @@ std::vector<graph::uid> graph::gno_path_finder_brute_force::run (const graph_ini
           m_model->run (new_initial_state);
 
           double val = m_phi (times);
+          if (val < m_min)
+          {
+            m_min = val;
+          }
+          if (val > m_max)
+          {
+              m_max = val;
+          }
+          m_average += val;
           if (m_min_path.empty () ||  ((graph::MINIMIZE && val < m_min_time) || (!graph::MINIMIZE && val > m_min_time)))
           {
               m_min_time = val;
@@ -184,5 +196,6 @@ std::vector<graph::uid> graph::gno_path_finder_brute_force::run (const graph_ini
   auto end = std::chrono::system_clock::now();
   std::chrono::duration<double> elapsed_seconds = end - start;
   m_time_elapsed = elapsed_seconds.count();
+  m_average /= m_modeling_count;
   return m_min_path;
 }
