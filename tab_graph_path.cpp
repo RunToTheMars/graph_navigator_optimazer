@@ -83,8 +83,8 @@ graph_path_tab::graph_path_tab (graph::graph_initial *graph_initial, QWidget *pa
     }
 
     // solvers
-//    m_model = std::make_unique<graph::gno_modeling_simple_macro> ();
-    m_model = std::make_unique<graph::gno_modeling_simple_micro> (graph::V_MAX, graph::V_MIN, graph::A_MAX, graph::D, graph::L);
+    m_model = std::make_unique<graph::gno_modeling_simple_macro> ();
+//    m_model = std::make_unique<graph::gno_modeling_simple_micro> (graph::V_MAX, graph::V_MIN, graph::A_MAX, graph::D, graph::L);
 //    m_model = std::make_unique<graph::gno_modeling_simple_on_edge> ();
     m_continuous_modeling = std::make_unique<graph::gno_continuous_modeling> (m_model.get ());
 

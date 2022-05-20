@@ -179,8 +179,8 @@ int gno_modeling_simple_macro::update_states (const graph_initial &initial_state
         if (n == 0)
             return -1;
 
-        m_machine_states[veh_id].velocity = graph::V_MAX / n;
-//        m_machine_states[veh_id].velocity = graph::V_MAX * (1. - n * r_count);
+//        m_machine_states[veh_id].velocity = graph::V_MAX / n;
+        m_machine_states[veh_id].velocity = graph::V_MAX * (1. - n * r_count);
     }
     return 0;
 }

@@ -89,6 +89,7 @@ gno_editor_settings_widget::gno_editor_settings_widget(QWidget *parent): QWidget
             fill_layout->addWidget (m_load_default_3_button = new QPushButton ("Tree Graph", this));
             fill_layout->addWidget (m_load_default_4_button = new QPushButton ("Rombe Graph", this));
             fill_layout->addWidget (m_load_default_5_button = new QPushButton ("Rombe Graph with Edge", this));
+            fill_layout->addWidget (m_load_default_6_button = new QPushButton ("Best Graph", this));
         }
 
         layout->addWidget (fill_groupbox);
@@ -132,4 +133,5 @@ gno_editor_settings_widget::gno_editor_settings_widget(QWidget *parent): QWidget
     QObject::connect (m_load_default_3_button, &QPushButton::clicked, this, [this] () { Q_EMIT load_default_3_signal (); });
     QObject::connect (m_load_default_4_button, &QPushButton::clicked, this, [this] () { Q_EMIT load_default_4_signal (); });
     QObject::connect (m_load_default_5_button, &QPushButton::clicked, this, [this] () { Q_EMIT load_default_5_signal (); });
+    QObject::connect (m_load_default_6_button, &QPushButton::clicked, this, [this] () { Q_EMIT load_default_6_signal (); });
 }

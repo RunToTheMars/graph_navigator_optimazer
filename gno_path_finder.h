@@ -10,6 +10,7 @@ class gno_path_finder_base
 {
 public:
    int m_modeling_count = 0;
+   double m_time_elapsed = 0.;
 
 protected:
   std::function<double (std::vector<double>)> m_phi;

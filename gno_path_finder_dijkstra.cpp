@@ -5,6 +5,7 @@
 #include "gno_graph_initial_state.h"
 #include "gno_modeling.h"
 #include "utils.h"
+#include <chrono>
 
 #include <stack>
 
@@ -15,6 +16,7 @@ graph::gno_path_finder_dijkstra::gno_path_finder_dijkstra (graph::gno_discrete_m
 
 std::vector<graph::uid> graph::gno_path_finder_dijkstra::run (const graph_initial &initial, graph::uid veh_uid)
 {
+    auto start = std::chrono::system_clock::now();
     m_modeling_count = 0;
     const graph::graph_base *graph = initial.get_graph ();
     const graph_initial_state_base *initial_state = initial.get_initial_state();
@@ -48,7 +50,7 @@ std::vector<graph::uid> graph::gno_path_finder_dijkstra::run (const graph_initia
         for (graph::uid node_uid = 0; node_uid < node_count; node_uid ++)
         {
             double val = phi_to_node[node_uid];
-            if (node_done[node_uid] == 1 || phi_to_node_valid[node_uid] == 0)
+            if (!(node_done[node_uid] == 0 && phi_to_node_valid[node_uid] == 1))
               continue;
 
             if (best_node == graph::invalid_uid || ((graph::MINIMIZE && val < best_time) || (!graph::MINIMIZE && val > best_time)))
@@ -145,6 +147,10 @@ std::vector<graph::uid> graph::gno_path_finder_dijkstra::run (const graph_initia
 
     if (graph->edge (path.back ()).end != veh_opt.dst)
       return {};
+
+    auto end = std::chrono::system_clock::now();
+    std::chrono::duration<double> elapsed_seconds = end - start;
+    m_time_elapsed = elapsed_seconds.count();
 
     return path;
 }

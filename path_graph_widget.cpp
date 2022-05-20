@@ -77,7 +77,9 @@ path_graph_widget::path_graph_widget(graph::graph_initial *graph_initial, graph:
               }
             }
 
-            m_res_line->setText (QString ("%1").arg (t_tes));
+            m_res_line->setText (QString ("Best: %1| Elapsed: %2 | Count: %3 | Per Modeling: %4").arg (t_tes).arg (m_path_finder->m_time_elapsed)
+                                .arg (m_path_finder->m_modeling_count)
+                                .arg (m_path_finder->m_time_elapsed / m_path_finder->m_modeling_count));
             get_painter ()->set_time (0.);
             area_render->update ();
 

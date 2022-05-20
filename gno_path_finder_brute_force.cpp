@@ -4,6 +4,7 @@
 #include "gno_graph_initial.h"
 #include "gno_graph_initial_state.h"
 #include "gno_modeling.h"
+#include <chrono>
 #include "utils.h"
 
 #include <stack>
@@ -107,6 +108,8 @@ graph::gno_path_finder_brute_force::gno_path_finder_brute_force (graph::gno_disc
 std::vector<graph::uid> graph::gno_path_finder_brute_force::run (const graph_initial &initial_state, graph::uid veh_uid)
 {
   m_modeling_count = 0;
+  auto start = std::chrono::system_clock::now();
+
   const graph::graph_base *graph = initial_state.get_graph ();
   std::vector<int> actual_nodes (graph->node_count (), 0);
 
@@ -178,5 +181,8 @@ std::vector<graph::uid> graph::gno_path_finder_brute_force::run (const graph_ini
           m_modeling_count ++;
         });
 
+  auto end = std::chrono::system_clock::now();
+  std::chrono::duration<double> elapsed_seconds = end - start;
+  m_time_elapsed = elapsed_seconds.count();
   return m_min_path;
 }
