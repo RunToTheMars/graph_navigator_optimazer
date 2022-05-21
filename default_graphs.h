@@ -12,7 +12,7 @@
 
 namespace graph
 {
-    static constexpr int veh_on_rombe = 100;
+    static constexpr int veh_on_rombe = 50;
     static constexpr int rombe_depth = 4;
 
     void set_graph (graph::graph_initial *graph_initial,

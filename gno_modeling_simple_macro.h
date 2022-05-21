@@ -22,6 +22,7 @@ class gno_modeling_simple_macro final: public gno_discrete_modeling_base
     };
 
     std::vector<state> m_machine_states;
+    std::vector<int> m_counts;
 
     graph::uid model_independer_uid = graph::invalid_uid;
 public:

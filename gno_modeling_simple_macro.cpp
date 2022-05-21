@@ -16,6 +16,8 @@ void gno_modeling_simple_macro::clear_states (const graph_initial &initial_state
 
     m_states.resize (veh_count);
     m_machine_states.resize (veh_count);
+
+    m_counts.assign (initial_state.get_graph()->edge_count (), 0);
 }
 
 bool gno_modeling_simple_macro::is_finished (const graph_initial &/*initial_state*/) const
@@ -133,7 +135,7 @@ int gno_modeling_simple_macro::update_states (const graph_initial &initial_state
         }
     }
 
-    double r_count = 1./ (double) m_machine_states.size ();
+    std::fill (m_counts.begin (), m_counts.end (), 0);
 
     //update velocities
     for (graph::uid veh_id = 0; veh_id < isize (m_machine_states); veh_id++)
@@ -148,39 +150,29 @@ int gno_modeling_simple_macro::update_states (const graph_initial &initial_state
         const vehicle_discrete_state &cur_state = m_states[veh_id];
         const graph::uid cur_edge = veh.path[cur_state.edge_num];
 
-        int n = 0;
-//        int n = 1;
+        if (veh_id == model_independer_uid)
+          continue;
+        m_counts[cur_edge] ++;
+    }
 
-        for (graph::uid veh_id_other = 0; veh_id_other < isize (m_machine_states);
-             veh_id_other++)
-        {
-            if (m_machine_states[veh_id_other].st != state_t::move)
-                continue;
+    double r_count = 1. / isize (m_machine_states);
+    for (graph::uid veh_id = 0; veh_id < isize (m_machine_states);
+         veh_id++)
+    {
+        if (m_machine_states[veh_id].st != state_t::move)
+            continue;
 
-//            if (veh_id_other == veh_id)
-//                continue;
+        const Directional_Vehicle &veh = initial_states->vehicle (veh_id);
+        const vehicle_discrete_state &cur_state = m_states[veh_id];
+        const graph::uid cur_edge = veh.path[cur_state.edge_num];
 
-            if (veh_id_other == model_independer_uid && veh_id != model_independer_uid)
-                continue;
+        int n = m_counts[cur_edge];
 
-            const Directional_Vehicle &other_veh = initial_states->vehicle (veh_id_other);
-            const vehicle_discrete_state &other_state = m_states[veh_id_other];
-            const graph::uid other_edge = other_veh.path[other_state.edge_num];
+        if (veh_id == model_independer_uid)
+          n ++;
 
-            if (m_machine_states[veh_id_other].st != state_t::move)
-                continue;
-
-            if (other_edge != cur_edge)
-                continue;
-
-            n++;
-        }
-
-        if (n == 0)
-            return -1;
-
-        m_machine_states[veh_id].velocity = graph::V_MAX / n;
-//        m_machine_states[veh_id].velocity = graph::V_MAX * (1. - n * r_count);
+        //m_machine_states[veh_id].velocity = graph::V_MAX / n;
+        m_machine_states[veh_id].velocity = (graph::V_MAX - graph::V_MIN) * (1. - n * r_count) + graph::V_MIN;
     }
     return 0;
 }
