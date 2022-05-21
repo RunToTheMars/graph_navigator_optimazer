@@ -91,6 +91,8 @@ std::vector<graph::uid> graph::gno_path_finder_dijkstra::run (const graph_initia
 
             if (!m_use_depence)
               m_model->set_model_independer (veh_uid);
+            else
+              m_model->set_model_independer (graph::invalid_uid);
 
             std::vector<double> times (m_updatable_initial_state->vehicle_count (), 0.);
             m_model->set_do_in_critical_time ([this, &times] (double time, const std::vector<vehicle_discrete_state> &states)

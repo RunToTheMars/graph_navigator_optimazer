@@ -169,6 +169,12 @@ std::vector<graph::uid> graph::gno_path_finder_brute_force::run (const graph_ini
           updated_veh.path = path;
 
           m_model->clear_states (new_initial_state);
+
+          if (!m_use_depence)
+            m_model->set_model_independer (veh_uid);
+          else
+            m_model->set_model_independer (graph::invalid_uid);
+
           m_model->run (new_initial_state);
 
           double val = m_phi (times);
@@ -186,9 +192,6 @@ std::vector<graph::uid> graph::gno_path_finder_brute_force::run (const graph_ini
               m_min_time = val;
               m_min_path = path;
           }
-
-          if (!m_use_depence)
-            m_model->set_model_independer (veh_uid);
 
           m_modeling_count ++;
         });

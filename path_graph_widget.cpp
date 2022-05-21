@@ -52,7 +52,11 @@ path_graph_widget::path_graph_widget(graph::graph_initial *graph_initial, graph:
             m_line_states.clear ();
 
             area_render->get_painter ()->set_line_states (&m_line_states);
-            m_continuous_modeling->discrete_model ()->set_model_independer (graph::invalid_uid);
+            if (!m_use_model_independer)
+              m_continuous_modeling->discrete_model ()->set_model_independer (graph::invalid_uid);
+            else
+              m_continuous_modeling->discrete_model ()->set_model_independer (graph_initial_state.vehicle_count () - 1);
+
             m_continuous_modeling->set_do_on_linear_time (
                 [this] (const graph::vehicle_continuous_line_states &states) {
                     m_line_states.push_back (states);

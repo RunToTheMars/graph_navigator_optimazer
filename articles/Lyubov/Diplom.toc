@@ -1,12 +1,13 @@
 \babel@toc {russian}{}\relax 
-\contentsline {section}{\numberline {1}Постановка задачи}{5}{}%
-\contentsline {section}{\numberline {2}Модели движения}{7}{}%
-\contentsline {subsection}{\numberline {2.1}Макроскопические модели}{7}{}%
-\contentsline {subsection}{\numberline {2.2}Микроскопические модели}{8}{}%
-\contentsline {section}{\numberline {3}Моделирование}{9}{}%
-\contentsline {section}{\numberline {4}Поиск оптимального пути}{10}{}%
-\contentsline {subsection}{\numberline {4.1}Перебор. Сложность}{10}{}%
-\contentsline {subsection}{\numberline {4.2}Поиск кратчайшего пути в динамическом графе}{11}{}%
-\contentsline {subsubsection}{\numberline {4.2.1}Модифицированный алгоритм Дейкстры}{12}{}%
-\contentsline {subsubsection}{\numberline {4.2.2}Применимость модифицированного алгоритма Дейкстры}{14}{}%
-\contentsline {section}{Литература}{18}{}%
+\contentsline {section}{\numberline {1}Постановка задачи}{5}{section.1}%
+\contentsline {section}{\numberline {2}Модели движения}{7}{section.2}%
+\contentsline {subsection}{\numberline {2.1}Макроскопические модели}{7}{subsection.2.1}%
+\contentsline {subsection}{\numberline {2.2}Микроскопические модели}{8}{subsection.2.2}%
+\contentsline {section}{\numberline {3}Моделирование}{9}{section.3}%
+\contentsline {section}{\numberline {4}Поиск оптимального пути}{10}{section.4}%
+\contentsline {subsection}{\numberline {4.1}Перебор. Сложность}{10}{subsection.4.1}%
+\contentsline {subsection}{\numberline {4.2}Поиск кратчайшего пути в динамическом графе}{11}{subsection.4.2}%
+\contentsline {subsubsection}{\numberline {4.2.1}Модифицированный алгоритм Дейкстры}{12}{subsubsection.4.2.1}%
+\contentsline {subsubsection}{\numberline {4.2.2}Применимость модифицированного алгоритма Дейкстры}{14}{subsubsection.4.2.2}%
+\contentsline {section}{\numberline {5}Практические результаты}{16}{section.5}%
+\contentsline {section}{Литература}{18}{section*.4}%

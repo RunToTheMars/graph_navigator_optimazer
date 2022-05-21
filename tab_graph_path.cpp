@@ -102,6 +102,7 @@ graph_path_tab::graph_path_tab (graph::graph_initial *graph_initial, QWidget *pa
             solver_brute_force_layout->addWidget (m_brute_force_widget = new path_graph_widget (graph_initial, m_brute_force.get (), m_continuous_modeling.get (), solver_brute_force_groupbox));
             m_brute_force_widget->get_painter()->show_src_dst (true);
             solvers_layout->addWidget (solver_brute_force_groupbox, 0, 0);
+            m_brute_force_widget->use_model_independer (true);
         }
 
         {
@@ -114,6 +115,7 @@ graph_path_tab::graph_path_tab (graph::graph_initial *graph_initial, QWidget *pa
             solver_dijkstra_layout->addWidget (m_dijkstra_widget = new path_graph_widget (graph_initial, m_dijkstra.get (), m_continuous_modeling.get (), solver_dijkstra_groupbox));
             m_dijkstra_widget->get_painter()->show_src_dst (true);
             solvers_layout->addWidget (solver_dijkstra_groupbox, 0, 1);
+            m_dijkstra_widget->use_model_independer (true);
         }
 
         {
@@ -126,6 +128,7 @@ graph_path_tab::graph_path_tab (graph::graph_initial *graph_initial, QWidget *pa
             solver_brute_force_layout->addWidget (m_brute_force_with_depence_widget = new path_graph_widget (graph_initial, m_brute_force_with_depence.get (), m_continuous_modeling.get (), solver_brute_force_groupbox));
             m_brute_force_with_depence_widget->get_painter()->show_src_dst (true);
             solvers_layout->addWidget (solver_brute_force_groupbox, 1, 0);
+            m_brute_force_with_depence_widget->use_model_independer (false);
         }
 
         {
@@ -138,6 +141,7 @@ graph_path_tab::graph_path_tab (graph::graph_initial *graph_initial, QWidget *pa
             solver_dijkstra_layout->addWidget (m_dijkstra_with_depence_widget = new path_graph_widget (graph_initial, m_dijkstra_with_depence.get (), m_continuous_modeling.get (), solver_dijkstra_groupbox));
             m_dijkstra_with_depence_widget->get_painter()->show_src_dst (true);
             solvers_layout->addWidget (solver_dijkstra_groupbox, 1, 1);
+            m_dijkstra_with_depence_widget->use_model_independer (false);
         }
     }
 

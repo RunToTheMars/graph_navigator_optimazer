@@ -28,12 +28,15 @@ class path_graph_widget: public QWidget
     std::vector<graph::uid> m_best_path;
     std::vector<graph::vehicle_continuous_line_states> m_line_states;
 
+    bool m_use_model_independer = false;
+
 public:
     path_graph_widget (graph::graph_initial *graph_initial, graph::gno_path_finder_base *path_finder, graph::gno_continuous_modeling *continuous_modeling, QWidget *parent = nullptr);
     ~path_graph_widget ();
 
     void set_src_dst (graph::uid src, graph::uid dst);
     void set_start_time (double start_time) { m_start_time = start_time; }
+    void use_model_independer (bool use) {m_use_model_independer = use;}
 
     const std::vector<graph::uid> &get_path () const { return m_best_path; }
 
