@@ -1,6 +1,5 @@
 \babel@toc {russian}{}\relax 
-\beamer@sectionintoc {1}{Задача кооперативной оптимизации транспортного потока}{2}{0}{1}
-\beamer@sectionintoc {2}{Модель движения}{8}{0}{2}
-\beamer@sectionintoc {3}{Примеры моделей движения}{12}{0}{3}
-\beamer@sectionintoc {4}{Равновесие транспортных потоков}{19}{0}{4}
-\beamer@sectionintoc {5}{Результаты. }{23}{0}{5}
+\beamer@sectionintoc {1}{Описание задачи}{2}{0}{1}
+\beamer@sectionintoc {2}{Постановка задачи}{8}{0}{2}
+\beamer@sectionintoc {3}{Решение задачи}{11}{0}{3}
+\beamer@sectionintoc {4}{Практические Результаты}{14}{0}{4}
