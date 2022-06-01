@@ -1,5 +1,5 @@
 \babel@toc {russian}{}\relax 
 \beamer@sectionintoc {1}{Описание задачи}{2}{0}{1}
 \beamer@sectionintoc {2}{Постановка задачи}{8}{0}{2}
-\beamer@sectionintoc {3}{Решение задачи}{11}{0}{3}
-\beamer@sectionintoc {4}{Практические Результаты}{14}{0}{4}
+\beamer@sectionintoc {3}{Решение задачи}{12}{0}{3}
+\beamer@sectionintoc {4}{Практические Результаты}{15}{0}{4}
